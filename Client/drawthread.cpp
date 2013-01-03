@@ -13,7 +13,7 @@ void DrawThread::run() {
 
     QObject::connect(nextTimeTimer, SIGNAL(timeout()), this, SLOT(nextTime()));
 
-    nextTimeTimer->setInterval(10);
+    nextTimeTimer->setInterval(8);
     nextTimeTimer->start();
 
     exec();
@@ -23,6 +23,8 @@ void DrawThread::nextTime() {
     if (main->upPressed) {
         double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed;
         double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed;
+
+        main->check(deltaX, deltaY);
 
         main->coord.setX(main->coord.x() + deltaX);
         main->coord.setY(main->coord.y() + deltaY);
@@ -37,8 +39,9 @@ void DrawThread::nextTime() {
         double deltaX = -cos((-main->angle + 90) * M_PI / 180) * speed;
         double deltaY = -sin((-main->angle + 90) * M_PI / 180) * speed;
 
+        main->check(deltaX, deltaY);
+
         main->coord.setX(main->coord.x() + deltaX);
         main->coord.setY(main->coord.y() + deltaY);
     }
 }
-

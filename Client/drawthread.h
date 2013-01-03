@@ -22,6 +22,8 @@ private:
     QTimer *nextTimeTimer;
     MainWindow *main;
 
+    void check(double &dx, double &dy);
+
 private slots:
     void nextTime();
 };

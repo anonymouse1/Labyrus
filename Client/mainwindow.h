@@ -85,6 +85,9 @@ public:
     bool rightPressed;
     bool downPressed;
 
+    void check(double &dx, double &dy);
+    void checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2);
+
 
 private:
     void close();

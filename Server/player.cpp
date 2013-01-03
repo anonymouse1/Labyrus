@@ -34,7 +34,6 @@ void Player::readyRead() {
 
 void Player::disconnect() {
     this->terminate();
-    this->deleteLater();
     server->alreadyPlayers--;
     server->r.remove(socketDescriptor);
     server->sendHeroes();

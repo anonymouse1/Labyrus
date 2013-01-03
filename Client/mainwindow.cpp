@@ -59,6 +59,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     leftPressed = false;
     rightPressed = false;
     angle = 0;
+    coord.setX(0.5);
+    coord.setY(0.5);
 }
 
 MainWindow::~MainWindow()
@@ -611,4 +613,29 @@ void MainWindow::readHeroes() {
         heroNames[i] = mainSocket->readLine();
         heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
     }
+}
+
+void MainWindow::checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2) {
+    assert(x1 <= x2);
+    assert(y1 <= y2);
+    if (x1 == x2) {
+        if ((coord.y() >= y1) && (coord.y() <= y2) && (fabs(coord.x() - x1) < 0.2) && ((x1 - coord.x() > 0) == (dx > 0)))
+            dx = 0;
+    } else
+        if ((coord.x() >= x1) && (coord.x() <= x2) && (fabs(coord.y() - y1) < 0.2) && ((y1 - coord.y() > 0) == (dy > 0)))
+            dy = 0;
+}
+
+void MainWindow::check(double &dx, double &dy) {
+    double k = 1 / 10.0;
+    for (int i = 0; i < m; i++)
+        if (walls[i][2] == 0) {
+            checkForWall(dx, dy, walls[i][0], walls[i][1], walls[i][0] + 1, walls[i][1]);
+            checkForWall(dx, dy, walls[i][0], walls[i][1] - k, walls[i][0], walls[i][1] + k);
+            checkForWall(dx, dy, walls[i][0] + 1, walls[i][1] - k, walls[i][0] + 1, walls[i][1] + k);
+        } else {
+            checkForWall(dx, dy, walls[i][0], walls[i][1], walls[i][0], walls[i][1] + 1);
+            checkForWall(dx, dy, walls[i][0] - k, walls[i][1], walls[i][0] + k, walls[i][1]);
+            checkForWall(dx, dy, walls[i][0] - k, walls[i][1] + 1, walls[i][0] + k, walls[i][1] + 1);
+        }
 }

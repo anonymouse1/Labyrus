@@ -58,7 +58,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 void DrawGl::initializeGL() {
     qglClearColor(Qt::white);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+//    glEnable(GL_CULL_FACE);
     glEnable(GL_POINT_SMOOTH);
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
@@ -128,7 +128,7 @@ void DrawGl::paintGL() {
 
     nSca = a->n / 2.0;
     glScalef(nSca, nSca, nSca);
-    glTranslatef((-a->coord.x() - animX) / sizeView - 1 / sizeView / 2 + xtra, (-a->coord.y() - animY) / sizeView - 1 / sizeView / 2 + ytra, ztra);
+    glTranslatef((-a->coord.x() - animX) / sizeView, (-a->coord.y() - animY) / sizeView, ztra);
 
     glEnable(GL_LIGHTING);
 //    drawAxis();
@@ -270,14 +270,10 @@ void DrawGl::drawMaze() {
 //            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
 
             if (a->walls[i][2] == 0) {
-//                drawQuad(x, y + f, x, y - f, true);
                 drawQuad(x, y - f, x + k, y - f, false);
-//                drawQuad(x + k, y - f, x + k, y + f, true);
                 drawQuad(x + k, y + f, x, y + f, false);
             } else {
-//                drawQuad(x - f, y, x + f, y, true);
                 drawQuad(x + f, y, x + f, y + k, false);
-//                drawQuad(x + f, y + k, x - f, y + k, true);
                 drawQuad(x - f, y + k, x - f, y, false);
             }
         }
@@ -297,14 +293,10 @@ void DrawGl::drawMaze() {
 
             if (a->walls[i][2] == 0) {
                 drawQuad(x, y + f, x, y - f, true);
-//                drawQuad(x, y - f, x + k, y - f, false);
                 drawQuad(x + k, y - f, x + k, y + f, true);
-//                drawQuad(x + k, y + f, x, y + f, false);
             } else {
                 drawQuad(x - f, y, x + f, y, true);
-//                drawQuad(x + f, y, x + f, y + k, false);
                 drawQuad(x + f, y + k, x - f, y + k, true);
-//                drawQuad(x - f, y + k, x - f, y, false);
             }
         }
     glEnd();
@@ -340,6 +332,7 @@ void DrawGl::drawMaze() {
     renderText(5, this->height() - 40, QString("patrons: ") + QString::number(a->patrons), hudFont);
     renderText(5, this->height() - 60, QString("walls: ") + QString::number(a->wall), hudFont);
     renderText(5, this->height() - 80, QString("destroy: ") + QString::number(a->destroy), hudFont);
+    renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x()) + " " + QString::number(a->coord.y()));
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     qglColor(Qt::red);
