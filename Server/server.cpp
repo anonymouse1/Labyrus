@@ -14,7 +14,7 @@ Server::Server(QObject *parent) :
 //    QObject::connect(this, SIGNAL(newConnection()), this, SLOT(newConnection()));
     alreadyPlayers = 0;
 
-    n = 3;
+    n = 15;
     m = 0;
     /*walls[0][0] = 1;
     walls[0][1] = 1;
@@ -173,7 +173,7 @@ void Server::runCommand(QString command, Player *player) {
         player->destroy--;
     }
 
-    sendFields();
+    sendHeroes();
 }
 
 void Server::someoneDisconnected() {
@@ -214,8 +214,16 @@ void Server::sendFieldToPlayer(Player *player) {
     socket->write((QString::number(numberArsenals) + "\n").toAscii());
     for (int i = 0; i < numberArsenals; i++)
         socket->write((QString::number(arsenal[i].x()) + "\n" + QString::number(arsenal[i].y()) + "\n").toAscii());
-    //players
 
+    socket->flush();
+    player->sendingInformation.unlock();
+}
+
+void Server::sendHeroesToPlayer(Player *player) {
+    player->sendingInformation.lock();
+
+    QTcpSocket *socket = player->socket;
+    socket->write("hero\n");
     socket->write((QString::number(r.size()) + "\n").toAscii());
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++) {
         socket->write((QString::number(i.value()->socket->socketDescriptor()) + "\n" +
@@ -373,4 +381,9 @@ void Server::forAllClientsPrint(QString s) {
 void Server::sendFields() {
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
         sendFieldToPlayer(i.value());
+}
+
+void Server::sendHeroes() {
+    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
+        sendHeroesToPlayer(i.value());
 }

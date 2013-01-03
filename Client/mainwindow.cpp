@@ -21,9 +21,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     thread->setPriority(QThread::LowestPriority);
 
     login = l;
-    timer = new QTimer;
-    timeToSeek = new QTimer;
-    timeToFullRefresh = new QTimer;
     animateTimer = new QTimer;
     failConnection = new QTimer;
 
@@ -33,19 +30,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     mainSocket = new QTcpSocket(this);
 
     QObject::connect(mainSocket, SIGNAL(connected()), this, SLOT(connectionEstablished()));
-//    QObject::connect(actionExit, SIGNAL(triggered()), this, SLOT(deleteLater()));
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(readField()));
     QObject::connect(animateTimer, SIGNAL(timeout()), this, SLOT(animate()));
-    QObject::connect(timeToSeek, SIGNAL(timeout()), this, SLOT(seekNet()));
-    QObject::connect(timeToFullRefresh, SIGNAL(timeout()), this, SLOT(setFullRefresh()));
     QObject::connect(failConnection, SIGNAL(timeout()), this, SLOT(connectionFailed()));
-
-    herou = new QPixmap("herou.png");
-    herod = new QPixmap("herod.png");
-    herol = new QPixmap("herol.png");
-    heror = new QPixmap("heror.png");
-    hospitalPix = new QPixmap("hospital.png");
-    arsenalPix = new QPixmap("arsenal.png");
 
     nap = 0;
     scanN = true;
@@ -55,13 +41,9 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
 
 
     mainSocket->connectToHost(ip, port, QTcpSocket::ReadWrite);
-    timer->setInterval(10000);
-    timeToSeek->setInterval(60000);
-    timeToFullRefresh->setInterval(10000);
     animateTimer->setInterval(4);
     failConnection->setInterval(5000);
 
-    timeToFullRefresh->start();
     animateTimer->start();
     failConnection->start();
     widget->a = this;
@@ -101,38 +83,14 @@ void MainWindow::connectionEstablished() {
     mainSocket->waitForReadyRead(300);
     myDescriptor = scanInt();
     command->wasPrinted("as" + QString::number(myDescriptor));
-    QObject::connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readField()));
+    QObject::connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()));
     QObject::connect(command, SIGNAL(startBot()), this, SLOT(startBot()));
-    timer->start();
+
+    if (mainSocket->canReadLine())
+        readInformation();
 }
 
 void MainWindow::readField() {
-    /*while (mainSocket->canReadLine()) {
-        qDebug() << mainSocket->readLine();
-    }
-    return;*/
-    if (!widget->isVisible()) {
-        mainSocket->disconnect();
-        deleteLater();
-        return;
-    }
-    if (!mainSocket->canReadLine())
-        return;
-
-    QString s = mainSocket->readLine();
-    if (s == "gameStart\n") {
-        qDebug() << "gameStart detected";
-        mainSocket->waitForReadyRead(5000);
-        thread->start();
-        readField();
-        gameStart();
-        return;
-    } else if (s != "field\n") {
-        seekNet();
-        qDebug() << "error denied :-)" << s;
-        return;
-    }
-
     n = scanInt();
     m = scanInt();
     for (int i = 0; i < m; i++)
@@ -147,43 +105,6 @@ void MainWindow::readField() {
         arsenal[i].setX(scanInt());
         arsenal[i].setY(scanInt());
     }
-
-    otherHeroes = scanInt();
-    for (int i = 0; i < otherHeroes; i++) {
-        int tmp = scanInt();
-        QPoint c;
-        c.setX(scanInt());
-        c.setY(scanInt());
-        if (tmp == myDescriptor) {
-            if (fullRefresh) {
-                coord = c;
-                qDebug() << coord;
-            }
-
-            fullRefresh = false;
-            alive = scanInt();
-            patrons = scanInt();
-            wall = scanInt();
-            destroy = scanInt();
-
-            heroes[i].setX(-1);
-            heroes[i].setY(-1);
-        } else {
-            heroes[i] = c;
-            descriptors[i] = tmp;
-            otherAlive[i] = scanInt();
-            scanInt();
-            scanInt();
-            scanInt();
-        }
-        heroNames[i] = mainSocket->readLine();
-        heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
-    }
-
-//    seekNet();
-    while (mainSocket->canReadLine())
-        readField();
-//    qDebug() << "field refreshed";
 }
 
 int MainWindow::getRealX(double x) {
@@ -192,51 +113,6 @@ int MainWindow::getRealX(double x) {
 
 int MainWindow::getRealY(double y) {
     return (this->height() / n - 1) * y + 23;
-}
-
-void MainWindow::paintEvent(QPaintEvent *event) {
-   /* if (!GL) {
-    QPainter p(widget);
-    p.setPen(QPen(QColor("red")));
-    for (int i = 0; i < m; i++)
-        if (walls[i][2] == 0)
-            p.drawLine(getRealX(walls[i][0]), getRealY(walls[i][1]), getRealX(walls[i][0] + 1), getRealY(walls[i][1]));
-        else
-            p.drawLine(getRealX(walls[i][0]), getRealY(walls[i][1]), getRealX(walls[i][0]), getRealY(walls[i][1] + 1));
-
-//    p.drawEllipse(getRealX(coord.x()), getRealY(coord.y()), widget->width() / n - 10, widget->height() / n - 10);
-    if (nap == 0)
-        hero = herou;
-    else if (nap == 2)
-        hero = herod;
-    else if (nap == 3)
-        hero = herol;
-    else if (nap == 1)
-        hero = heror;
-
-    p.drawPixmap(getRealX(coord.x()) + 1, getRealY(coord.y()) + 1, this->width() / n - 2, this->height() / n - 2, *hero);
-
-    for (int i = 0; i < otherHeroes; i++) {
-        if (otherAlive[i])
-            p.setPen(QPen(QColor("red")));
-        else
-            p.setPen(QPen(QColor("blue")));
-        p.drawEllipse(getRealX(heroes[i].x()), getRealY(heroes[i].y()), this->width() / n - 2, this->height() / n - 2);
-    }
-
-    p.setPen(QPen(QColor("red")));
-
-    for (int i = 0; i < numberArsenals; i++)
-        p.drawPixmap(getRealX(arsenal[i].x()) + 1, getRealY(arsenal[i].y()) + 1, this->width() / n - 2, this->height() / n - 2, *arsenalPix);
-
-    p.drawPixmap(getRealX(hospital.x()) + 1, getRealY(hospital.y()) + 1, this->width() / n - 2, this->height() / n - 2, *hospitalPix);
-
-    if (!alive)
-        p.drawEllipse(getRealX(coord.x()) + 1, getRealY(coord.y()) + 1, this->width() / n - 2, this->height() / n - 2);
-
-    p.end();
-    event->accept();
-    }*/
 }
 
 int MainWindow::lefter() {
@@ -639,4 +515,67 @@ double MainWindow::fabs(double a) {
 
 void MainWindow::connectionFailed() {
     emit fail();
+}
+
+void MainWindow::readInformation() {
+    while (mainSocket->canReadLine()) {
+        QString s = mainSocket->readLine();
+        if (s == "gameStart\n") {
+            qDebug() << "gameStart detected";
+            thread->start();
+            if (mainSocket->readLine() != "field\n")
+                qDebug() << "very strange error";
+
+            readField();
+            mainSocket->waitForReadyRead(100);
+            if (mainSocket->readLine() != "hero\n")
+                qDebug() << "very strange error";
+
+            readHeroes();
+            gameStart();
+            return;
+        } else if (s == "field\n") {
+            readField();
+            return;
+        } else if (s == "hero\n") {
+            readHeroes();
+        } else {
+            qDebug() << "unknown information" << s;
+            qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        }
+    }
+}
+
+void MainWindow::readHeroes() {
+    otherHeroes = scanInt();
+    for (int i = 0; i < otherHeroes; i++) {
+        int tmp = scanInt();
+        QPoint c;
+        c.setX(scanInt());
+        c.setY(scanInt());
+        if (tmp == myDescriptor) {
+            if (fullRefresh) {
+                coord = c;
+                qDebug() << coord;
+            }
+
+            fullRefresh = false;
+            alive = scanInt();
+            patrons = scanInt();
+            wall = scanInt();
+            destroy = scanInt();
+
+            heroes[i].setX(-1);
+            heroes[i].setY(-1);
+        } else {
+            heroes[i] = c;
+            descriptors[i] = tmp;
+            otherAlive[i] = scanInt();
+            scanInt();
+            scanInt();
+            scanInt();
+        }
+        heroNames[i] = mainSocket->readLine();
+        heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
+    }
 }

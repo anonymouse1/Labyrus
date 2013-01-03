@@ -31,6 +31,7 @@ public:
 private:
     void die(QString);
     void sendFieldToPlayer(Player *);
+    void sendHeroesToPlayer(Player *);
     int alreadyPlayers;
 
     bool isWallUp(QPoint c);
@@ -68,6 +69,7 @@ protected:
 
 private slots:
     void sendFields();
+    void sendHeroes();
     void someoneHasSomethingToSay();
     void someoneDisconnected();
 };

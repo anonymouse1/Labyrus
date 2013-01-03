@@ -105,12 +105,10 @@ private:
     double fabs(double);
 
     QByteArray login;
-    QTimer *timer, *timeToFullRefresh;
-    QTimer *timeToSeek, *animateTimer;
+    QTimer *animateTimer;
     QTimer *unScanN;
     QTimer *failConnection;
     QTimeLine *startLine;
-    QPixmap *herol, *heror, *herod, *herou, *hero, *arsenalPix, *hospitalPix;
     DrawThread *thread;
 
 
@@ -120,9 +118,6 @@ private:
     int myDescriptor;
     int descriptors[100];
 
-protected:
-    void paintEvent(QPaintEvent *);
-
 signals:
     void successConnection();
     void fail();
@@ -130,6 +125,8 @@ signals:
 private slots:
     void connectionEstablished();
     void readField();
+    void readHeroes();
+    void readInformation();
     void seekNet();
     void setFullRefresh();
     void setUnScan();
