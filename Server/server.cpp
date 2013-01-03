@@ -43,7 +43,7 @@ Server::Server(QObject *parent) :
 
     gameStart = false;
     timer = new QTimer;
-    timer->setInterval(2000);
+    timer->setInterval(10000);
 }
 
 void Server::die(QString s) {
@@ -115,7 +115,8 @@ void Server::processConnection(Player *player) {
 
     player->connect(socket, SIGNAL(readyRead()), this, SLOT(someoneHasSomethingToSay()));
     player->connect(socket, SIGNAL(disconnected()), this, SLOT(someoneDisconnected()));
-    player->connect(timer, SIGNAL(timeout()), this, SLOT(refreshMap()));
+    player->connect(timer, SIGNAL(timeout()), this, SLOT(sendFields()));
+    player->connect(timer, SIGNAL(timeout()), this, SLOT(sendHeroes()));
 }
 
 void Server::someoneHasSomethingToSay() {
