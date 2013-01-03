@@ -14,7 +14,7 @@ Server::Server(QObject *parent) :
 //    QObject::connect(this, SIGNAL(newConnection()), this, SLOT(newConnection()));
     alreadyPlayers = 0;
 
-    n = 15;
+    n = 20;
     m = 0;
     /*walls[0][0] = 1;
     walls[0][1] = 1;
@@ -42,8 +42,6 @@ Server::Server(QObject *parent) :
     generateMap();
 
     gameStart = false;
-    timer = new QTimer;
-    timer->setInterval(10000);
 }
 
 void Server::die(QString s) {
@@ -108,29 +106,8 @@ void Server::processConnection(Player *player) {
     if (alreadyPlayers == 1) {
         qDebug() << "starting game";
         gameStart = true;
-        timer->start();
         forAllClientsPrint("gameStart");
         sendFields();
-    }
-
-    player->connect(socket, SIGNAL(readyRead()), this, SLOT(someoneHasSomethingToSay()));
-    player->connect(socket, SIGNAL(disconnected()), this, SLOT(someoneDisconnected()));
-    player->connect(timer, SIGNAL(timeout()), this, SLOT(sendFields()));
-    player->connect(timer, SIGNAL(timeout()), this, SLOT(sendHeroes()));
-}
-
-void Server::someoneHasSomethingToSay() {
-    QMap<int, Player *>::Iterator i = r.begin();
-    while (i != r.end()) {
-        while (i.value()->socket->canReadLine()) {
-            QString s = i.value()->socket->readLine();
-            if (s[s.length() - 1] == '\n')
-                s.remove(s.length() - 1, 1);
-
-            qDebug() << i.value()->name << "say" << s;
-            runCommand(s, i.value());
-        }
-        i++;
     }
 }
 
@@ -175,22 +152,6 @@ void Server::runCommand(QString command, Player *player) {
     }
 
     sendHeroes();
-}
-
-void Server::someoneDisconnected() {
-    qDebug() << "trying to disconnect someone";
-    QMap<int, Player *>::Iterator i = r.begin();
-    while (i != r.end()) {
-        if (i.value()->socket->state() == 0) {
-            qDebug() << i.value()->name << "disconnected";
-            delete i.value();
-            r.erase(i);
-            alreadyPlayers--;
-        }
-        i++;
-    }
-
-    sendFields();
 }
 
 void Server::sendFieldToPlayer(Player *player) {

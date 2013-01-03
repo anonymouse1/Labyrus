@@ -6,6 +6,7 @@
 #include <QThread>
 #include <server.h>
 #include <QMutex>
+#include <QTimer>
 
 class Server;
 class Player : public QThread
@@ -25,6 +26,12 @@ public:
     int socketDescriptor;
     Server *server;
     QMutex sendingInformation;
+private:
+    QTimer *refresh;
+private slots:
+    void refreshTime();
+    void readyRead();
+    void disconnect();
 protected:
     void run();
 

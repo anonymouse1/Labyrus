@@ -27,19 +27,22 @@ class Server : public QTcpServer
 public:
     explicit Server(QObject *parent = 0);
     void processConnection(Player *player);
-
-private:
-    void die(QString);
     void sendFieldToPlayer(Player *);
     void sendHeroesToPlayer(Player *);
     int alreadyPlayers;
+    void runCommand(QString command, Player *player);
+    QMap<int, Player *> r;
+    void sendHeroes();
+
+
+private:
+    void die(QString);
 
     bool isWallUp(QPoint c);
     bool isWallDown(QPoint c);
     bool isWallLeft(QPoint c);
     bool isWallRight(QPoint c);
 
-    void runCommand(QString command, Player *player);
     int scanInt(QTcpSocket *);
     int findNap(QString);
     QPoint getFreePoint();
@@ -51,10 +54,6 @@ private:
     void dfs(QPoint);
 
     bool w[100][100];
-
-    QMap<int, Player *> r;
-    QTimer *timer;
-
 
     bool gameStart;
     int n;
@@ -69,9 +68,6 @@ protected:
 
 private slots:
     void sendFields();
-    void sendHeroes();
-    void someoneHasSomethingToSay();
-    void someoneDisconnected();
 };
 
 #endif // SERVER_H
