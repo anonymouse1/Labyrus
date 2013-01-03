@@ -124,7 +124,7 @@ void DrawGl::paintGL() {
 
     glRotatef(xRot, 1.0f, 0.0f, 0.0f);
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-    glRotatef(zRot + plMouseXRot, 0.0f, 0.0f, 1.0f);
+    glRotatef(a->angle, 0.0f, 0.0f, 1.0f);
 
     nSca = a->n / 2.0;
     glScalef(nSca, nSca, nSca);
@@ -383,29 +383,34 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
             currentText = currentText.left(currentText.length() - 1);
         else
             currentText += event->text();
-    else
+    else {
         a->keyPressEvent(event);
+    }
 
     event->accept();
 }
 
-void DrawGl::mousePressEvent(QMouseEvent *event) {
-    a->taskKill();
+void DrawGl::keyReleaseEvent(QKeyEvent *event) {
+    a->keyReleaseEvent(event);
+}
+
+/*void DrawGl::mousePressEvent(QMouseEvent *event) {
+//    a->taskKill();
     event->accept();
 }
 
 void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
     event->accept();
-}
+}*/
 
-void DrawGl::wheelEvent(QWheelEvent *event) {
+/*void DrawGl::wheelEvent(QWheelEvent *event) {
     if (event->delta() > 0)
         a->fgup();
     else
         a->fgdown();
-}
+}*/
 
-void DrawGl::mouseMoveEvent(QMouseEvent *event) {
+/*void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     if (botActive)
         return;
 
@@ -431,7 +436,7 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
         lastClickX -= 90;
         a->nap = a->righter();
     }
-}
+}*/
 
 
 void DrawGl::loadTexture(GLuint a) {
@@ -467,9 +472,9 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         a->deleteLater();
         this->deleteLater();
-    } else if (currentText == "BOT") {
+    } else/* if (currentText == "BOT") {
         a->startBot();
-    }
+    }*/
 
     qDebug() << currentText << "processed";
 }

@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QPoint>
+#include <QPointF>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPixmap>
@@ -42,7 +43,10 @@ public:
     int walls[1000][3];
     bool w[100][100];
     int n, m;
-    QPoint coord;
+
+    QPointF coord;
+    double angle;
+
     int otherHeroes;
     QPoint heroes[100];
     int numberArsenals;
@@ -61,20 +65,25 @@ public:
     CommandSend *command;
     DrawGl *widget;
     void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
 
-    int lefter();
-    int righter();
+   /* int lefter();
+    int righter();*/
     int nap;//0 - up
             //1 - right
             //2 - down
             //3 -- left
 
-    void taskKill();
+    /*void taskKill();
     void fgup();
     void fgleft();
     void fgright();
-    void fgdown();
+    void fgdown();*/
 
+    bool upPressed;
+    bool leftPressed;
+    bool rightPressed;
+    bool downPressed;
 
 
 private:
@@ -84,23 +93,23 @@ private:
     int getRealX(double x);
     int getRealY(double y);
 
-    bool isWallUp(QPoint c);
-    bool isWallDown(QPoint c);
-    bool isWallLeft(QPoint c);
-    bool isWallRight(QPoint c);
+    /*bool isWallUp(QPointF c);
+    bool isWallDown(QPointF c);
+    bool isWallLeft(QPointF c);
+    bool isWallRight(QPointF c);*/
 
-    bool noWall(int d);
+    /*bool noWall(int d);
     void createWall(int x, int y, int flag);
     void eraseWall(int x, int y, int flag);
     void invertNap();
 
-    int backward();
+    int backward();*/
 
     void gameStart();
-    bool superDfs();
+//    bool superDfs();
     void strangeWait();
-    void syncNap(int);
-    void standartMove(bool);
+  //  void syncNap(int);
+//    void standartMove(bool);
 
     double fabs(double);
 
@@ -108,6 +117,7 @@ private:
     QTimer *animateTimer;
     QTimer *unScanN;
     QTimer *failConnection;
+    QTimer *repaintTimer;
     QTimeLine *startLine;
     DrawThread *thread;
 

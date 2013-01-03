@@ -10,12 +10,13 @@ void Player::run() {
 
     refresh = new QTimer;
     refresh->setInterval(10000);
-    this->connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()));
+    QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()));
+
 
     server->processConnection(this);
 
-    this->connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    this->connect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()));
+    QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()));
     qDebug() << socket->thread();
     qDebug() << this;
 

@@ -63,10 +63,11 @@ protected:
     void paintGL();
 
     void keyPressEvent(QKeyEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void wheelEvent(QWheelEvent *);
+    void keyReleaseEvent(QKeyEvent *);
+//    void mousePressEvent(QMouseEvent *);
+//    void mouseReleaseEvent(QMouseEvent *);
+//    void mouseMoveEvent(QMouseEvent *);
+//    void wheelEvent(QWheelEvent *);
 
 signals:
     

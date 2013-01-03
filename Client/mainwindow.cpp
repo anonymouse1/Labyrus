@@ -17,12 +17,13 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     widget = new DrawGl(app, skin);
     widget->setFocus();
 
-    thread = new DrawThread(widget, this);
+    thread = new DrawThread(widget, this, this);
     thread->setPriority(QThread::LowestPriority);
 
     login = l;
     animateTimer = new QTimer;
     failConnection = new QTimer;
+    repaintTimer = new QTimer;
 
     this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
 
@@ -32,6 +33,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(mainSocket, SIGNAL(connected()), this, SLOT(connectionEstablished()));
     QObject::connect(animateTimer, SIGNAL(timeout()), this, SLOT(animate()));
     QObject::connect(failConnection, SIGNAL(timeout()), this, SLOT(connectionFailed()));
+    QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
 
     nap = 0;
     scanN = true;
@@ -43,11 +45,20 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     mainSocket->connectToHost(ip, port, QTcpSocket::ReadWrite);
     animateTimer->setInterval(4);
     failConnection->setInterval(5000);
+    repaintTimer->setInterval(16);
 
     animateTimer->start();
     failConnection->start();
+    repaintTimer->start();
+
     widget->a = this;
     widget->setFocus();
+
+    upPressed = false;
+    downPressed = false;
+    leftPressed = false;
+    rightPressed = false;
+    angle = 0;
 }
 
 MainWindow::~MainWindow()
@@ -115,7 +126,7 @@ int MainWindow::getRealY(double y) {
     return (this->height() / n - 1) * y + 23;
 }
 
-int MainWindow::lefter() {
+/*int MainWindow::lefter() {
     return (nap + 3) % 4;
 }
 
@@ -176,7 +187,7 @@ bool MainWindow::noWall(int d) {
     }
 
     return false;
-}
+}*/
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
@@ -201,8 +212,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (event->key() == Qt::Key_O)
         widget->ztra -= 0.01;
 
+    if (event->key() == Qt::Key_Up)
+        upPressed = true;
+    else if (event->key() == Qt::Key_Down)
+        downPressed = true;
+    else if (event->key() == Qt::Key_Left)
+        leftPressed = true;
+    else if (event->key() == Qt::Key_Right)
+        rightPressed = true;
 
-    if ((widget->animX >= -1) && (widget->animX <= 1) && (widget->animY >= -1) &&
+
+
+    /*if ((widget->animX >= -1) && (widget->animX <= 1) && (widget->animY >= -1) &&
             (widget->animY <= 1) && (widget->animZRot <= 90) && (widget->animZRot >= -90)) {
 
 
@@ -232,9 +253,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         widget->animZRot += 90;
     }
 
-    }
+    }*/
 
-    if ((key == Qt::Key_Space) && (alive) && (patrons)) {
+    /*if ((key == Qt::Key_Space) && (alive) && (patrons)) {
         taskKill();
     } else if ((key == Qt::Key_B) && (alive) && (wall)) {
         if (nap == 2)
@@ -255,7 +276,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
             eraseWall(coord.x(), coord.y() + 1, 0);
         else
             eraseWall(coord.x(), coord.y(), 1);
-    }
+    }*/
 
     for (int i = 0; i < numberArsenals; i++)
         if (coord == arsenal[i]) {
@@ -273,6 +294,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
     seekNet();
     event->accept();
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+    qDebug() << "released key";
+    if (event->key() == Qt::Key_Up)
+        upPressed = false;
+    else if (event->key() == Qt::Key_Left)
+        leftPressed = false;
+    else if (event->key() == Qt::Key_Right)
+        rightPressed = false;
+    else if (event->key() == Qt::Key_Down)
+        downPressed = false;
 }
 
 int MainWindow::scanInt() {
@@ -294,7 +327,7 @@ int MainWindow::scanInt() {
     return s.toInt();
 }
 
-bool MainWindow::isWallDown(QPoint c) {
+/*bool MainWindow::isWallDown(QPoint c) {
     if (!cheat)
     for (int i = 0; i < m; i ++)
         if ((walls[i][0] == c.x()) && (walls[i][1] == c.y() + 1) && (walls[i][2] == 0))
@@ -328,7 +361,7 @@ bool MainWindow::isWallRight(QPoint c) {
             return true;
 
     return false;
-}
+}*/
 
 void MainWindow::seekNet() {
     while (mainSocket->canReadLine())
@@ -343,7 +376,7 @@ void MainWindow::setUnScan() {
     scanN = false;
 }
 
-void MainWindow::createWall(int x, int y, int flag) {
+/*void MainWindow::createWall(int x, int y, int flag) {
     command->go("b\n" + QString::number(x) + "\n" + QString::number(y) + "\n" + QString::number(flag));
 }
 
@@ -352,9 +385,9 @@ void MainWindow::eraseWall(int x, int y, int flag) {
     for (int i = 0; i < m; i++)
         if ((walls[i][0] == x) && (walls[i][1] == y) && (walls[i][2] == flag))
             command->go("e\n" + QString::number(i));
-}
+}*/
 
-void MainWindow::startBot() {
+/*void MainWindow::startBot() {
     qDebug() << "bot started";
     widget->botActive = true;
     for (int i = 0; i < n; i++)
@@ -364,14 +397,14 @@ void MainWindow::startBot() {
     superDfs();
     widget->botActive = false;
     qDebug() << "bot finished";
-}
+}*/
 
 void MainWindow::strangeWait() {
     while ((widget->animZRot != 0) || (widget->animX != 0) || (widget->animY != 0))
         app->processEvents(QEventLoop::AllEvents, 10);
 }
 
-void MainWindow::syncNap(int a) {
+/*void MainWindow::syncNap(int a) {
     if (nap == (a + 3) % 4) {
         nap = righter();
         widget->animZRot += 90;
@@ -383,9 +416,9 @@ void MainWindow::syncNap(int a) {
             strangeWait();
         }
     }
-}
+}*/
 
-void MainWindow::standartMove(bool standart) {
+/*void MainWindow::standartMove(bool standart) {
     if (!standart)
         fgup();
     else
@@ -399,9 +432,9 @@ void MainWindow::standartMove(bool standart) {
         fgdown();
 
     strangeWait();
-}
+}*/
 
-bool MainWindow::superDfs() {
+/*bool MainWindow::superDfs() {
     int a = nap;
     w[coord.x()][coord.y()] = true;
     if (!w[coord.x() - 1][coord.y()] && !isWallLeft(coord)) {
@@ -427,7 +460,7 @@ bool MainWindow::superDfs() {
     syncNap((a + 2) % 4);
     return 0;
 }
-
+*/
 void MainWindow::gameStart() {
     qDebug() << "starting game";
     startLine = new QTimeLine;
@@ -454,7 +487,7 @@ void MainWindow::startingFinished() {
     delete startLine;
 }
 
-void MainWindow::taskKill() {
+/*void MainWindow::taskKill() {
     QPoint c = coord;
     patrons--;
     nap = backward();
@@ -474,7 +507,7 @@ void MainWindow::taskKill() {
     coord = c;
     widget->animX = 0;
     widget->animY = 0;
-}
+}*/
 
 void MainWindow::animate() {
     //qDebug() << "animate Timer";

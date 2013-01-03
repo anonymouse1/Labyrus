@@ -11,6 +11,7 @@
 class Server;
 class Player : public QThread
 {
+    Q_OBJECT
 public:
     explicit Player(QObject *parent = 0);
 
@@ -28,7 +29,7 @@ public:
     QMutex sendingInformation;
 private:
     QTimer *refresh;
-private slots:
+public slots:
     void refreshTime();
     void readyRead();
     void disconnect();
