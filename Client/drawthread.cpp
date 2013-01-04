@@ -64,4 +64,20 @@ void DrawThread::nextTime() {
         main->coord.setX(main->coord.x() + deltaX);
         main->coord.setY(main->coord.y() + deltaY);
     }
+
+    for (int i = 0; i < main->numberArsenals; i++)
+        if (main->equal(main->coord, main->arsenal[i])) {
+            main->patrons += 3;
+            main->wall += 1;
+            main->destroy += 1;
+            main->command->go(QString("a") + "\n" + QString::number(i));
+            main->arsenal[i] = QPoint(-100, -100);
+        }
+
+    if (main->equal(main->coord, main->hospital)) {
+        main->alive = true;
+        main->command->go("l");
+    }
+
+
 }

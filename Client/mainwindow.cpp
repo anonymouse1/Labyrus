@@ -29,8 +29,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     qDebug() << ip.toString();
     mainSocket = new QTcpSocket(this);
 
-    QObject::connect(mainSocket, SIGNAL(connected()), this, SLOT(connectionEstablished()));
-    QObject::connect(animateTimer, SIGNAL(timeout()), this, SLOT(animate()));
+    QObject::connect(mainSocket, SIGNAL(connected()), this,  SLOT(connectionEstablished()));
     QObject::connect(failConnection, SIGNAL(timeout()), this, SLOT(connectionFailed()));
     QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
 
@@ -99,7 +98,6 @@ void MainWindow::connectionEstablished() {
     myDescriptor = scanInt();
     command->wasPrinted("as" + QString::number(myDescriptor));
     QObject::connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()));
-    QObject::connect(command, SIGNAL(startBot()), this, SLOT(startBot()));
 
     if (mainSocket->canReadLine())
         readInformation();
@@ -129,69 +127,6 @@ int MainWindow::getRealX(double x) {
 int MainWindow::getRealY(double y) {
     return (this->height() / n - 1) * y + 23;
 }
-
-/*int MainWindow::lefter() {
-    return (nap + 3) % 4;
-}
-
-int MainWindow::righter() {
-    return (nap + 1) % 4;
-}
-
-int MainWindow::backward() {
-    return (nap + 2) % 4;
-}
-
-
-void MainWindow::fgdown() {
-    if (noWall(backward()))
-        command->go(QString::number(backward()));
-}
-
-void MainWindow::fgup() {
-    if (noWall(nap))
-        command->go(QString::number(nap));
-}
-
-void MainWindow::fgleft() {
-    if (noWall(lefter()))
-        command->go(QString::number(lefter()));
-}
-
-void MainWindow::fgright() {
-    if (noWall(righter()))
-        command->go(QString::number(righter()));
-}
-
-bool MainWindow::noWall(int d) {
-    if (d == 0) {
-        if (!isWallUp(coord)) {
-            coord.setY(coord.y() - 1);
-            widget->animY += 1;
-            return true;
-        }
-    } else if (d == 1) {
-        if (!isWallRight(coord)) {
-            coord.setX(coord.x() + 1);
-            widget->animX -= 1;
-            return true;
-        }
-    } else if (d == 2) {
-        if (!isWallDown(coord)) {
-            coord.setY(coord.y() + 1);
-            widget->animY -= 1;
-            return true;
-        }
-    } else if (d == 3) {
-        if (!isWallLeft(coord)) {
-            coord.setX(coord.x() - 1);
-            widget->animX += 1;
-            return true;
-        }
-    }
-
-    return false;
-}*/
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
@@ -231,38 +166,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
 
 
-    /*if ((widget->animX >= -1) && (widget->animX <= 1) && (widget->animY >= -1) &&
-            (widget->animY <= 1) && (widget->animZRot <= 90) && (widget->animZRot >= -90)) {
-
-
-    if ((key == Qt::Key_Up)) {
-        fgdown();
-    } else if (key == Qt::Key_Down) {
-        fgup();
-    } else if (key == Qt::Key_Left) {
-        nap = righter();
-        command->go("c\n" + QString::number(nap));
-    } else if (key == Qt::Key_Right) {
-        nap = lefter();
-        command->go("c\n" + QString::number(nap));
-    } else if (key == Qt::Key_S) {
-        fgup();
-    } else if (key == Qt::Key_A) {
-        fgleft();
-    } else if (key == Qt::Key_W) {
-        fgdown();
-    } else if (key == Qt::Key_D) {
-        fgright();
-    }
-
-    if (event->key() == Qt::Key_Left) {
-        widget->animZRot += -90;
-    } else if (event->key() == Qt::Key_Right) {
-        widget->animZRot += 90;
-    }
-
-    }*/
-
     /*if ((key == Qt::Key_Space) && (alive) && (patrons)) {
         taskKill();
     } else if ((key == Qt::Key_B) && (alive) && (wall)) {
@@ -286,21 +189,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
             eraseWall(coord.x(), coord.y(), 1);
     }*/
 
-    for (int i = 0; i < numberArsenals; i++)
-        if (coord == arsenal[i]) {
-            patrons += 3;
-            wall += 1;
-            destroy += 1;
-            command->go(QString("a") + "\n" + QString::number(i));
-            arsenal[i] = QPoint(-100, -100);
-        }
-
-    if (coord == hospital) {
-        alive = true;
-        command->go("l");
-    }
-
-    seekNet();
     event->accept();
 }
 
@@ -337,47 +225,6 @@ int MainWindow::scanInt() {
     if (!res)
         qDebug() << "error scanning int from:" + s;
     return s.toInt();
-}
-
-/*bool MainWindow::isWallDown(QPoint c) {
-    if (!cheat)
-    for (int i = 0; i < m; i ++)
-        if ((walls[i][0] == c.x()) && (walls[i][1] == c.y() + 1) && (walls[i][2] == 0))
-            return true;
-
-    return false;
-}
-
-bool MainWindow::isWallUp(QPoint c) {
-    if (!cheat)
-    for (int i = 0; i < m; i++)
-        if ((walls[i][0] == c.x()) && (walls[i][1] == c.y()) && (walls[i][2] == 0))
-            return true;
-
-    return false;
-}
-
-bool MainWindow::isWallLeft(QPoint c) {
-    if (!cheat)
-    for (int i = 0; i < m; i++)
-        if ((walls[i][0] == c.x()) && (walls[i][1] == c.y()) && (walls[i][2] == 1))
-            return true;
-
-    return false;
-}
-
-bool MainWindow::isWallRight(QPoint c) {
-    if (!cheat)
-    for (int i = 0; i < m; i++)
-        if ((walls[i][0] == c.x() + 1) && (walls[i][1] == c.y()) && (walls[i][2] == 1))
-            return true;
-
-    return false;
-}*/
-
-void MainWindow::seekNet() {
-    while (mainSocket->canReadLine())
-        mainSocket->readLine();
 }
 
 void MainWindow::setFullRefresh() {
@@ -520,37 +367,6 @@ void MainWindow::startingFinished() {
     widget->animX = 0;
     widget->animY = 0;
 }*/
-
-void MainWindow::animate() {
-    //qDebug() << "animate Timer";
-
-    if (widget->animZRot) {
-        widget->zRot += widget->animZRot / abs(widget->animZRot) * animZRotone;
-        widget->animZRot -= widget->animZRot / abs(widget->animZRot) * animZRotone;
-    }
-
-    if (fabs(widget->animZRot) < animZRotone) {
-        widget->zRot += widget->animZRot;
-        widget->animZRot = 0;
-    }
-
-    if (fabs(widget->animX) < animXY)
-        widget->animX = 0;
-
-    if (fabs(widget->animY) < animXY)
-        widget->animY = 0;
-
-    if (widget->animX > 0)
-        widget->animX -= animXY;
-    else if (widget->animX < 0)
-        widget->animX += animXY;
-
-    if (widget->animY > 0)
-        widget->animY -= animXY;
-    else if (widget->animY < 0)
-        widget->animY += animXY;
-}
-
 double MainWindow::fabs(double a) {
     if (a < 0)
         return -a;
@@ -648,4 +464,8 @@ void MainWindow::check(double &dx, double &dy) {
             checkForWall(dx, dy, walls[i][0] - k, walls[i][1], walls[i][0] + k, walls[i][1]);
             checkForWall(dx, dy, walls[i][0] - k, walls[i][1] + 1, walls[i][0] + k, walls[i][1] + 1);
         }
+}
+
+bool MainWindow::equal(QPointF a, QPointF b) {
+    return (fabs(a.x() - b.x()) < 1) && (fabs(a.y() - b.y()) < 1);
 }

@@ -108,12 +108,6 @@ void DrawGl::resizeGL(int w, int h) {
 }
 
 void DrawGl::paintGL() {
-//    if (startAfter == 666)
-//        return;
-
-//    application->processEvents();
-
-//    qDebug() << "paint" << rand();
     fps++;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -286,8 +280,6 @@ void DrawGl::drawMaze() {
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
-//            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
-
             if (a->walls[i][2] == 0) {
                 drawQuad(x, y + f, x, y - f, true);
                 drawQuad(x + k, y - f, x + k, y + f, true);
@@ -356,7 +348,6 @@ void DrawGl::drawMaze() {
         renderText(5, this->height() - 120, "-" + currentText, hudFont);
 
     glLineWidth(1);
-
     drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
 
@@ -447,19 +438,15 @@ void DrawGl::loadTexture(GLuint a) {
 void DrawGl::drawText(double x, double y, double z, bool xForwarding, bool yForwarding, QString s) {
     QPainterPath a;
     a.addText(0, 20, QFont("FreeSans", 10), s);
-//    qDebug() << s;
     QList<QPolygonF> l = a.toSubpathPolygons();
-    int k = 0;
-    for (QList<QPolygonF>::iterator i = l.begin(); i != l.end(); i++) {
+        for (QList<QPolygonF>::iterator i = l.begin(); i != l.end(); i++) {
         glBegin(GL_LINE_STRIP);
-            for (QPolygonF::iterator j = (*i).end(); j != (*i).begin();) {
-                --j;
+            for (QPolygonF::iterator j = (*i).begin(); j != (*i).end(); j++) {
+                qglColor(Qt::red);
                 glVertex3f(j->rx() * 0.0005f * xForwarding + x, j->rx() * 0.0005f * yForwarding + y, -j->ry() * 0.0005f + z);
-                k++;
             }
         glEnd();
     }
-//    qDebug() << k << "points";
 }
 
 void DrawGl::processText() {

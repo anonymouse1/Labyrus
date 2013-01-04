@@ -38,6 +38,7 @@ public:
     ~MainWindow();
 
     void startBot();
+    bool equal(QPointF, QPointF);
 
 
     int walls[1000][3];
@@ -142,12 +143,10 @@ private slots:
     void readField();
     void readHeroes();
     void readInformation();
-    void seekNet();
     void setFullRefresh();
     void setUnScan();
     void startTimerChanged(qreal);
     void startingFinished();
-    void animate();
     void connectionFailed();
 };
 
