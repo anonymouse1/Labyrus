@@ -420,7 +420,7 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (botActive)
+    if (botActive || (!this->isFullScreen()))
         return;
 
     double x = (event->x() - width() / 2) / 5;
@@ -430,6 +430,7 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
 
     a->angle += x;
     xRot += y;
+//    qDebug() << event->x() - width() / 2 - this->pos().x();
 }
 
 

@@ -24,6 +24,10 @@ void startDialog::start() {
     QObject::connect(w, SIGNAL(successConnection()), connectWindow, SLOT(hide()));
     QObject::connect(w, SIGNAL(fail()), connectWindow, SLOT(hide()));
     QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(show()));
+
+    if (ui->fullScreen->checkState() == Qt::Checked)
+        QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showFullScreen()));
+
 //    command->show();
     this->hide();
 
@@ -31,7 +35,6 @@ void startDialog::start() {
     loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
     loop->connect(w, SIGNAL(fail()), loop, SLOT(quit()));
     loop->exec();
-
 }
 
 void startDialog::scanSkins() {
@@ -51,7 +54,7 @@ void startDialog::setPix(QString s) {
 void startDialog::paintEvent(QPaintEvent *event) {
     QPainter p(this);
 
-    p.drawPixmap(0, 100, this->width(), 300, *pix);
+    p.drawPixmap(0, 130, this->width(), 300, *pix);
 
     p.end();
     event->accept();

@@ -15,7 +15,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     app = a;
 
     widget = new DrawGl(app, skin);
-    widget->setFocus();
 
     thread = new DrawThread(widget, this, this);
     thread->setPriority(QThread::LowestPriority);
@@ -53,7 +52,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
 
     widget->a = this;
     widget->setFocus();
-    widget->showFullScreen();
+//    widget->showFullScreen();
 
     upPressed = false;
     downPressed = false;
