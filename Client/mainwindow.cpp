@@ -53,12 +53,13 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
 
     widget->a = this;
     widget->setFocus();
+    widget->showFullScreen();
 
     upPressed = false;
     downPressed = false;
     leftPressed = false;
     rightPressed = false;
-    angle = 0;
+    angle = 45;
     coord.setX(0.5);
     coord.setY(0.5);
 }
