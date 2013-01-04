@@ -84,6 +84,8 @@ public:
     bool leftPressed;
     bool rightPressed;
     bool downPressed;
+    bool leftStrife;
+    bool rightStrife;
 
     void check(double &dx, double &dy);
     void checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2);

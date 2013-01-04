@@ -44,4 +44,24 @@ void DrawThread::nextTime() {
         main->coord.setX(main->coord.x() + deltaX);
         main->coord.setY(main->coord.y() + deltaY);
     }
+
+    if (main->leftStrife) {
+        double deltaX = -cos(-main->angle * M_PI / 180) * speed;
+        double deltaY = -sin(-main->angle * M_PI / 180) * speed;
+
+        main->check(deltaX, deltaY);
+
+        main->coord.setX(main->coord.x() + deltaX);
+        main->coord.setY(main->coord.y() + deltaY);
+    }
+
+    if (main->rightStrife) {
+        double deltaX = -cos((-main->angle + 180) * M_PI / 180) * speed;
+        double deltaY = -sin((-main->angle + 180) * M_PI / 180) * speed;
+
+        main->check(deltaX, deltaY);
+
+        main->coord.setX(main->coord.x() + deltaX);
+        main->coord.setY(main->coord.y() + deltaY);
+    }
 }

@@ -423,8 +423,8 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     if (botActive)
         return;
 
-    double x = (event->x() - width() / 2) / 10;
-    double y = (event->y() - height() / 2) / 10;
+    double x = (event->x() - width() / 2) / 5;
+    double y = (event->y() - height() / 2) / 5;
 
     QCursor::setPos(width() / 2, height() / 2);
 

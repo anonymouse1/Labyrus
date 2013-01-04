@@ -59,6 +59,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     downPressed = false;
     leftPressed = false;
     rightPressed = false;
+    leftStrife = false;
+    rightStrife = false;
     angle = 45;
     coord.setX(0.5);
     coord.setY(0.5);
@@ -215,14 +217,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (event->key() == Qt::Key_O)
         widget->ztra -= 0.01;
 
-    if (event->key() == Qt::Key_Up)
+    if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
         upPressed = true;
-    else if (event->key() == Qt::Key_Down)
+    else if ((event->key() == Qt::Key_Down) || (event->key() == Qt::Key_S))
         downPressed = true;
     else if (event->key() == Qt::Key_Left)
         leftPressed = true;
     else if (event->key() == Qt::Key_Right)
         rightPressed = true;
+    else if (event->key() == Qt::Key_A)
+        leftStrife = true;
+    else if (event->key() == Qt::Key_D)
+        rightStrife = true;
 
 
 
@@ -301,14 +307,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     qDebug() << "released key";
-    if (event->key() == Qt::Key_Up)
+    if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
         upPressed = false;
     else if (event->key() == Qt::Key_Left)
         leftPressed = false;
     else if (event->key() == Qt::Key_Right)
         rightPressed = false;
-    else if (event->key() == Qt::Key_Down)
+    else if ((event->key() == Qt::Key_Down) || (event->key() == Qt::Key_S))
         downPressed = false;
+    else if (event->key() == Qt::Key_A)
+        leftStrife = false;
+    else if (event->key() == Qt::Key_D)
+        rightStrife = false;
 }
 
 int MainWindow::scanInt() {
