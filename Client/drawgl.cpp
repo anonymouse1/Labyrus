@@ -12,8 +12,6 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     xRot = -90;
     yRot = 0;
     zRot = 0;
-//    yRot = 1;
-//    zRot = 1;
 
     animZRot = 0;
     fps = 0;
@@ -24,8 +22,6 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     xtra = ytra = 0;
     ztra = -0.1;
     startingGame = false;
-    plMouseXRot = 0;
-    plMouseYRot = 0;
 
     hudFont = QFont("FreeSans", 15, 20, true);
 
@@ -49,10 +45,11 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     defaultWall = QGLWidget::convertToGLFormat(defaultWall);
     shortWall = QGLWidget::convertToGLFormat(shortWall);
 
-//    showFullScreen();
-//    setMouseTracking(true);
     firstMouseMove = true;
+    setMouseTracking(true);
     botActive = false;
+    QCursor::setPos(width() / 2, height() / 2);
+    setCursor(QCursor(Qt::BlankCursor));
 }
 
 void DrawGl::initializeGL() {
@@ -301,6 +298,25 @@ void DrawGl::drawMaze() {
         }
     glEnd();
 
+    /*glColor3ub(100, 250, 100);
+    glBegin(GL_QUADS);
+        for (int i = 0; i < a->m; i++) {
+            double x = a->walls[i][0] * k;
+            double y = a->walls[i][1] * k;
+            if (a->walls[i][2] == 0) {
+                glVertex3f(x - f, y, wallHeight);
+                glVertex3f(x - f, y + k, wallHeight);
+                glVertex3f(x + f, y + k, wallHeight);
+                glVertex3f(x + f, y, wallHeight);
+            } else {
+                glVertex3f(x, y - f, wallHeight);
+                glVertex3f(x, y + f, wallHeight);
+                glVertex3f(x + k, y + f, wallHeight);
+                glVertex3f(x + k, y - f, wallHeight);
+            }
+        }
+    glEnd();*/
+
 
   /*  glBegin(GL_POINTS);
         glColor3f(0.0f, 1.0f, 0.0f);
@@ -403,33 +419,18 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
         a->fgdown();
 }*/
 
-/*void DrawGl::mouseMoveEvent(QMouseEvent *event) {
+void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     if (botActive)
         return;
 
-    if (firstMouseMove) {
-        lastClickX = event->x();
-        lastClickY = event->y();
-        firstMouseMove = false;
-        return;
-    }
+    double x = (event->x() - width() / 2) / 10;
+    double y = (event->y() - height() / 2) / 10;
 
-    plMouseXRot = (event->x() - lastClickX);
+    QCursor::setPos(width() / 2, height() / 2);
 
-    while (plMouseXRot > 45) {
-        plMouseXRot -= 90;
-        zRot += 90;
-        lastClickX += 90;
-        a->nap = a->lefter();
-    }
-
-    while (plMouseXRot < -45) {
-        plMouseXRot += 90;
-        zRot -= 90;
-        lastClickX -= 90;
-        a->nap = a->righter();
-    }
-}*/
+    a->angle += x;
+    xRot += y;
+}
 
 
 void DrawGl::loadTexture(GLuint a) {

@@ -66,7 +66,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *);
 //    void mousePressEvent(QMouseEvent *);
 //    void mouseReleaseEvent(QMouseEvent *);
-//    void mouseMoveEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
 //    void wheelEvent(QWheelEvent *);
 
 signals:
