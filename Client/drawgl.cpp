@@ -62,24 +62,6 @@ void DrawGl::initializeGL() {
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
 
     glEnable(GL_TEXTURE_2D);
-
-
-//    loadTexture(textures[0]);
-
-
-//    glGenTextures(2, textures);
-
-    /*glBindTexture(GL_TEXTURE_2D, 0);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)defaultWall.width(), (GLsizei)defaultWall.height(), GL_RGBA, GL_UNSIGNED_BYTE,
-                 defaultWall.bits());
-
-
-    glBindTexture(GL_TEXTURE_2D, 1);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, (GLsizei)shortWall.width(), (GLsizei)shortWall.height(), GL_RGBA, GL_UNSIGNED_BYTE,
-                 shortWall.bits());
-*/
-
-
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
@@ -104,7 +86,7 @@ void DrawGl::resizeGL(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
-    gluPerspective(45.0, w / (double)h, 0.001, 100.0);
+    gluPerspective(45.0, w / (double)h, 0.001, 1000.0);
 }
 
 void DrawGl::paintGL() {
@@ -119,11 +101,15 @@ void DrawGl::paintGL() {
 
     nSca = a->n / 2.0;
     glScalef(nSca, nSca, nSca);
-    glTranslatef((-a->coord.x() - animX) / sizeView, (-a->coord.y() - animY) / sizeView, ztra);
+    glTranslatef(-a->coord.x() / sizeView, -a->coord.y() / sizeView, ztra);
 
-    glEnable(GL_LIGHTING);
 //    drawAxis();
     drawMaze();
+
+    glColor3ub(100, 0, 0);
+    glBegin(GL_POINTS);
+        glVertex3f(a->coord.x() / sizeView, a->coord.y() / sizeView, wallHeight / 2);
+    glEnd();
 }
 
 void DrawGl::drawAxis() {

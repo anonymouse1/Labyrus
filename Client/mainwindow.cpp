@@ -130,8 +130,6 @@ int MainWindow::getRealY(double y) {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
-    qDebug() << key << "pressed";
-
     if (event->key() == Qt::Key_Z)
         if (!widget->isFullScreen())
             widget->showFullScreen();
@@ -193,7 +191,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    qDebug() << "released key";
     if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
         upPressed = false;
     else if (event->key() == Qt::Key_Left)

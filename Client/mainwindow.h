@@ -41,7 +41,7 @@ public:
     bool equal(QPointF, QPointF);
 
 
-    int walls[1000][3];
+    int walls[10000][3];
     bool w[100][100];
     int n, m;
 

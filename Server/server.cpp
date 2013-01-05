@@ -14,7 +14,7 @@ Server::Server(QObject *parent) :
 //    QObject::connect(this, SIGNAL(newConnection()), this, SLOT(newConnection()));
     alreadyPlayers = 0;
 
-    n = 20;
+    n = 30;
     m = 0;
     /*walls[0][0] = 1;
     walls[0][1] = 1;
