@@ -60,6 +60,7 @@ void DrawGl::initializeGL() {
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
+    textures[2] = bindTexture(QPixmap(skinPath + "/roof.png"), GL_TEXTURE_2D);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -79,7 +80,7 @@ void DrawGl::initializeGL() {
     glLightfv(GL_LIGHT0, GL_DIFFUSE, color);
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_specular);
-    glPointSize(50);
+    glPointSize(10);
 }
 
 void DrawGl::resizeGL(int w, int h) {
@@ -87,6 +88,7 @@ void DrawGl::resizeGL(int w, int h) {
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
     gluPerspective(45.0, w / (double)h, 0.001, 1000.0);
+    QCursor::setPos(w / 2, h / 2);
 }
 
 void DrawGl::paintGL() {
@@ -276,24 +278,24 @@ void DrawGl::drawMaze() {
         }
     glEnd();
 
-    /*glColor3ub(100, 250, 100);
+    loadTexture(textures[2]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
-            if (a->walls[i][2] == 0) {
-                glVertex3f(x - f, y, wallHeight);
-                glVertex3f(x - f, y + k, wallHeight);
-                glVertex3f(x + f, y + k, wallHeight);
-                glVertex3f(x + f, y, wallHeight);
+            if (a->walls[i][2] == 1) {
+                glVertex3f(x - f, y, wallHeight + eps);
+                glVertex3f(x - f, y + k, wallHeight + eps);
+                glVertex3f(x + f, y + k, wallHeight + eps);
+                glVertex3f(x + f, y, wallHeight + eps);
             } else {
-                glVertex3f(x, y - f, wallHeight);
-                glVertex3f(x, y + f, wallHeight);
-                glVertex3f(x + k, y + f, wallHeight);
-                glVertex3f(x + k, y - f, wallHeight);
+                glVertex3f(x, y - f, wallHeight + eps);
+                glVertex3f(x, y + f, wallHeight + eps);
+                glVertex3f(x + k, y + f, wallHeight + eps);
+                glVertex3f(x + k, y - f, wallHeight + eps);
             }
         }
-    glEnd();*/
+    glEnd();
 
 
   /*  glBegin(GL_POINTS);
