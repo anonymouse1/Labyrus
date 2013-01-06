@@ -19,13 +19,14 @@ public:
 private:
     void run();
     DrawGl *widget;
-    QTimer *nextTimeTimer;
+    QTimer *nextTimeTimer, *serverRefresh;
     MainWindow *main;
 
     void check(double &dx, double &dy);
 
 private slots:
     void nextTime();
+    void refreshCoord();
 };
 
 #endif // DRAWTHREAD_H

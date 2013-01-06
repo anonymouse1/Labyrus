@@ -43,12 +43,10 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[3];
+    GLuint textures[4];
     GLuint superFontList;
     QString currentText;
     bool enteringText;
-    QImage shortWall;
-    QImage defaultWall;
     QString skinPath;
     QLineEdit *inputLine;
 
@@ -57,6 +55,7 @@ private:
     int lastClickY;
     double plMouseXRot;
     double plMouseYRot;
+    bool mousePressed;
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -64,8 +63,8 @@ protected:
 
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
-//    void mousePressEvent(QMouseEvent *);
-//    void mouseReleaseEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
 //    void wheelEvent(QWheelEvent *);
 

@@ -39,17 +39,12 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     timeFPS->start();
 
 
-    qDebug("%d", defaultWall.load(skinPath + "/defaultWall.png"));
-    qDebug("%d", shortWall.load(skinPath + "/shortWall.png"));
-
-    defaultWall = QGLWidget::convertToGLFormat(defaultWall);
-    shortWall = QGLWidget::convertToGLFormat(shortWall);
-
     firstMouseMove = true;
-    setMouseTracking(true);
     botActive = false;
     QCursor::setPos(width() / 2, height() / 2);
     setCursor(QCursor(Qt::BlankCursor));
+    setMouseTracking(true);
+    mousePressed = false;
 }
 
 void DrawGl::initializeGL() {
@@ -61,6 +56,7 @@ void DrawGl::initializeGL() {
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
     textures[2] = bindTexture(QPixmap(skinPath + "/roof.png"), GL_TEXTURE_2D);
+    textures[3] = bindTexture(QPixmap(skinPath + "/floor.png"), GL_TEXTURE_2D);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -108,8 +104,8 @@ void DrawGl::paintGL() {
 //    drawAxis();
     drawMaze();
 
-    glColor3ub(100, 0, 0);
-    glBegin(GL_POINTS);
+    qglColor(Qt::red);
+    glBegin(GL_POINT);
         glVertex3f(a->coord.x() / sizeView, a->coord.y() / sizeView, wallHeight / 2);
     glEnd();
 }
@@ -256,14 +252,9 @@ void DrawGl::drawMaze() {
                 drawQuad(x - f, y + k, x - f, y, false);
             }
         }
-        glVertex3f(0, 0 ,0);
-        glVertex3f(k * a->n, 0, 0);
-        glVertex3f(k * a->n, k * a->n, 0);
-        glVertex3f(0, k * a->n, 0);
     glEnd();
 
     loadTexture(textures[1]);
-
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
@@ -284,27 +275,43 @@ void DrawGl::drawMaze() {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
             if (a->walls[i][2] == 1) {
-                glVertex3f(x - f, y, wallHeight + eps);
                 glVertex3f(x - f, y + k, wallHeight + eps);
-                glVertex3f(x + f, y + k, wallHeight + eps);
+                glTexCoord2d(0, 1);
+                glVertex3f(x - f, y, wallHeight + eps);
+                glTexCoord2d(0, 0);
                 glVertex3f(x + f, y, wallHeight + eps);
+                glTexCoord2d(1, 0);
+                glVertex3f(x + f, y + k, wallHeight + eps);
+                glTexCoord2d(1, 1);
             } else {
                 glVertex3f(x, y - f, wallHeight + eps);
+                glTexCoord2d(0, 1);
                 glVertex3f(x, y + f, wallHeight + eps);
+                glTexCoord2d(0, 0);
                 glVertex3f(x + k, y + f, wallHeight + eps);
+                glTexCoord2d(1, 0);
                 glVertex3f(x + k, y - f, wallHeight + eps);
+                glTexCoord2d(1, 1);
             }
         }
     glEnd();
 
+    loadTexture(textures[3]);
+    glBegin(GL_QUADS);
+        for (int i = 0; i < a->n; i++)
+            for (int j = 0; j < a->n; j++) {
+                glVertex3f((i + 1) * k, j * k, -eps);
+                glTexCoord2d(0, 0);
+                glVertex3f(i * k, j * k, -eps);
+                glTexCoord2d(0, 1);
+                glVertex3f(i * k, (j + 1) * k, -eps);
+                glTexCoord2d(1, 1);
+                glVertex3f((i + 1) * k, (j + 1) * k, -eps);
+                glTexCoord2d(1, 0);
+            }
+    glEnd();
 
-  /*  glBegin(GL_POINTS);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        for (int i = 0; i < a->numberArsenals; i++)
-            glVertex3f(a->arsenal[i].x() * k + k / 2, a->arsenal[i].y() * k + k / 2, wallHeight / 2);
 
-
-    glEnd();*/
 
     qglColor(QColor(0, 0, 250));
     for (int i = 0; i < a->numberArsenals; i++)
@@ -382,14 +389,15 @@ void DrawGl::keyReleaseEvent(QKeyEvent *event) {
     a->keyReleaseEvent(event);
 }
 
-/*void DrawGl::mousePressEvent(QMouseEvent *event) {
-//    a->taskKill();
+void DrawGl::mousePressEvent(QMouseEvent *event) {
+    mousePressed = true;
     event->accept();
 }
 
 void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
+    mousePressed = false;
     event->accept();
-}*/
+}
 
 /*void DrawGl::wheelEvent(QWheelEvent *event) {
     if (event->delta() > 0)
@@ -399,7 +407,7 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (botActive || (!this->isFullScreen()))
+    if (botActive || (!this->isFullScreen() && !mousePressed))
         return;
 
     double x = (event->x() - width() / 2) / 5;

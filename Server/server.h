@@ -32,8 +32,6 @@ public:
     int alreadyPlayers;
     void runCommand(QString command, Player *player);
     QMap<int, Player *> r;
-    void sendHeroes();
-
 
 private:
     void die(QString);
@@ -46,6 +44,7 @@ private:
     int scanInt(QTcpSocket *);
     int findNap(QString);
     QPoint getFreePoint();
+    QTimer *sendHeroesTime;
 
     void forAllClientsPrint(QString);
 
@@ -66,8 +65,9 @@ private:
 protected:
     void incomingConnection(int handle);
 
-private slots:
+public slots:
     void sendFields();
+    void sendHeroes();
 };
 
 #endif // SERVER_H

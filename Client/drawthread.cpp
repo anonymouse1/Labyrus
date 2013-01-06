@@ -10,11 +10,16 @@ DrawThread::DrawThread(DrawGl *wid, MainWindow *m, QObject *parent) :
 void DrawThread::run() {
     qDebug() << "run called";
     nextTimeTimer = new QTimer;
+    serverRefresh = new QTimer;
 
     QObject::connect(nextTimeTimer, SIGNAL(timeout()), this, SLOT(nextTime()));
+    QObject::connect(serverRefresh, SIGNAL(timeout()), this, SLOT(refreshCoord()));
 
-    nextTimeTimer->setInterval(8);
+    nextTimeTimer->setInterval(10);
     nextTimeTimer->start();
+
+    serverRefresh->setInterval(100);
+    serverRefresh->start();
 
     exec();
 }
@@ -78,6 +83,10 @@ void DrawThread::nextTime() {
         main->alive = true;
         main->command->go("l");
     }
+}
 
-
+void DrawThread::refreshCoord() {
+    main->sending.lock();
+    main->command->go(QString("n\n") + QString::number(main->coord.x()) + "\n" + QString::number(main->coord.y()) + "\n");
+    main->sending.unlock();
 }

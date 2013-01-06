@@ -90,7 +90,7 @@ void MainWindow::connectionEstablished() {
     } else {
         command->wasPrinted("Success\n");
         failConnection->stop();
-        delete failConnection;
+        failConnection->deleteLater();
         emit successConnection();
     }
 

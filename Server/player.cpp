@@ -1,6 +1,7 @@
 #include "player.h"
 
 Player::Player(QObject *parent) : QThread(parent) {
+    coord = new QPointF(0.4, 0.4);
 }
 
 void Player::run() {

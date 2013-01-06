@@ -16,12 +16,11 @@ Server::Server(QObject *parent) :
 
     n = 30;
     m = 0;
-    /*walls[0][0] = 1;
-    walls[0][1] = 1;
-    walls[0][2] = 0;
-    walls[1][0] = 1;
-    walls[1][1] = 1;
-    walls[1][2] = 1;*/
+    sendHeroesTime = new QTimer;
+    sendHeroesTime->setInterval(1000);
+    QObject::connect(sendHeroesTime, SIGNAL(timeout()), this, SLOT(sendHeroes()));
+    sendHeroesTime->start();
+
     for (int i = 0; i < n; i++) {
         walls[m][0] = 0;
         walls[m][1] = i;
@@ -96,7 +95,6 @@ void Server::processConnection(Player *player) {
     player->alive = true;
     player->destiny = 0;
     player->destroy = 3;
-    player->coord = new QPoint(qrand() % n, qrand() % n);
 
     qDebug() << player->name << "connected";
     qDebug() << "as" << socket->socketDescriptor();
@@ -112,54 +110,25 @@ void Server::processConnection(Player *player) {
 }
 
 void Server::runCommand(QString command, Player *player) {
-    if (command[0] == '0')
-        player->coord->setY(player->coord->y() - 1);
-    else if (command[0] == '1')
-        player->coord->setX(player->coord->x() + 1);
-    else if (command[0] == '2')
-        player->coord->setY(player->coord->y() + 1);
-    else if (command[0] == '3')
-        player->coord->setX(player->coord->x() - 1);
-    else if (command[0] == 'c')
-        player->destiny = player->socket->readLine().toInt();
-    else if (command[0] == 'a') {
-        player->destroy += 1;
-        player->walls += 1;
-        player->patrons += 3;
-        int tmp = player->socket->readLine().left(1).toInt();
-        arsenal[tmp] = QPoint(-100, -100);
-    } else if (command[0] == 'l') {
-        player->alive = true;
-    } else if (command[0] == 'p') {
-//        player->patrons--;
-        player->socket->waitForReadyRead(100);
-        QString s = player->socket->readLine();
-        qDebug() << "SIGKILL" << s.left(s.length() - 1);
-        r[s.left(s.length() - 1).toInt()]->alive = false;
-        sendFields();
-    } else if (command[0] == 'b') {
-        player->walls--;
-        walls[m][0] = scanInt(player->socket);
-        walls[m][1] = scanInt(player->socket);
-        walls[m][2] = scanInt(player->socket);
-        m++;
-    } else if (command[0] == 'p') {
-        player->patrons--;
-    } else if (command[0] == 'e') {
-        walls[scanInt(player->socket)][0] = -1000;
-    } else if (command[0] == 'r') {
-        player->destroy--;
+    if (command[0] == 'n') {
+        QString s;
+        s = player->socket->readLine();
+        qDebug() << s;
+        player->coord->setX(s.left(s.length() - 1).toDouble());
+        s = player->socket->readLine();
+        qDebug() << s;
+        player->coord->setY(s.left(s.length() - 1).toDouble());
     }
 
-    sendHeroes();
+    if (player->socket->canReadLine())
+        runCommand(player->socket->readLine(), player);
+    qDebug() << "success" << *player->coord;
+//    sendHeroes();
 }
 
 void Server::sendFieldToPlayer(Player *player) {
     if (!gameStart)
         return;
-
-    qDebug() << this->thread();
-
     player->sendingInformation.lock();
     QTcpSocket *socket = player->socket;
 
@@ -198,6 +167,7 @@ void Server::sendHeroesToPlayer(Player *player) {
                        i.value()->name + "\n").toAscii());
         }
 
+    qDebug() << socket->state();
     socket->flush();
     player->sendingInformation.unlock();
 }

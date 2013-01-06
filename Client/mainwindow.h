@@ -16,6 +16,7 @@
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QTimeLine>
+#include <QMutex>
 #include <commandsend.h>
 #include <drawgl.h>
 #include <assert.h>
@@ -90,6 +91,7 @@ public:
 
     void check(double &dx, double &dy);
     void checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2);
+    QMutex sending;
 
 
 private:

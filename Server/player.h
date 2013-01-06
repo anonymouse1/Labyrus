@@ -16,7 +16,7 @@ public:
     explicit Player(QObject *parent = 0);
 
     QString name;
-    QPoint *coord;
+    QPointF *coord;
     bool alive;
     int patrons;
     int walls;
