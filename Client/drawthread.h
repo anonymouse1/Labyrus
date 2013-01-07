@@ -10,6 +10,7 @@ class DrawGl;
 class MainWindow;
 
 const double speed = 0.01;
+const int lacency = 100; // ms
 
 class DrawThread : public QThread
 {

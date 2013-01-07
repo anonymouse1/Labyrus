@@ -18,7 +18,7 @@ void DrawThread::run() {
     nextTimeTimer->setInterval(10);
     nextTimeTimer->start();
 
-    serverRefresh->setInterval(100);
+    serverRefresh->setInterval(1000);
     serverRefresh->start();
 
     exec();

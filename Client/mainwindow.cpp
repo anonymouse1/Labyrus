@@ -381,27 +381,26 @@ void MainWindow::readInformation() {
         if (s == "gameStart\n") {
             qDebug() << "gameStart detected";
             thread->start();
-            if (mainSocket->readLine() != "field\n")
-                qDebug() << "very strange error";
-
-            readField();
-            mainSocket->waitForReadyRead(100);
-            if (mainSocket->readLine() != "hero\n")
-                qDebug() << "very strange error";
-
-            readHeroes();
+            processInformation();
+            processInformation();
             gameStart();
-            return;
         } else if (s == "field\n") {
             readField();
-            return;
+            processInformation();
         } else if (s == "hero\n") {
             readHeroes();
+            processInformation();
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         }
     }
+}
+
+void MainWindow::processInformation() {
+    mainSocket->waitForReadyRead(lacency);
+    if (mainSocket->canReadLine())
+        readInformation();
 }
 
 void MainWindow::readHeroes() {
@@ -414,17 +413,14 @@ void MainWindow::readHeroes() {
         if (tmp == myDescriptor) {
             if (fullRefresh) {
                 coord = c;
-                qDebug() << coord;
+                fullRefresh = false;
+                alive = scanInt();
+                patrons = scanInt();
+                wall = scanInt();
+                destroy = scanInt();
+                heroes[i].setX(-1);
+                heroes[i].setY(-1);
             }
-
-            fullRefresh = false;
-            alive = scanInt();
-            patrons = scanInt();
-            wall = scanInt();
-            destroy = scanInt();
-
-            heroes[i].setX(-1);
-            heroes[i].setY(-1);
         } else {
             heroes[i] = c;
             descriptors[i] = tmp;

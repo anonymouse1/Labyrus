@@ -96,6 +96,7 @@ public:
 
 private:
     void close();
+    void processInformation();
     int scanInt();
 
     int getRealX(double x);

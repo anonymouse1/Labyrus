@@ -78,8 +78,8 @@ void Server::processConnection(Player *player) {
             socket->write("login is already in use");
             socket->flush();
             socket->disconnectFromHost();
-            player->deleteLater();
             player->terminate();
+            player->deleteLater();
             return;
         }
 
@@ -89,7 +89,6 @@ void Server::processConnection(Player *player) {
     socket->flush();
 
     player->socket = socket;
-    player->socket->moveToThread(player);
     player->patrons = 3;
     player->walls = 1;
     player->alive = true;
@@ -105,8 +104,9 @@ void Server::processConnection(Player *player) {
         qDebug() << "starting game";
         gameStart = true;
         forAllClientsPrint("gameStart");
-        sendFields();
     }
+
+    sendFieldToPlayer(player);
 }
 
 void Server::runCommand(QString command, Player *player) {
@@ -123,7 +123,6 @@ void Server::runCommand(QString command, Player *player) {
     if (player->socket->canReadLine())
         runCommand(player->socket->readLine(), player);
     qDebug() << "success" << *player->coord;
-//    sendHeroes();
 }
 
 void Server::sendFieldToPlayer(Player *player) {
@@ -166,8 +165,6 @@ void Server::sendHeroesToPlayer(Player *player) {
                        QString::number(i.value()->destroy) + "\n" +
                        i.value()->name + "\n").toAscii());
         }
-
-    qDebug() << socket->state();
     socket->flush();
     player->sendingInformation.unlock();
 }
