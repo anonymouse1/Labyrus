@@ -6,7 +6,6 @@
 #include <GL/glu.h>
 #include <QImage>
 
-
 class MainWindow;
 
 const double wallHeight = 0.2;
@@ -48,7 +47,6 @@ private:
     QString currentText;
     bool enteringText;
     QString skinPath;
-    QLineEdit *inputLine;
 
     bool firstMouseMove;
     int lastClickX;

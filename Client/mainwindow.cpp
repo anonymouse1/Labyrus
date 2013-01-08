@@ -19,6 +19,9 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     thread = new DrawThread(widget, this, this);
     thread->setPriority(QThread::LowestPriority);
 
+    netThread = new QThread(this);
+    netThread->start();
+
     login = l;
     failConnection = new QTimer;
     repaintTimer = new QTimer;
@@ -26,9 +29,12 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
 
     qDebug() << ip.toString();
-    mainSocket = new QTcpSocket(this);
+    mainSocket = new QTcpSocket();
+    mainSocket->moveToThread(netThread);
+    command = new CommandSend(mainSocket);
+    command->moveToThread(netThread);
 
-    QObject::connect(mainSocket, SIGNAL(connected()), this,  SLOT(connectionEstablished()));
+    netThread->connect(mainSocket, SIGNAL(connected()), this,  SLOT(connectionEstablished()));
     QObject::connect(failConnection, SIGNAL(timeout()), this, SLOT(connectionFailed()));
     QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
 
@@ -78,23 +84,21 @@ void MainWindow::connectionEstablished() {
     command->go("Hello maze", true);
     command->go(login, true, false);
 
-    mainSocket->waitForReadyRead(300);
+    mainSocket->waitForReadyRead(lacency);
     QString s = mainSocket->readLine();
     if (s != "success\n") {
         QMessageBox::critical(this, "Cannot connect to server", s);
         connectionFailed();
         this->close();
     } else {
-        command->wasPrinted("Success\n");
         failConnection->stop();
         failConnection->deleteLater();
         emit successConnection();
     }
 
-    mainSocket->waitForReadyRead(300);
+    mainSocket->waitForReadyRead(lacency);
     myDescriptor = scanInt();
-    command->wasPrinted("as" + QString::number(myDescriptor));
-    QObject::connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()));
+    netThread->connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()));
 
     if (mainSocket->canReadLine())
         readInformation();
@@ -244,10 +248,10 @@ void MainWindow::eraseWall(int x, int y, int flag) {
     qDebug() << "bot finished";
 }*/
 
-void MainWindow::strangeWait() {
+/*void MainWindow::strangeWait() {
     while ((widget->animZRot != 0) || (widget->animX != 0) || (widget->animY != 0))
         app->processEvents(QEventLoop::AllEvents, 10);
-}
+}*/
 
 /*void MainWindow::syncNap(int a) {
     if (nap == (a + 3) % 4) {

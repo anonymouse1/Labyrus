@@ -33,6 +33,5 @@ HEADERS  += mainwindow.h \
 
 FORMS    += \
     startDialog.ui \
-    command.ui \
     mainwindow.ui \
     connection.ui

@@ -18,6 +18,7 @@
 #include <QTimeLine>
 #include <QMutex>
 #include <QTime>
+#include <QEventLoop>
 #include <commandsend.h>
 #include <drawgl.h>
 #include <assert.h>
@@ -114,7 +115,7 @@ private:
 
     void gameStart();
 //    bool superDfs();
-    void strangeWait();
+//    void strangeWait();
   //  void syncNap(int);
 //    void standartMove(bool);
 
@@ -126,6 +127,7 @@ private:
     QTimer *repaintTimer;
     QTimeLine *startLine;
     DrawThread *thread;
+    QThread *netThread;
 
 
     bool fullRefresh;

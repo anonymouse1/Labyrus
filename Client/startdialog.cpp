@@ -7,6 +7,8 @@ startDialog::startDialog(QWidget *parent) :
     ui->setupUi(this);
     scanSkins();
 
+    qDebug() << this->thread();
+
 
     QObject::connect(ui->commandLinkButton, SIGNAL(clicked()), this, SLOT(start()));
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
@@ -14,9 +16,6 @@ startDialog::startDialog(QWidget *parent) :
 
 void startDialog::start() {
     w = new MainWindow(app, QHostAddress(ui->lineEdit_2->text()), ui->spinBox->value(), ui->lineEdit->text().toAscii(), ui->comboBox->currentText(), this);
-    command = new CommandSend(w->mainSocket);
-    w->command = command;
-
     connectWindow = new Connection(QString("Connecting to: ") + ui->lineEdit_2->text() + ":" + ui->spinBox->text());
     connectWindow->show();
 
