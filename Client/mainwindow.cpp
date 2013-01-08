@@ -20,7 +20,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     thread->setPriority(QThread::LowestPriority);
 
     login = l;
-    animateTimer = new QTimer;
     failConnection = new QTimer;
     repaintTimer = new QTimer;
 
@@ -41,11 +40,9 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
 
 
     mainSocket->connectToHost(ip, port, QTcpSocket::ReadWrite);
-    animateTimer->setInterval(4);
     failConnection->setInterval(5000);
     repaintTimer->setInterval(16);
 
-    animateTimer->start();
     failConnection->start();
     repaintTimer->start();
 

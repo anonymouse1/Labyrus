@@ -121,7 +121,6 @@ private:
     double fabs(double);
 
     QByteArray login;
-    QTimer *animateTimer;
     QTimer *unScanN;
     QTimer *failConnection;
     QTimer *repaintTimer;
