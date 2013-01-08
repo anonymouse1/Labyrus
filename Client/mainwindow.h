@@ -17,6 +17,7 @@
 #include <QPixmap>
 #include <QTimeLine>
 #include <QMutex>
+#include <QTime>
 #include <commandsend.h>
 #include <drawgl.h>
 #include <assert.h>
@@ -50,7 +51,7 @@ public:
     double angle;
 
     int otherHeroes;
-    QPoint heroes[100];
+    QPointF heroes[100];
     int numberArsenals;
     QPoint arsenal[100];
     QString heroNames[100];
@@ -97,10 +98,7 @@ public:
 private:
     void close();
     void processInformation();
-    int scanInt();
-
-    int getRealX(double x);
-    int getRealY(double y);
+    double scanInt();
 
     /*bool isWallUp(QPointF c);
     bool isWallDown(QPointF c);

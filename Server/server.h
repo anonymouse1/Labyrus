@@ -44,7 +44,6 @@ private:
     int scanInt(QTcpSocket *);
     int findNap(QString);
     QPoint getFreePoint();
-    QTimer *sendHeroesTime;
 
     void forAllClientsPrint(QString);
 

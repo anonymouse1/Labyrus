@@ -8,6 +8,8 @@
 #include <QMutex>
 #include <QTimer>
 
+const int lacency = 1000; //ms
+
 class Server;
 class Player : public QThread
 {
@@ -29,6 +31,9 @@ public:
     QMutex sendingInformation;
 private:
     QTimer *refresh;
+    QTimer *sendHeroesTime;
+private slots:
+    void sendHeroTime();
 public slots:
     void refreshTime();
     void readyRead();

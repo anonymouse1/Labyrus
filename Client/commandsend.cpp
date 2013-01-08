@@ -14,7 +14,7 @@ CommandSend::CommandSend(QTcpSocket *s, QWidget *parent) :
     QObject::connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(print()));
 }
 
-void CommandSend::go(QString s, bool b) {
+void CommandSend::go(QString s, bool flush, bool b) {
     if (s == "bot") {
         emit startBot();
         return;
@@ -22,8 +22,10 @@ void CommandSend::go(QString s, bool b) {
 
     if (b)
         s += "\n";
-    socket->write((s).toAscii());
-    socket->flush();
+    socket->write(s.toAscii());
+    if (flush)
+        socket->flush(); // it was a many strange bugs, was not it?
+
     if (b)
         wasPrinted(s);
     else
@@ -31,7 +33,7 @@ void CommandSend::go(QString s, bool b) {
 }
 
 void CommandSend::print() {
-    go(ui->lineEdit->text());
+    go(ui->lineEdit->text(), true);
 }
 
 void CommandSend::wasPrinted(QString s) {

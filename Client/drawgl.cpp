@@ -322,7 +322,7 @@ void DrawGl::drawMaze() {
         if ((a->heroes[i].x() != -1) || (a->heroes[i].y()) != -1) {
 //            glVertex3f(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2);
             qglColor(QColor(0, a->otherAlive[i] * 200, 0));
-            renderText(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2, a->heroNames[i], hudFont);
+            renderText(a->heroes[i].x() * k, a->heroes[i].y() * k, wallHeight / 2, a->heroNames[i], hudFont);
         }
 //    paintEngine()->drawEllipse(QRect(0, 0, 10, 10));
 //    paintEngine()->setActive(true);

@@ -60,8 +60,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     leftStrife = false;
     rightStrife = false;
     angle = 45;
-    coord.setX(0.5);
-    coord.setY(0.5);
+    coord.setX(0);
+    coord.setY(0);
 }
 
 MainWindow::~MainWindow()
@@ -78,8 +78,8 @@ void MainWindow::close() {
 }
 
 void MainWindow::connectionEstablished() {
-    command->go("Hello maze");
-    command->go(login, false);
+    command->go("Hello maze", true);
+    command->go(login, true, false);
 
     mainSocket->waitForReadyRead(300);
     QString s = mainSocket->readLine();
@@ -118,14 +118,6 @@ void MainWindow::readField() {
         arsenal[i].setX(scanInt());
         arsenal[i].setY(scanInt());
     }
-}
-
-int MainWindow::getRealX(double x) {
-    return (this->width() / n - 1) * x + 1;
-}
-
-int MainWindow::getRealY(double y) {
-    return (this->height() / n - 1) * y + 23;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -205,9 +197,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         rightStrife = false;
 }
 
-int MainWindow::scanInt() {
+double MainWindow::scanInt() {
     if (!mainSocket->canReadLine())
-        if (mainSocket->waitForReadyRead(100))
+        if (!mainSocket->waitForReadyRead(lacency))
             qDebug() << "slow net bugs enabled";
     QString s = mainSocket->readLine();
     if (s == "") {
@@ -218,10 +210,10 @@ int MainWindow::scanInt() {
         s.remove(s.length() - 1, 1);
 
     bool res;
-    s.toInt(&res, 10);
+    s.toDouble(&res);
     if (!res)
         qDebug() << "error scanning int from:" + s;
-    return s.toInt();
+    return s.toDouble();
 }
 
 void MainWindow::setFullRefresh() {
@@ -382,14 +374,11 @@ void MainWindow::readInformation() {
             qDebug() << "gameStart detected";
             thread->start();
             processInformation();
-            processInformation();
             gameStart();
         } else if (s == "field\n") {
             readField();
-            processInformation();
         } else if (s == "hero\n") {
             readHeroes();
-            processInformation();
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
@@ -407,28 +396,21 @@ void MainWindow::readHeroes() {
     otherHeroes = scanInt();
     for (int i = 0; i < otherHeroes; i++) {
         int tmp = scanInt();
-        QPoint c;
+        QPointF c;
         c.setX(scanInt());
         c.setY(scanInt());
         if (tmp == myDescriptor) {
             if (fullRefresh) {
                 coord = c;
                 fullRefresh = false;
-                alive = scanInt();
-                patrons = scanInt();
-                wall = scanInt();
-                destroy = scanInt();
                 heroes[i].setX(-1);
                 heroes[i].setY(-1);
             }
         } else {
             heroes[i] = c;
             descriptors[i] = tmp;
-            otherAlive[i] = scanInt();
-            scanInt();
-            scanInt();
-            scanInt();
         }
+        mainSocket->waitForReadyRead(lacency);
         heroNames[i] = mainSocket->readLine();
         heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
     }

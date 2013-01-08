@@ -11,16 +11,10 @@ Server::Server(QObject *parent) :
         if (l[i].toIPv4Address() && l[i] != QHostAddress::LocalHost)
             qDebug() << QString("server is upped on ") + QString(l[i].toString()) + QChar(':') + QString::number(port);
 
-//    QObject::connect(this, SIGNAL(newConnection()), this, SLOT(newConnection()));
     alreadyPlayers = 0;
 
     n = 30;
     m = 0;
-    sendHeroesTime = new QTimer;
-    sendHeroesTime->setInterval(1000);
-    QObject::connect(sendHeroesTime, SIGNAL(timeout()), this, SLOT(sendHeroes()));
-    sendHeroesTime->start();
-
     for (int i = 0; i < n; i++) {
         walls[m][0] = 0;
         walls[m][1] = i;
@@ -53,7 +47,6 @@ void Server::incomingConnection(int handle) {
     Player *player = new Player();
     player->socketDescriptor = handle;
     player->server = this;
-
     player->start();
 }
 
@@ -88,6 +81,8 @@ void Server::processConnection(Player *player) {
     socket->write((QString::number(socket->socketDescriptor()) + "\n").toAscii());
     socket->flush();
 
+    player->coord->setX(0.5);
+    player->coord->setY(0.5);
     player->socket = socket;
     player->patrons = 3;
     player->walls = 1;
@@ -113,10 +108,8 @@ void Server::runCommand(QString command, Player *player) {
     if (command[0] == 'n') {
         QString s;
         s = player->socket->readLine();
-        qDebug() << s;
         player->coord->setX(s.left(s.length() - 1).toDouble());
         s = player->socket->readLine();
-        qDebug() << s;
         player->coord->setY(s.left(s.length() - 1).toDouble());
     }
 
@@ -145,7 +138,7 @@ void Server::sendFieldToPlayer(Player *player) {
     for (int i = 0; i < numberArsenals; i++)
         socket->write((QString::number(arsenal[i].x()) + "\n" + QString::number(arsenal[i].y()) + "\n").toAscii());
 
-    socket->flush();
+//    socket->flush(); I don't know if it is very strange bug, but comment it.
     player->sendingInformation.unlock();
 }
 
@@ -159,13 +152,9 @@ void Server::sendHeroesToPlayer(Player *player) {
         socket->write((QString::number(i.value()->socket->socketDescriptor()) + "\n" +
                        QString::number(i.value()->coord->x()) + "\n" +
                        QString::number(i.value()->coord->y()) + "\n" +
-                       QString::number(i.value()->alive) + "\n" +
-                       QString::number(i.value()->patrons) + "\n" +
-                       QString::number(i.value()->walls) + "\n" +
-                       QString::number(i.value()->destroy) + "\n" +
                        i.value()->name + "\n").toAscii());
         }
-    socket->flush();
+//    socket->flush(); this is super very strange bug don't uncomment this
     player->sendingInformation.unlock();
 }
 

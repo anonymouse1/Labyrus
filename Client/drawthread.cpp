@@ -18,7 +18,7 @@ void DrawThread::run() {
     nextTimeTimer->setInterval(10);
     nextTimeTimer->start();
 
-    serverRefresh->setInterval(1000);
+    serverRefresh->setInterval(lacency);
     serverRefresh->start();
 
     exec();
@@ -75,18 +75,20 @@ void DrawThread::nextTime() {
             main->patrons += 3;
             main->wall += 1;
             main->destroy += 1;
-            main->command->go(QString("a") + "\n" + QString::number(i));
+            main->command->go(QString("a") + "\n" + QString::number(i), false);
             main->arsenal[i] = QPoint(-100, -100);
         }
 
     if (main->equal(main->coord, main->hospital)) {
         main->alive = true;
-        main->command->go("l");
+        main->sending.lock();
+        main->command->go("l", false);
+        main->sending.unlock();
     }
 }
 
 void DrawThread::refreshCoord() {
     main->sending.lock();
-    main->command->go(QString("n\n") + QString::number(main->coord.x()) + "\n" + QString::number(main->coord.y()) + "\n");
+    main->command->go(QString("n\n") + QString::number(main->coord.x()) + "\n" + QString::number(main->coord.y()) + "\n", false);
     main->sending.unlock();
 }

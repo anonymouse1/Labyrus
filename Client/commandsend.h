@@ -13,7 +13,7 @@ public:
     explicit CommandSend(QTcpSocket *s, QWidget *parent = 0);
     Ui::commands *ui;
 
-    void go(QString, bool b = true);
+    void go(QString, bool flush, bool b = true);
     void wasPrinted(QString);
 private:
     QTcpSocket *socket;
