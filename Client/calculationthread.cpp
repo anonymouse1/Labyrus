@@ -11,6 +11,8 @@ CalculationThread::CalculationThread(DrawGl *wid, NetworkClass *m) : QThread()
     rightPressed = false;
     leftStrife = false;
     rightStrife = false;
+    lookingDown = false;
+    lookingUp = false;
 }
 
 void CalculationThread::run() {
@@ -75,6 +77,12 @@ void CalculationThread::nextTime() {
         main->coord.setX(main->coord.x() + deltaX);
         main->coord.setY(main->coord.y() + deltaY);
     }
+
+    if (lookingDown)
+        main->yAngle += 1;
+
+    if (lookingUp)
+        main->yAngle -= 1;
 
     for (int i = 0; i < main->numberArsenals; i++)
         if (equal(main->coord, main->arsenal[i])) {

@@ -37,6 +37,7 @@ public:
     int myDescriptor;
     int descriptors[100];
     double angle;
+    double yAngle;
     QString login;
 
     void processInformation();

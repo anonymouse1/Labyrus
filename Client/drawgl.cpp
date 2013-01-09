@@ -93,7 +93,7 @@ void DrawGl::paintGL() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glRotatef(xRot, 1.0f, 0.0f, 0.0f);
+    glRotatef(xRot + a->yAngle, 1.0f, 0.0f, 0.0f);
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);
     glRotatef(a->angle, 0.0f, 0.0f, 1.0f);
 

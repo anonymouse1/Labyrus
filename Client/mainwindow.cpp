@@ -65,9 +65,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (event->key() == Qt::Key_O)
         widget->ztra -= 0.01;
 
-    if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
+    if (event->key() == Qt::Key_W)
         thread->upPressed = true;
-    else if ((event->key() == Qt::Key_Down) || (event->key() == Qt::Key_S))
+    else if (event->key() == Qt::Key_S)
         thread->downPressed = true;
     else if (event->key() == Qt::Key_Left)
         thread->leftPressed = true;
@@ -77,6 +77,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         thread->leftStrife = true;
     else if (event->key() == Qt::Key_D)
         thread->rightStrife = true;
+    else if (event->key() == Qt::Key_Up)
+        thread->lookingUp = true;
+    else if (event->key() == Qt::Key_Down)
+        thread->lookingDown = true;
 
 
 
@@ -107,18 +111,22 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
+    if (event->key() == Qt::Key_W)
         thread->upPressed = false;
     else if (event->key() == Qt::Key_Left)
         thread->leftPressed = false;
     else if (event->key() == Qt::Key_Right)
         thread->rightPressed = false;
-    else if ((event->key() == Qt::Key_Down) || (event->key() == Qt::Key_S))
+    else if (event->key() == Qt::Key_S)
         thread->downPressed = false;
     else if (event->key() == Qt::Key_A)
         thread->leftStrife = false;
     else if (event->key() == Qt::Key_D)
         thread->rightStrife = false;
+    else if (event->key() == Qt::Key_Up)
+        thread->lookingUp = false;
+    else if (event->key() == Qt::Key_Down)
+        thread->lookingDown = false;
 }
 
 /*void MainWindow::createWall(int x, int y, int flag) {

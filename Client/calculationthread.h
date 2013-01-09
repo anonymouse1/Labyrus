@@ -23,6 +23,8 @@ public:
     bool downPressed;
     bool leftStrife;
     bool rightStrife;
+    bool lookingUp;
+    bool lookingDown;
 private:
     void run();
     DrawGl *widget;
