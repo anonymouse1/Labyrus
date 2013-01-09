@@ -52,18 +52,21 @@ void Server::incomingConnection(int handle) {
 
 void Server::processConnection(Player *player) {
 //    QTcpSocket *socket = server->nextPendingConnection();
+    qDebug() << QThread::currentThread();
     QTcpSocket *socket = player->socket;
 
-    if (!socket->bytesAvailable())
-        socket->waitForReadyRead(1000);
+    if (!socket->canReadLine())
+        socket->waitForReadyRead(lacency);
 
-    if (socket->readLine() != "Hello maze\n") {
-        qDebug() << "this was unknown hacker";
+    QString s = socket->readLine();
+    if (s != "Hello maze\n") {
+        qDebug() << "this was unknown hacker" << s;
         socket->write("Are you a hacker?");
         socket->disconnectFromHost();
         return;
     }
-    socket->waitForReadyRead(1000);
+    if (!socket->canReadLine())
+        socket->waitForReadyRead(lacency);
     player->name = socket->readLine();
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
         if (i.value()->name == player->name) {
@@ -79,7 +82,6 @@ void Server::processConnection(Player *player) {
 
     socket->write("success\n");
     socket->write((QString::number(socket->socketDescriptor()) + "\n").toAscii());
-    socket->flush();
 
     player->coord->setX(0.5);
     player->coord->setY(0.5);
@@ -115,10 +117,11 @@ void Server::runCommand(QString command, Player *player) {
 
     if (player->socket->canReadLine())
         runCommand(player->socket->readLine(), player);
-    qDebug() << "success" << *player->coord;
+//    qDebug() << "success" << *player->coord;
 }
 
 void Server::sendFieldToPlayer(Player *player) {
+    qDebug() << "sending field to player" << player->name << QTime::currentTime();
     if (!gameStart)
         return;
     player->sendingInformation.lock();
@@ -144,7 +147,6 @@ void Server::sendFieldToPlayer(Player *player) {
 
 void Server::sendHeroesToPlayer(Player *player) {
     player->sendingInformation.lock();
-
     QTcpSocket *socket = player->socket;
     socket->write("hero\n");
     socket->write((QString::number(r.size()) + "\n").toAscii());
@@ -152,9 +154,9 @@ void Server::sendHeroesToPlayer(Player *player) {
         socket->write((QString::number(i.value()->socket->socketDescriptor()) + "\n" +
                        QString::number(i.value()->coord->x()) + "\n" +
                        QString::number(i.value()->coord->y()) + "\n" +
-                       i.value()->name + "\n").toAscii());
+                       i.value()->name).toAscii());
         }
-//    socket->flush(); this is super very strange bug don't uncomment this
+  //  socket->flush(); //this is super very strange bug don't uncomment this
     player->sendingInformation.unlock();
 }
 

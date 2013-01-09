@@ -2,7 +2,6 @@
 #define STARTDIALOG_H
 
 #include <QWidget>
-#include <commandsend.h>
 #include <mainwindow.h>
 #include <ui_startDialog.h>
 #include <QDir>
@@ -23,7 +22,6 @@ public:
 private:
     Ui::Form *ui;
     MainWindow *w;
-    CommandSend *command;
     QPixmap *pix;
     Connection *connectWindow;
 

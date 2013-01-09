@@ -15,14 +15,11 @@ void Player::run() {
     sendHeroesTime = new QTimer;
     sendHeroesTime->setInterval(lacency);
     sendHeroesTime->start();
-    QObject::connect(sendHeroesTime, SIGNAL(timeout()), this, SLOT(sendHeroTime()));
-//    sendHeroesTime->singleShot(3000, this, SLOT(sendHeroTime()));
-
     server->processConnection(this);
 
-    QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()));
-//    QObject::connect(server->sendHeroesTime, SIGNAL(timeout()), this, SLOT(sendHeroTime()));
+    QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::DirectConnection);
+    QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()), Qt::DirectConnection);
+    QObject::connect(sendHeroesTime, SIGNAL(timeout()), this, SLOT(sendHeroTime()), Qt::DirectConnection);
 
     exec();
 }

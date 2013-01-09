@@ -8,7 +8,7 @@
 #include <QMutex>
 #include <QTimer>
 
-const int lacency = 5000; //ms
+const int lacency = 100; //ms
 
 class Server;
 class Player : public QThread

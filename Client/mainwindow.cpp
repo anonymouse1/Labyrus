@@ -6,119 +6,42 @@
 const double animXY = 0.01;
 const double animZRotone = 1;
 
-MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArray l,  QString skin, QWidget *parent) :
-    QWidget(parent)
+MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArray l,  QString skin, QObject *parent) :
+    QObject(parent)
 {
-    n = 0;
-    m = 0;
-
     app = a;
-
-    widget = new DrawGl(app, skin);
-
-    thread = new DrawThread(widget, this, this);
-    thread->setPriority(QThread::LowestPriority);
-
-    netThread = new QThread(this);
-    netThread->start();
-
-    login = l;
-    failConnection = new QTimer;
     repaintTimer = new QTimer;
-
-    this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
-
-    qDebug() << ip.toString();
-    mainSocket = new QTcpSocket();
-    mainSocket->moveToThread(netThread);
-    command = new CommandSend(mainSocket);
-    command->moveToThread(netThread);
-
-    netThread->connect(mainSocket, SIGNAL(connected()), this,  SLOT(connectionEstablished()));
-    QObject::connect(failConnection, SIGNAL(timeout()), this, SLOT(connectionFailed()));
-    QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
-
-    nap = 0;
-    scanN = true;
-    otherHeroes = 0;
-    fullRefresh = true;
-    numberArsenals = 0;
-
-
-    mainSocket->connectToHost(ip, port, QTcpSocket::ReadWrite);
-    failConnection->setInterval(5000);
     repaintTimer->setInterval(16);
 
-    failConnection->start();
+    widget = new DrawGl(app, skin);
+    widget->legacy = this;
+    login = l;
+    //    this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
+
+    qDebug() << ip.toString();
+    input = new NetworkClass(ip, port, login);
+
+    QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
+    QObject::connect(input, SIGNAL(gameStart()), this, SLOT(gameStart()));
+    QObject::connect(input, SIGNAL(connectionFailed()), this, SLOT(connectionFailed()));
+    QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
+
+    nap = 0;
+    widget->a = input;
     repaintTimer->start();
-
-    widget->a = this;
-    widget->setFocus();
-//    widget->showFullScreen();
-
-    upPressed = false;
-    downPressed = false;
-    leftPressed = false;
-    rightPressed = false;
-    leftStrife = false;
-    rightStrife = false;
-    angle = 45;
-    coord.setX(0);
-    coord.setY(0);
+    input->start();
+    thread = new CalculationThread(widget, input);
 }
 
 MainWindow::~MainWindow()
 {
     qDebug() << "destroying";
-    mainSocket->disconnectFromHost();
-//    delete ui;
+    //    delete ui;
 }
 
 void MainWindow::close() {
     qDebug() << "close called";
-    mainSocket->disconnectFromHost();
     deleteLater();
-}
-
-void MainWindow::connectionEstablished() {
-    command->go("Hello maze", true);
-    command->go(login, true, false);
-
-    mainSocket->waitForReadyRead(lacency);
-    QString s = mainSocket->readLine();
-    if (s != "success\n") {
-        QMessageBox::critical(this, "Cannot connect to server", s);
-        connectionFailed();
-        this->close();
-    } else {
-        failConnection->stop();
-        failConnection->deleteLater();
-        emit successConnection();
-    }
-
-    mainSocket->waitForReadyRead(lacency);
-    myDescriptor = scanInt();
-    netThread->connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()));
-
-    if (mainSocket->canReadLine())
-        readInformation();
-}
-
-void MainWindow::readField() {
-    n = scanInt();
-    m = scanInt();
-    for (int i = 0; i < m; i++)
-        for (int j = 0; j < 3; j++)
-            walls[i][j] = scanInt();
-
-    hospital.setX(scanInt());
-    hospital.setY(scanInt());
-
-    numberArsenals = scanInt();
-    for (int i = 0; i < numberArsenals; i++) {
-        arsenal[i].setX(scanInt());
-        arsenal[i].setY(scanInt());
-    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
@@ -143,17 +66,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         widget->ztra -= 0.01;
 
     if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
-        upPressed = true;
+        thread->upPressed = true;
     else if ((event->key() == Qt::Key_Down) || (event->key() == Qt::Key_S))
-        downPressed = true;
+        thread->downPressed = true;
     else if (event->key() == Qt::Key_Left)
-        leftPressed = true;
+        thread->leftPressed = true;
     else if (event->key() == Qt::Key_Right)
-        rightPressed = true;
+        thread->rightPressed = true;
     else if (event->key() == Qt::Key_A)
-        leftStrife = true;
+        thread->leftStrife = true;
     else if (event->key() == Qt::Key_D)
-        rightStrife = true;
+        thread->rightStrife = true;
 
 
 
@@ -185,44 +108,17 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
-        upPressed = false;
+        thread->upPressed = false;
     else if (event->key() == Qt::Key_Left)
-        leftPressed = false;
+        thread->leftPressed = false;
     else if (event->key() == Qt::Key_Right)
-        rightPressed = false;
+        thread->rightPressed = false;
     else if ((event->key() == Qt::Key_Down) || (event->key() == Qt::Key_S))
-        downPressed = false;
+        thread->downPressed = false;
     else if (event->key() == Qt::Key_A)
-        leftStrife = false;
+        thread->leftStrife = false;
     else if (event->key() == Qt::Key_D)
-        rightStrife = false;
-}
-
-double MainWindow::scanInt() {
-    if (!mainSocket->canReadLine())
-        if (!mainSocket->waitForReadyRead(lacency))
-            qDebug() << "slow net bugs enabled";
-    QString s = mainSocket->readLine();
-    if (s == "") {
-        qDebug() << "got empty string";
-        return 0;
-    }
-    if (s[s.length() - 1] == '\n')
-        s.remove(s.length() - 1, 1);
-
-    bool res;
-    s.toDouble(&res);
-    if (!res)
-        qDebug() << "error scanning int from:" + s;
-    return s.toDouble();
-}
-
-void MainWindow::setFullRefresh() {
-    fullRefresh = true;
-}
-
-void MainWindow::setUnScan() {
-    scanN = false;
+        thread->rightStrife = false;
 }
 
 /*void MainWindow::createWall(int x, int y, int flag) {
@@ -311,6 +207,9 @@ void MainWindow::eraseWall(int x, int y, int flag) {
 }
 */
 void MainWindow::gameStart() {
+    thread->start();
+    input->processInformation();
+
     qDebug() << "starting game";
     startLine = new QTimeLine;
     startLine->setDuration(3000);
@@ -365,83 +264,11 @@ double MainWindow::fabs(double a) {
 }
 
 void MainWindow::connectionFailed() {
+    qDebug() << "fail";
     emit fail();
 }
 
-void MainWindow::readInformation() {
-    while (mainSocket->canReadLine()) {
-        QString s = mainSocket->readLine();
-        if (s == "gameStart\n") {
-            qDebug() << "gameStart detected";
-            thread->start();
-            processInformation();
-            gameStart();
-        } else if (s == "field\n") {
-            readField();
-        } else if (s == "hero\n") {
-            readHeroes();
-        } else {
-            qDebug() << "unknown information" << s;
-            qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-        }
-    }
-}
-
-void MainWindow::processInformation() {
-    mainSocket->waitForReadyRead(lacency);
-    if (mainSocket->canReadLine())
-        readInformation();
-}
-
-void MainWindow::readHeroes() {
-    otherHeroes = scanInt();
-    for (int i = 0; i < otherHeroes; i++) {
-        int tmp = scanInt();
-        QPointF c;
-        c.setX(scanInt());
-        c.setY(scanInt());
-        if (tmp == myDescriptor) {
-            if (fullRefresh) {
-                coord = c;
-                fullRefresh = false;
-                heroes[i].setX(-1);
-                heroes[i].setY(-1);
-            }
-        } else {
-            heroes[i] = c;
-            descriptors[i] = tmp;
-        }
-        mainSocket->waitForReadyRead(lacency);
-        heroNames[i] = mainSocket->readLine();
-        heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
-    }
-}
-
-void MainWindow::checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2) {
-    assert(x1 <= x2);
-    assert(y1 <= y2);
-    if (x1 == x2) {
-        if ((coord.y() >= y1) && (coord.y() <= y2) && (fabs(coord.x() - x1) < 0.2) && ((x1 - coord.x() > 0) == (dx > 0)))
-            dx = 0;
-    } else
-        if ((coord.x() >= x1) && (coord.x() <= x2) && (fabs(coord.y() - y1) < 0.2) && ((y1 - coord.y() > 0) == (dy > 0)))
-            dy = 0;
-}
-
-void MainWindow::check(double &dx, double &dy) {
-    double k = 1 / 10.0;
-    for (int i = 0; i < m; i++)
-        if (walls[i][2] == 0) {
-            checkForWall(dx, dy, walls[i][0], walls[i][1], walls[i][0] + 1, walls[i][1]);
-            checkForWall(dx, dy, walls[i][0], walls[i][1] - k, walls[i][0], walls[i][1] + k);
-            checkForWall(dx, dy, walls[i][0] + 1, walls[i][1] - k, walls[i][0] + 1, walls[i][1] + k);
-        } else {
-            checkForWall(dx, dy, walls[i][0], walls[i][1], walls[i][0], walls[i][1] + 1);
-            checkForWall(dx, dy, walls[i][0] - k, walls[i][1], walls[i][0] + k, walls[i][1]);
-            checkForWall(dx, dy, walls[i][0] - k, walls[i][1] + 1, walls[i][0] + k, walls[i][1] + 1);
-        }
-}
-
-bool MainWindow::equal(QPointF a, QPointF b) {
-    return (fabs(a.x() - b.x()) < 1) && (fabs(a.y() - b.y()) < 1);
+void MainWindow::connectedSuccess() {
+    qDebug() << "success";
+    emit successConnection();
 }

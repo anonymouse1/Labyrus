@@ -22,6 +22,7 @@ void startDialog::start() {
     QObject::connect(w, SIGNAL(fail()), this, SLOT(show()));
     QObject::connect(w, SIGNAL(successConnection()), connectWindow, SLOT(hide()));
     QObject::connect(w, SIGNAL(fail()), connectWindow, SLOT(hide()));
+    QObject::connect(w, SIGNAL(fail()), w, SLOT(deleteLater()));
     QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(show()));
 
     if (ui->fullScreen->checkState() == Qt::Checked)

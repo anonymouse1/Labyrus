@@ -19,17 +19,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     startdialog.cpp \
-    commandsend.cpp \
     drawgl.cpp \
-    drawthread.cpp \
-    connection.cpp
+    connection.cpp \
+    networkclass.cpp \
+    calculationthread.cpp
 
 HEADERS  += mainwindow.h \
     startdialog.h \
-    commandsend.h \
     drawgl.h \
-    drawthread.h \
-    connection.h
+    connection.h \
+    networkclass.h \
+    fieldinformation.h \
+    calculationthread.h
 
 FORMS    += \
     startDialog.ui \

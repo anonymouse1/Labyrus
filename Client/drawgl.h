@@ -9,7 +9,7 @@
 class MainWindow;
 
 const double wallHeight = 0.2;
-const double eps = 0.001;
+const double eps = 0.00001;
 const double sizeView = 10;
 //const QString skinPath = "../skins/default";
 
@@ -18,7 +18,8 @@ class DrawGl : public QGLWidget
     Q_OBJECT
 public:
     explicit DrawGl(QApplication *app, QString skin, QWidget *parent = 0);
-    MainWindow *a;
+    NetworkClass *a;
+    MainWindow *legacy;
     QApplication *application;
     int xRot, yRot, zRot;
     int animZRot;

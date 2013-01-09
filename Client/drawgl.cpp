@@ -379,14 +379,14 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
         else
             currentText += event->text();
     else {
-        a->keyPressEvent(event);
+        legacy->keyPressEvent(event);
     }
 
     event->accept();
 }
 
 void DrawGl::keyReleaseEvent(QKeyEvent *event) {
-    a->keyReleaseEvent(event);
+    legacy->keyReleaseEvent(event);
 }
 
 void DrawGl::mousePressEvent(QMouseEvent *event) {
