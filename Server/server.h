@@ -25,7 +25,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(QObject *parent = 0);
+    explicit Server(int size, QObject *parent = 0);
     void processConnection(Player *player);
     void sendFieldToPlayer(Player *);
     void sendHeroesToPlayer(Player *);

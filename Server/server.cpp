@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(QObject *parent) :
+Server::Server(int size, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -13,7 +13,7 @@ Server::Server(QObject *parent) :
 
     alreadyPlayers = 0;
 
-    n = 30;
+    n = size;
     m = 0;
     for (int i = 0; i < n; i++) {
         walls[m][0] = 0;
@@ -68,6 +68,7 @@ void Server::processConnection(Player *player) {
     if (!socket->canReadLine())
         socket->waitForReadyRead(lacency);
     player->name = socket->readLine();
+    player->name.remove(player->name.length() - 1, 1);
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
         if (i.value()->name == player->name) {
             qDebug() << "used login";
@@ -113,6 +114,8 @@ void Server::runCommand(QString command, Player *player) {
         player->coord->setX(s.left(s.length() - 1).toDouble());
         s = player->socket->readLine();
         player->coord->setY(s.left(s.length() - 1).toDouble());
+    } else if (command[0] == 'I') {
+        forAllClientsPrint("S\n" + player->name + ": " + player->socket->readLine());
     }
 
     if (player->socket->canReadLine())
@@ -154,7 +157,7 @@ void Server::sendHeroesToPlayer(Player *player) {
         socket->write((QString::number(i.value()->socket->socketDescriptor()) + "\n" +
                        QString::number(i.value()->coord->x()) + "\n" +
                        QString::number(i.value()->coord->y()) + "\n" +
-                       i.value()->name).toAscii());
+                       i.value()->name + "\n").toAscii());
         }
   //  socket->flush(); //this is super very strange bug don't uncomment this
     player->sendingInformation.unlock();

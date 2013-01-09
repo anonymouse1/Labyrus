@@ -6,6 +6,7 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     login = myName;
     targetIp = ip;
     targetPort = port;
+    messages = new MessagesStack;
 }
 
 void NetworkClass::run() {
@@ -76,7 +77,9 @@ void NetworkClass::readInformation() {
             readField();
         } else if (s == "hero\n") {
             readHeroes();
-        } else {
+        } else if (s == "S\n") {
+            messages->addMessage(mainSocket->readLine());
+        } else{
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         }

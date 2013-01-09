@@ -12,6 +12,7 @@
 #include <QTime>
 #include <QThread>
 #include <QHostAddress>
+#include <messagesstack.h>
 
 const int lacency = 100; // ms
 
@@ -39,6 +40,7 @@ public:
     double angle;
     double yAngle;
     QString login;
+    MessagesStack *messages;
 
     void processInformation();
     void go(QString s, bool flush = false, bool addEndLine = true);

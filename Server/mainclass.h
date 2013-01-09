@@ -3,14 +3,16 @@
 
 #include <QCoreApplication>
 #include <server.h>
+#include <stdio.h>
 
-class mainClass : public QCoreApplication
+class MainClass : public QCoreApplication
 {
     Q_OBJECT
 public:
-    explicit mainClass(int argc, char *argv[]);
+    explicit MainClass(int argc, char *argv[]);
 private:
     Server *server;
+    void die(QString s);
 signals:
     
 public slots:

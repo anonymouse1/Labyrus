@@ -342,6 +342,10 @@ void DrawGl::drawMaze() {
     if (enteringText)
         renderText(5, this->height() - 120, "-" + currentText, hudFont);
 
+    QList<QString> list = a->messages->getMessages();
+    for (int i = 0; i < list.size(); i++)
+        renderText(5, this->height() - 120 - 20 * (list.size() - i), list[i], hudFont);
+
     glLineWidth(1);
     drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
@@ -446,6 +450,7 @@ void DrawGl::drawText(double x, double y, double z, bool xForwarding, bool yForw
 }
 
 void DrawGl::processText() {
+    a->go("I\n" + currentText);
     currentText = currentText.toUpper();
     if (currentText == "EXIT") {
         a->deleteLater();

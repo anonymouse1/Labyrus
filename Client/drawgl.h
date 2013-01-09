@@ -5,6 +5,7 @@
 #include <mainwindow.h>
 #include <GL/glu.h>
 #include <QImage>
+#include <messagesstack.h>
 
 class MainWindow;
 
