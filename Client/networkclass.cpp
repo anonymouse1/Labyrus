@@ -47,7 +47,7 @@ void NetworkClass::readField() {
 
 double NetworkClass::scanInt() {
     if (!mainSocket->canReadLine())
-        if (!mainSocket->waitForReadyRead(lacency))
+        if (!mainSocket->waitForReadyRead(latency))
             qDebug() << "slow net bugs enabled";
     QString s = mainSocket->readLine();
     if (s == "") {
@@ -108,7 +108,7 @@ void NetworkClass::readHeroes() {
             descriptors[i] = tmp;
         }
         if (!mainSocket->canReadLine())
-            mainSocket->waitForReadyRead(lacency);
+            mainSocket->waitForReadyRead(latency);
 
         heroNames[i] = mainSocket->readLine();
         heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
@@ -143,6 +143,7 @@ void NetworkClass::connectionEstablished() {
     }
 
     myDescriptor = scanInt();
+    latency = scanInt();
     connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()), Qt::DirectConnection);
 
     if (mainSocket->canReadLine())

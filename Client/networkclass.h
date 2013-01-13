@@ -14,8 +14,6 @@
 #include <QHostAddress>
 #include <messagesstack.h>
 
-const int lacency = 100; // ms
-
 class NetworkClass : public QThread
 {
     Q_OBJECT
@@ -41,6 +39,8 @@ public:
     double yAngle;
     QString login;
     MessagesStack *messages;
+
+    int latency;
 
     void go(QString s, bool flush = false, bool addEndLine = true);
 private:

@@ -1,7 +1,8 @@
 #include "player.h"
 
-Player::Player(QObject *parent) : QThread(parent) {
+Player::Player(int lat, QObject *parent) : QThread(parent) {
     coord = new QPointF(0.4, 0.4);
+    latency = lat;
 }
 
 void Player::run() {
@@ -13,7 +14,7 @@ void Player::run() {
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()));
 
     sendHeroesTime = new QTimer;
-    sendHeroesTime->setInterval(lacency);
+    sendHeroesTime->setInterval(latency);
     sendHeroesTime->start();
     server->processConnection(this);
 

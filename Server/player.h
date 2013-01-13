@@ -8,14 +8,12 @@
 #include <QMutex>
 #include <QTimer>
 
-const int lacency = 100; //ms
-
 class Server;
 class Player : public QThread
 {
     Q_OBJECT
 public:
-    explicit Player(QObject *parent = 0);
+    explicit Player(int latency, QObject *parent = 0);
 
     QString name;
     QPointF *coord;
@@ -32,6 +30,7 @@ public:
 private:
     QTimer *refresh;
     QTimer *sendHeroesTime;
+    int latency;
 private slots:
     void sendHeroTime();
 public slots:

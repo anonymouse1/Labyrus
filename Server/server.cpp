@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(int size, QObject *parent) :
+Server::Server(int size, int lat, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -13,6 +13,7 @@ Server::Server(int size, QObject *parent) :
 
     alreadyPlayers = 0;
 
+    latency = lat;
     n = size;
     m = 0;
     for (int i = 0; i < n; i++) {
@@ -44,7 +45,7 @@ void Server::die(QString s) {
 
 void Server::incomingConnection(int handle) {
     qDebug() << "new connection detected " << handle;
-    Player *player = new Player();
+    Player *player = new Player(latency);
     player->socketDescriptor = handle;
     player->server = this;
     player->start();
@@ -56,7 +57,7 @@ void Server::processConnection(Player *player) {
     QTcpSocket *socket = player->socket;
 
     if (!socket->canReadLine())
-        socket->waitForReadyRead(lacency);
+        socket->waitForReadyRead(latency);
 
     QString s = socket->readLine();
     if (s != "Hello maze\n") {
@@ -66,7 +67,7 @@ void Server::processConnection(Player *player) {
         return;
     }
     if (!socket->canReadLine())
-        socket->waitForReadyRead(lacency);
+        socket->waitForReadyRead(latency);
     player->name = socket->readLine();
     player->name.remove(player->name.length() - 1, 1);
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
@@ -83,6 +84,7 @@ void Server::processConnection(Player *player) {
 
     socket->write("success\n");
     socket->write((QString::number(socket->socketDescriptor()) + "\n").toAscii());
+    socket->write((QString::number(latency) + "\n").toAscii());
 
     player->coord->setX(0.5);
     player->coord->setY(0.5);

@@ -26,7 +26,7 @@ void CalculationThread::run() {
     nextTimeTimer->setInterval(10);
     nextTimeTimer->start();
 
-    serverRefresh->setInterval(lacency);
+    serverRefresh->setInterval(main->latency);
     serverRefresh->start();
 
     exec();
