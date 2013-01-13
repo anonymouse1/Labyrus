@@ -14,7 +14,7 @@
 #include <QHostAddress>
 #include <messagesstack.h>
 
-const int lacency = 100; // ms
+const int lacency = 16; // ms
 
 class NetworkClass : public QThread
 {
