@@ -14,11 +14,6 @@
 #include <QHostAddress>
 #include <messagesstack.h>
 
-<<<<<<< HEAD
-=======
-const int lacency = 16; // ms
-
->>>>>>> 24a34a6c011d42848c2f5b3ea828f896894a034d
 class NetworkClass : public QThread
 {
     Q_OBJECT
