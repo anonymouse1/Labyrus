@@ -33,6 +33,7 @@ public:
     int alreadyPlayers;
     void runCommand(QString command, Player *player);
     QMap<int, Player *> r;
+    QSet<QString> names;
 
 private:
     void die(QString);
@@ -59,7 +60,6 @@ private:
     int m;
     int walls[10000][3]; // 3:    0 - сверху; 1 - слева
     QPoint hospital;
-    QSet<QString> names;
 
     int numberArsenals;
     QPoint arsenal[100];

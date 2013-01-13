@@ -40,6 +40,7 @@ void Player::disconnect() {
     server->alreadyPlayers--;
     server->r.remove(socketDescriptor);
     qDebug() << this->name << "disconnected";
+    server->names.remove(name);
     this->terminate();
 }
 
