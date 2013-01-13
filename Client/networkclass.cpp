@@ -134,6 +134,7 @@ void NetworkClass::connectionEstablished() {
 
     QString s = mainSocket->readLine();
     if (s != "success\n") {
+        qDebug() << "unsuccess" << s;
         emit connectionFailed();
         return;
     } else {

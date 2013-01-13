@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(int size, int lat, QObject *parent) :
+Server::Server(int size, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -14,6 +14,8 @@ Server::Server(int size, int lat, QObject *parent) :
     alreadyPlayers = 0;
 
     latency = lat;
+    numPlayers = players;
+    strongNumPlayers = strong;
     n = size;
     m = 0;
     for (int i = 0; i < n; i++) {
@@ -45,6 +47,11 @@ void Server::die(QString s) {
 
 void Server::incomingConnection(int handle) {
     qDebug() << "new connection detected " << handle;
+    if (strongNumPlayers && (alreadyPlayers == numPlayers)) {
+        qDebug() << "too many connections";
+        return;
+    }
+
     Player *player = new Player(latency);
     player->socketDescriptor = handle;
     player->server = this;
@@ -100,13 +107,12 @@ void Server::processConnection(Player *player) {
     r[socket->socketDescriptor()] = player;
     alreadyPlayers++;
 
-    if (alreadyPlayers >= 1) {
+    if (alreadyPlayers >= numPlayers) {
         qDebug() << "starting game";
         gameStart = true;
         forAllClientsPrint("gameStart");
+        sendFields();
     }
-
-    sendFieldToPlayer(player);
 }
 
 void Server::runCommand(QString command, Player *player) {
