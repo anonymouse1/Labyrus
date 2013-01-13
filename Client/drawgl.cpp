@@ -25,7 +25,6 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 
     hudFont = QFont("FreeSans", 15, 20, true);
 
-
 //    t = new QTimer;
     timeFPS = new QTimer;
 //    t->setInterval(3);
@@ -45,6 +44,8 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     setCursor(QCursor(Qt::BlankCursor));
     setMouseTracking(true);
     mousePressed = false;
+
+    compass = new QPixmap(skinPath + "/compass.png");
 }
 
 void DrawGl::initializeGL() {
@@ -57,11 +58,16 @@ void DrawGl::initializeGL() {
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
     textures[2] = bindTexture(QPixmap(skinPath + "/roof.png"), GL_TEXTURE_2D);
     textures[3] = bindTexture(QPixmap(skinPath + "/floor.png"), GL_TEXTURE_2D);
+    textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_2D);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
 
     float dir[3] = {0, 0, -1};
     float pos[4] = {0.5, 0.5, 10, 200};
@@ -338,6 +344,22 @@ void DrawGl::drawMaze() {
     renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x()) + " " + QString::number(a->coord.y()));
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
+    deleteTexture(textures[4]);
+    textures[4] = bindTexture(generateCompass(a->angle), GL_TEXTURE_2D);
+    begin2d();
+    loadTexture(textures[4]);
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() - 200, 0);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width(), 0);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width(), 200);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() - 200, 200);
+        glTexCoord2d(1, 0);
+    glEnd();
+    end2d();
+
     qglColor(Qt::red);
     if (enteringText)
         renderText(5, this->height() - 120, "-" + currentText, hudFont);
@@ -427,13 +449,7 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
 
 void DrawGl::loadTexture(GLuint a) {
     glBindTexture(GL_TEXTURE_2D, a);
-
- /*   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // задана линейная фильтрация вблизи
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // задана линейная фильтрация вдали
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // при фильтрации игнорируются тексели, выходящие за границу текстуры для s координаты
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // при фильтрации игнорируются тексели, выходящие за границу текстуры для t координаты
-*/}
+}
 
 void DrawGl::drawText(double x, double y, double z, bool xForwarding, bool yForwarding, QString s) {
     QPainterPath a;
@@ -450,6 +466,8 @@ void DrawGl::drawText(double x, double y, double z, bool xForwarding, bool yForw
 }
 
 void DrawGl::processText() {
+    if (currentText == "")
+        return;
     a->go("I\n" + currentText);
     currentText = currentText.toUpper();
     if (currentText == "EXIT") {
@@ -460,4 +478,40 @@ void DrawGl::processText() {
     }*/
 
     qDebug() << currentText << "processed";
+}
+
+void DrawGl::begin2d() {
+  glDisable(GL_DEPTH_TEST);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(0, this->width(), 0, this->height());
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+}
+
+void DrawGl::end2d() {
+  glPopMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glEnable(GL_DEPTH_TEST);
+}
+
+QPixmap DrawGl::generateCompass(double angle) {
+    QPixmap res(400, 400);
+    res.fill(Qt::transparent);
+
+    QPainter p;
+    p.begin(&res);
+
+    QTransform transform;
+    transform.translate(199, 199);
+    transform.rotate(angle);
+    p.setTransform(transform);
+
+    p.drawPixmap(-200, -200, QPixmap(skinPath + "/compass.png"));
+    p.end();
+    return res;
 }

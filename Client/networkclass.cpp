@@ -132,10 +132,10 @@ void NetworkClass::go(QString s, bool flush, bool addEndLine) {
 void NetworkClass::connectionEstablished() {
     qDebug() << "connection established" << this->currentThread();
     go("Hello maze\n" + login, true);
-
     qDebug() << mainSocket->state();
     if (!mainSocket->canReadLine())
-        mainSocket->waitForReadyRead(1000);
+        mainSocket->waitForReadyRead(100);
+
     QString s = mainSocket->readLine();
     if (s != "success\n") {
         emit connectionFailed();

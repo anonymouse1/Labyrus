@@ -5,7 +5,9 @@
 #include <mainwindow.h>
 #include <GL/glu.h>
 #include <QImage>
+#include <QPixmap>
 #include <messagesstack.h>
+#include <QPicture>
 
 class MainWindow;
 
@@ -44,11 +46,13 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[4];
+    GLuint textures[5];
     GLuint superFontList;
     QString currentText;
     bool enteringText;
     QString skinPath;
+    QPixmap generateCompass(double angle);
+    QPixmap *compass;
 
     bool firstMouseMove;
     int lastClickX;
@@ -56,6 +60,9 @@ private:
     double plMouseXRot;
     double plMouseYRot;
     bool mousePressed;
+
+    void begin2d();
+    void end2d();
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

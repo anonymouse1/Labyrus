@@ -296,8 +296,9 @@ int Server::scanInt(QTcpSocket *socket) {
 
 void Server::forAllClientsPrint(QString s) {
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++) {
+        i.value()->sendingInformation.lock();
         i.value()->socket->write((s + "\n").toAscii());
-        i.value()->socket->flush();
+        i.value()->sendingInformation.unlock();
     }
 }
 
