@@ -216,7 +216,7 @@ void MainWindow::eraseWall(int x, int y, int flag) {
 */
 void MainWindow::gameStart() {
     thread->start();
-    input->processInformation();
+    input->readInformation();
 
     qDebug() << "starting game";
     startLine = new QTimeLine;

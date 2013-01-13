@@ -65,7 +65,9 @@ double NetworkClass::scanInt() {
 }
 
 void NetworkClass::readInformation() {
-    processingInformation.lock();
+    if (!processingInformation.tryLock())
+        return;
+
     while (mainSocket->canReadLine()) {
         QString s = mainSocket->readLine();
         if ((s == "") || (s == "\n"))
@@ -85,12 +87,6 @@ void NetworkClass::readInformation() {
         }
     }
     processingInformation.unlock();
-}
-
-void NetworkClass::processInformation() {
-    mainSocket->waitForReadyRead(lacency);
-    if (mainSocket->canReadLine())
-        readInformation();
 }
 
 void NetworkClass::readHeroes() {

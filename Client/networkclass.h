@@ -42,7 +42,6 @@ public:
     QString login;
     MessagesStack *messages;
 
-    void processInformation();
     void go(QString s, bool flush = false, bool addEndLine = true);
 private:
     QMutex processingInformation;
@@ -59,8 +58,10 @@ private:
 protected:
     void run();
 
-private slots:
+public slots:
     void readInformation();
+
+private slots:
     void connectionEstablished();
     void failConnection();
 
