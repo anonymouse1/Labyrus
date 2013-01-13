@@ -9,6 +9,7 @@
 #include <QList>
 #include <QHostAddress>
 #include <player.h>
+#include <QSet>
 #include <QMap>
 #include <QPair>
 #include <QPoint>
@@ -45,8 +46,6 @@ private:
     int findNap(QString);
     QPoint getFreePoint();
 
-    void forAllClientsPrint(QString);
-
     bool isConnected();
     void generateMap();
     void dfs(QPoint);
@@ -60,15 +59,16 @@ private:
     int m;
     int walls[10000][3]; // 3:    0 - сверху; 1 - слева
     QPoint hospital;
+    QSet<QString> names;
 
     int numberArsenals;
     QPoint arsenal[100];
 protected:
     void incomingConnection(int handle);
 
-public slots:
+signals:
     void sendFields();
-    void sendHeroes();
+    void forAllClientsPrint(QString);
 };
 
 #endif // SERVER_H

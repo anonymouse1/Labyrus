@@ -34,6 +34,7 @@ private:
     int latency;
 private slots:
     void sendHeroTime();
+    void printString(QString);
 public slots:
     void refreshTime();
     void readyRead();

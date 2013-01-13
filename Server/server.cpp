@@ -77,18 +77,17 @@ void Server::processConnection(Player *player) {
         socket->waitForReadyRead(latency);
     player->name = socket->readLine();
     player->name.remove(player->name.length() - 1, 1);
-    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
-        if (i.value()->name == player->name) {
-            qDebug() << "used login";
-            socket->write("login is already in use");
-            socket->flush();
-            socket->disconnectFromHost();
-            player->terminate();
-            player->deleteLater();
-            return;
-        }
-
-
+    if (names.find(player->name) != names.end()) {
+        qDebug() << "used login";
+        socket->write("login is already in use");
+        socket->flush();
+        socket->disconnectFromHost();
+        player->terminate();
+        player->deleteLater();
+        return;
+    }
+    r[player->socketDescriptor] = player;
+    names.insert(player->name);
     socket->write("success\n");
     socket->write((QString::number(socket->socketDescriptor()) + "\n").toAscii());
     socket->write((QString::number(latency) + "\n").toAscii());
@@ -104,15 +103,16 @@ void Server::processConnection(Player *player) {
 
     qDebug() << player->name << "connected";
     qDebug() << "as" << socket->socketDescriptor();
-    r[socket->socketDescriptor()] = player;
     alreadyPlayers++;
 
     if (alreadyPlayers >= numPlayers) {
         qDebug() << "starting game";
         gameStart = true;
-        forAllClientsPrint("gameStart");
-        sendFields();
+        emit forAllClientsPrint("gameStart");
+//        emit sendFields();
     }
+
+    sendFieldToPlayer(player);
 }
 
 void Server::runCommand(QString command, Player *player) {
@@ -133,8 +133,6 @@ void Server::runCommand(QString command, Player *player) {
 
 void Server::sendFieldToPlayer(Player *player) {
     qDebug() << "sending field to player" << player->name << QTime::currentTime();
-    if (!gameStart)
-        return;
     player->sendingInformation.lock();
     QTcpSocket *socket = player->socket;
 
@@ -160,7 +158,7 @@ void Server::sendHeroesToPlayer(Player *player) {
     player->sendingInformation.lock();
     QTcpSocket *socket = player->socket;
     socket->write("hero\n");
-    socket->write((QString::number(r.size()) + "\n").toAscii());
+    socket->write((QString::number(alreadyPlayers) + "\n").toAscii());
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++) {
         socket->write((QString::number(i.value()->socket->socketDescriptor()) + "\n" +
                        QString::number(i.value()->coord->x()) + "\n" +
@@ -300,22 +298,4 @@ int Server::scanInt(QTcpSocket *socket) {
     QString s = socket->readLine();
     s = s.left(s.length() - 1);
     return s.toInt();
-}
-
-void Server::forAllClientsPrint(QString s) {
-    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++) {
-        i.value()->sendingInformation.lock();
-        i.value()->socket->write((s + "\n").toAscii());
-        i.value()->sendingInformation.unlock();
-    }
-}
-
-void Server::sendFields() {
-    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
-        sendFieldToPlayer(i.value());
-}
-
-void Server::sendHeroes() {
-    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
-        sendHeroesToPlayer(i.value());
 }

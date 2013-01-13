@@ -11,17 +11,19 @@ void Player::run() {
 
     refresh = new QTimer;
     refresh->setInterval(10000);
-    QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()));
+    QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
+    QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
+    QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)));
 
     sendHeroesTime = new QTimer;
     sendHeroesTime->setInterval(latency);
-    sendHeroesTime->start();
     server->processConnection(this);
 
     QObject::connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::DirectConnection);
     QObject::connect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()), Qt::DirectConnection);
     QObject::connect(sendHeroesTime, SIGNAL(timeout()), this, SLOT(sendHeroTime()), Qt::DirectConnection);
 
+    sendHeroesTime->start();
     exec();
 }
 
@@ -37,11 +39,16 @@ void Player::readyRead() {
 void Player::disconnect() {
     server->alreadyPlayers--;
     server->r.remove(socketDescriptor);
-    server->sendHeroes();
     qDebug() << this->name << "disconnected";
     this->terminate();
 }
 
 void Player::sendHeroTime() {
     server->sendHeroesToPlayer(this);
+}
+
+void Player::printString(QString s) {
+    sendingInformation.lock();
+    socket->write((s + "\n").toAscii());
+    sendingInformation.unlock();
 }
