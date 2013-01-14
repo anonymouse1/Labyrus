@@ -39,12 +39,14 @@ void startDialog::start() {
 
 void startDialog::scanSkins() {
     QFileInfoList list = QDir("../skins").entryInfoList();
-    if (list.size() == 0)
-        list = QDir("/usr/share/labyrus/skins/").entryInfoList();
+    if (list.size() <= 2)
+        list = QDir("/usr/share/labyrus/skins").entryInfoList();
+
+    qDebug() << list.size();
 
     for (int i = 0; i < list.size(); i++)
         if ((list.at(i).fileName() != ".")  && (list.at(i).fileName() != ".."))
-        ui->comboBox->addItem(list.at(i).fileName());
+          ui->comboBox->addItem(list.at(i).fileName());
 
     setPix(ui->comboBox->currentText());
 }
