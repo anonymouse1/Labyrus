@@ -39,6 +39,9 @@ void startDialog::start() {
 
 void startDialog::scanSkins() {
     QFileInfoList list = QDir("../skins").entryInfoList();
+    if (list.size() == 0)
+        list = QDir("../share/labyrus/skins/");
+
     for (int i = 0; i < list.size(); i++)
         if ((list.at(i).fileName() != ".")  && (list.at(i).fileName() != ".."))
         ui->comboBox->addItem(list.at(i).fileName());
