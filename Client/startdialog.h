@@ -24,6 +24,7 @@ private:
     MainWindow *w;
     QPixmap *pix;
     Connection *connectWindow;
+    QString skinPath;
 
     void scanSkins();
 protected:

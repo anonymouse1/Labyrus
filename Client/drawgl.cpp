@@ -7,7 +7,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     QGLWidget(parent)
 {
     application = app;
-    skinPath = "../skins/" + skin;
+    skinPath = skin;
     enteringText = false;
     xRot = -90;
     yRot = 0;
