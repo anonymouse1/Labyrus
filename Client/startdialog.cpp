@@ -38,11 +38,12 @@ void startDialog::start() {
 }
 
 void startDialog::scanSkins() {
-    QFileInfoList list = QDir("../skins").entryInfoList();
-    if (list.size() <= 2)
-        list = QDir("/usr/share/labyrus/skins").entryInfoList();
-
-    qDebug() << list.size();
+    skinPath = "../skins/";
+    QFileInfoList list = QDir(skinPath).entryInfoList();
+    if (list.size() <= 2) {
+        skinPath = "/usr/share/labyrus/skins/";
+        list = QDir(skinPath).entryInfoList();
+    }
 
     for (int i = 0; i < list.size(); i++)
         if ((list.at(i).fileName() != ".")  && (list.at(i).fileName() != ".."))
@@ -52,7 +53,7 @@ void startDialog::scanSkins() {
 }
 
 void startDialog::setPix(QString s) {
-    pix = new QPixmap("../skins/" + s + "/defaultWall.png");
+    pix = new QPixmap(skinPath + s + "/defaultWall.png");
     repaint();
 }
 
