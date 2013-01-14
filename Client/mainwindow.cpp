@@ -52,17 +52,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         else
             widget->showNormal();
 
-    if (event->key() == Qt::Key_I)
-        widget->ytra += 0.01;
-    else if (event->key() == Qt::Key_K)
-        widget->ytra -= 0.01;
-    else if (event->key() == Qt::Key_J)
-        widget->xtra -= 0.01;
-    else if (event->key() == Qt::Key_L)
-        widget->xtra += 0.01;
-    else if (event->key() == Qt::Key_U)
+    if (event->key() == Qt::Key_Q)
         widget->ztra += 0.01;
-    else if (event->key() == Qt::Key_O)
+    else if (event->key() == Qt::Key_E)
         widget->ztra -= 0.01;
 
     if (event->key() == Qt::Key_W)

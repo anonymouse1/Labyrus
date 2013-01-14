@@ -11,9 +11,10 @@ void Player::run() {
 
     refresh = new QTimer;
     refresh->setInterval(10000);
+    refresh->start();
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
-    QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)));
+    QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)), Qt::DirectConnection);
 
     sendHeroesTime = new QTimer;
     sendHeroesTime->setInterval(latency);
