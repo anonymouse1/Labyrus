@@ -9,13 +9,14 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
     bool strong = false;
     for (int i = 0; i < argc; i++)
         if ((QString(argv[i]) == "--help") || (QString(argv[i]) == "-h")) {
-            printf("Welcome to Labyrus Server manual\n");
-            printf("-n --size <int> for settinh size of maze (-n 20)\n");
-            printf("-l --latency <int> for setting latency\n");
-            printf("-p --players <int> for setting number of players\n");
-            printf("-s --strong for setting strong number of players\n");
-            printf("-h --help to view this help\n");
-            printf("-v --version to view version\n");
+            printf("\tWelcome to Labyrus Server manual\n");
+            printf("\tFor all questions please contact vladislav.tyulbashev@yandex.ru\n");
+            printf("\t\t-n --size <int> for settin size of maze (-n 20)\n");
+            printf("\t\t-l --latency <int> for setting latency\n");
+            printf("\t\t-p --players <int> for setting number of players\n");
+            printf("\t\t-s --strong for setting strong number of players\n");
+            printf("\t\t-h --help to view this help\n");
+            printf("\t\t-v --version to view version\n");
             die("");
         } else if ((QString(argv[i]) == "-n") || (QString(argv[i]) == "--size")) {
             bool a;
@@ -43,8 +44,8 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
 void MainClass::die(QString s) {
     if (s == "")
-        exit(0);
+        quick_exit(0);
 
     qDebug() << s;
-    exit(1);
+    quick_exit(1);
 }

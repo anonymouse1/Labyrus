@@ -65,10 +65,6 @@ void DrawGl::initializeGL() {
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_2D);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-
-
     float dir[3] = {0, 0, -1};
     float pos[4] = {0.5, 0.5, 10, 200};
     float color[4] = {200, 200, 200, 5};
@@ -343,6 +339,9 @@ void DrawGl::drawMaze() {
     renderText(5, this->height() - 80, QString("destroy: ") + QString::number(a->destroy), hudFont);
     renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x()) + " " + QString::number(a->coord.y()));
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 
     deleteTexture(textures[4]);
     textures[4] = bindTexture(generateCompass(a->angle), GL_TEXTURE_2D);
