@@ -9,7 +9,7 @@
 class DrawGl;
 class MainWindow;
 
-const double speed = 0.01;
+const double speed = 0.015;
 
 class CalculationThread : public QThread
 {
