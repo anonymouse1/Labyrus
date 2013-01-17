@@ -47,6 +47,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     mousePressed = false;
 
     compass = new QPixmap(skinPath + "/compass.png");
+    needRefreshCursor = true;
 }
 
 void DrawGl::initializeGL() {
@@ -87,7 +88,10 @@ void DrawGl::resizeGL(int w, int h) {
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
     gluPerspective(perspective, w / (double)h, 0.001, 1000.0);
-    QCursor::setPos(w / 2, h / 2);
+    if (isFullScreen())
+        QCursor::setPos(w / 2, h / 2);
+
+    needRefreshCursor = true;
 }
 
 void DrawGl::paintGL() {
@@ -433,7 +437,7 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (botActive || (!this->isFullScreen() && !mousePressed))
+    if (botActive || (!this->isFullScreen()))
         return;
 
     double x = (event->x() - width() / 2) / 5;

@@ -53,6 +53,7 @@ void Server::incomingConnection(int handle) {
     }
 
     Player *player = new Player(latency);
+    QObject::connect(player, SIGNAL(say(QString)), this, SLOT(forAllClients(QString)));
     player->socketDescriptor = handle;
     player->server = this;
     player->start();
@@ -83,7 +84,6 @@ void Server::processConnection(Player *player) {
         socket->flush();
         socket->disconnectFromHost();
         player->terminate();
-        player->deleteLater();
         return;
     }
     r[player->socketDescriptor] = player;
@@ -113,6 +113,7 @@ void Server::processConnection(Player *player) {
     }
 
     sendFieldToPlayer(player);
+    emit forAllClientsPrint("S\n" + player->name + " connected\n");
 }
 
 void Server::runCommand(QString command, Player *player) {
@@ -298,4 +299,8 @@ int Server::scanInt(QTcpSocket *socket) {
     QString s = socket->readLine();
     s = s.left(s.length() - 1);
     return s.toInt();
+}
+
+void Server::forAllClients(QString s) {
+    emit forAllClientsPrint(s);
 }

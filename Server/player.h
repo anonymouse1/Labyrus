@@ -39,6 +39,8 @@ public slots:
     void refreshTime();
     void readyRead();
     void disconnect();
+signals:
+    void say(QString);
 protected:
     void run();
 

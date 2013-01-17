@@ -3,6 +3,7 @@
 Player::Player(int lat, QObject *parent) : QThread(parent) {
     coord = new QPointF(0.4, 0.4);
     latency = lat;
+    QObject::connect(this, SIGNAL(terminated()), this, SLOT(deleteLater()));
 }
 
 void Player::run() {
@@ -11,7 +12,7 @@ void Player::run() {
 
     refresh = new QTimer;
     refresh->setInterval(100000);
-    refresh->start();
+//    refresh->start();
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)), Qt::DirectConnection);
@@ -41,6 +42,7 @@ void Player::disconnect() {
     server->alreadyPlayers--;
     server->r.remove(socketDescriptor);
     qDebug() << this->name << "disconnected";
+    emit say("S\n" + name + " disconnected\n");
     server->names.remove(name);
     this->terminate();
 }

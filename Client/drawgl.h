@@ -35,6 +35,7 @@ public:
     qreal startAfter;
     bool botActive;
     int perspective;
+    bool needRefreshCursor;
 
 private:
     void drawAxis();

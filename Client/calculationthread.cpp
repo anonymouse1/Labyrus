@@ -100,6 +100,7 @@ void CalculationThread::nextTime() {
 
     if (rand() % 100 == 0) {
         widget->perspective++;
+        widget->needRefreshCursor = false;
         widget->resize(widget->width(), widget->height() - 1);
     }
 }

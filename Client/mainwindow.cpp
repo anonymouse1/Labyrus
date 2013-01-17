@@ -78,6 +78,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (event->key() == Qt::Key_Control) {
         backupPerspective = widget->perspective;
         widget->perspective = 10;
+        widget->needRefreshCursor = false;
         widget->resize(widget->width(), widget->height() - 1);
     }
 
@@ -130,6 +131,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         thread->shiftPressed = false;
     else if (event->key() == Qt::Key_Control) {
         widget->perspective = backupPerspective;
+        widget->needRefreshCursor = false;
         widget->resize(widget->width(), widget->height() - 1);
     }
 }

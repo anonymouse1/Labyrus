@@ -63,6 +63,8 @@ private:
 
     int numberArsenals;
     QPoint arsenal[100];
+private slots:
+    void forAllClients(QString);
 protected:
     void incomingConnection(int handle);
 
