@@ -12,6 +12,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     xRot = -90;
     yRot = 0;
     zRot = 0;
+    perspective = 45;
 
     animZRot = 0;
     fps = 0;
@@ -85,7 +86,7 @@ void DrawGl::resizeGL(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
-    gluPerspective(45.0, w / (double)h, 0.001, 1000.0);
+    gluPerspective(perspective, w / (double)h, 0.001, 1000.0);
     QCursor::setPos(w / 2, h / 2);
 }
 

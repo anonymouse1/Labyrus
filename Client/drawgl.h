@@ -34,6 +34,7 @@ public:
     bool startingGame;
     qreal startAfter;
     bool botActive;
+    int perspective;
 
 private:
     void drawAxis();

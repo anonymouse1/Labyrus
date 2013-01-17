@@ -92,6 +92,7 @@ private:
     CalculationThread *thread;
     QThread *netThread;
     NetworkClass *input;
+    int backupPerspective;
 
 signals:
     void successConnection();

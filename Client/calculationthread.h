@@ -9,7 +9,7 @@
 class DrawGl;
 class MainWindow;
 
-const double speed = 0.015;
+const double speed = 0.012;
 
 class CalculationThread : public QThread
 {
@@ -25,6 +25,7 @@ public:
     bool rightStrife;
     bool lookingUp;
     bool lookingDown;
+    bool shiftPressed;
 private:
     void run();
     DrawGl *widget;

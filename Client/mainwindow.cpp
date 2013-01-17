@@ -73,6 +73,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         thread->lookingUp = true;
     else if (event->key() == Qt::Key_Down)
         thread->lookingDown = true;
+    else if (event->key() == Qt::Key_Shift)
+        thread->shiftPressed = true;
+    else if (event->key() == Qt::Key_Control) {
+        backupPerspective = widget->perspective;
+        widget->perspective = 10;
+        widget->resize(widget->width(), widget->height() - 1);
+    }
 
 
 
@@ -119,6 +126,12 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         thread->lookingUp = false;
     else if (event->key() == Qt::Key_Down)
         thread->lookingDown = false;
+    else if (event->key() == Qt::Key_Shift)
+        thread->shiftPressed = false;
+    else if (event->key() == Qt::Key_Control) {
+        widget->perspective = backupPerspective;
+        widget->resize(widget->width(), widget->height() - 1);
+    }
 }
 
 /*void MainWindow::createWall(int x, int y, int flag) {

@@ -34,8 +34,8 @@ void CalculationThread::run() {
 
 void CalculationThread::nextTime() {
     if (upPressed) {
-        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed;
-        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed;
+        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
+        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
 
         check(deltaX, deltaY);
 
@@ -96,6 +96,11 @@ void CalculationThread::nextTime() {
     if (equal(main->coord, main->hospital)) {
         main->alive = true;
         main->go("l");
+    }
+
+    if (rand() % 100 == 0) {
+        widget->perspective++;
+        widget->resize(widget->width(), widget->height() - 1);
     }
 }
 
