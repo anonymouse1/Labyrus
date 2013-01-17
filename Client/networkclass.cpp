@@ -46,6 +46,10 @@ void NetworkClass::readField() {
 }
 
 double NetworkClass::scanInt() {
+    if (!mainSocket->isValid()) {
+        qDebug() << "disconnected by socket";
+        return 0;
+    }
     if (!mainSocket->canReadLine())
         if (!mainSocket->waitForReadyRead(latency))
             qDebug() << "slow net bugs enabled";
