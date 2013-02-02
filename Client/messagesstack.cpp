@@ -16,7 +16,7 @@ void MessagesStack::addMessage(QString s) {
     list.append(s);
     if (list.size() != 10) {
         QTimer *timer = new QTimer;
-        timer->setInterval(10000);
+        timer->setInterval(15000);
         QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timeToRemove()));
         QObject::connect(timer, SIGNAL(timeout()), timer, SLOT(deleteLater()));
         timer->start();

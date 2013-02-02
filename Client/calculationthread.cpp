@@ -13,6 +13,7 @@ CalculationThread::CalculationThread(DrawGl *wid, NetworkClass *m) : QThread()
     rightStrife = false;
     lookingDown = false;
     lookingUp = false;
+    shiftPressed = false;
 }
 
 void CalculationThread::run() {
@@ -98,8 +99,9 @@ void CalculationThread::nextTime() {
         main->go("l");
     }
 
-    if (rand() % 100 == 0) {
-        widget->perspective++;
+    if (rand() % 300 == 0) {
+        if (widget->perspective < 150)
+            widget->perspective++;
         widget->needRefreshCursor = false;
         widget->resize(widget->width(), widget->height() - 1);
     }
