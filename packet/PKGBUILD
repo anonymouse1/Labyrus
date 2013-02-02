@@ -1,0 +1,54 @@
+pkgname=labyrus-git
+pkgver=20130118
+pkgrel=1
+pkgdesk="Qt Game written with OpenGL"
+arch=('i686' 'x86_64')
+license=('LGPL')
+depends=('qt')
+makedepends=('git')
+
+_gitroot="git://gitorious.org/labyrus/labyrus.git"
+_gitname="labyrus"
+
+build() {
+  cd $srcdir
+  msg "Conencting to the GIT server..."
+
+  if [[ -d $srcdir/$_gitname ]] ; then
+    cd $_gitname
+    git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot --depth=1
+  fi
+
+  msg "GIT checkout done"
+  msg "Starting make"
+  if [[ -d ${srcdir}/build ]]; then
+    msg "Cleaning previous build directory..."
+    rm -rf ${srcdir}/build
+  fi
+
+  cp -r $srcdir/$_gitname ${srcdir}/build
+  cd ${srcdir}/build
+
+  cd Client
+  qmake -makefile
+  make
+  cd ../Server
+  qmake -makefile
+  make
+  cd ../SinglePlayer
+  qmake -makefile
+  make
+}
+
+package() {
+  cd ${srcdir}/build
+  mkdir -p ../../pkg/usr/bin
+  mkdir -p ../../pkg/usr/share/labyrus
+  cp -rf Server/Server ../../pkg/usr/bin/labyrus-server
+  cp -rf Client/Client ../../pkg/usr/bin/labyrus-client
+  cp -rf SinglePlayer/SinglePlayer ../../pkg/usr/bin/labyrus-SinglePlayer
+  cp -rf skins ../../pkg/usr/share/labyrus/
+}
