@@ -36,8 +36,8 @@ void MainWindow::start() {
     }
     this->hide();
     QProcess *server = new QProcess;
-    QObject::connect(server, SIGNAL(finished(int)), this, SLOT(close()));
-    server->start("Server", attributes);
+    QObject::connect(this, SIGNAL(destroyed()), server, SLOT(terminate()));
+    server->start("/usr/bin/labyrus-server", attributes);
 
     QEventLoop *loop = new QEventLoop;
     QTimer::singleShot(5000, loop, SLOT(quit()));
@@ -50,5 +50,5 @@ void MainWindow::start() {
     attributes << "--start";
     QProcess *client = new QProcess;
     QObject::connect(client, SIGNAL(finished(int)), this, SLOT(close()));
-    client->start("Client", attributes);
+    client->start("/usr/bin/labyrus-client", attributes);
 }

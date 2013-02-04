@@ -1,5 +1,5 @@
 pkgname=labyrus-git
-pkgver=20130118
+pkgver=20130203
 pkgrel=1
 pkgdesk="Qt Game written with OpenGL"
 arch=('i686' 'x86_64')

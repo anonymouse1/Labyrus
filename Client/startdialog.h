@@ -16,15 +16,15 @@ class startDialog : public QWidget
 {
     Q_OBJECT
 public:
-    explicit startDialog(QWidget *parent = 0);
+    explicit startDialog(QApplication *a, int argc, char *argv[], QWidget *parent = 0);
 
-    QApplication *app;
 private:
     Ui::Form *ui;
     MainWindow *w;
     QPixmap *pix;
     Connection *connectWindow;
     QString skinPath;
+    QApplication *app;
 
     void scanSkins();
 protected:
