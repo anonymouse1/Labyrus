@@ -26,7 +26,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(int size, int lat, int players, bool strong, QObject *parent = 0);
+    explicit Server(bool sil, int size, int lat, int players, bool strong, QObject *parent = 0);
     void processConnection(Player *player);
     void sendFieldToPlayer(Player *);
     void sendHeroesToPlayer(Player *);
@@ -60,6 +60,7 @@ private:
     int m;
     int walls[10000][3]; // 3:    0 - сверху; 1 - слева
     QPoint hospital;
+    bool silence;
 
     int numberArsenals;
     QPoint arsenal[100];

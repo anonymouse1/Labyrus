@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QProcess>
 #include <QTimer>
+#include <QMessageBox>
+#include <QDebug>
 
 namespace Ui {
     class MainWindow;

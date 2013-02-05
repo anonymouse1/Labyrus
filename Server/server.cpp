@@ -1,17 +1,13 @@
 #include "server.h"
 
-Server::Server(int size, int lat, int players, bool strong, QObject *parent) :
+Server::Server(bool sil, int size, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
         die(errorString());
 
-    QList<QHostAddress> l = QNetworkInterface::allAddresses();
-    for (int i = 0; i < l.size(); i++)
-        if (l[i].toIPv4Address() && l[i] != QHostAddress::LocalHost)
-            qDebug() << QString("server is upped on ") + QString(l[i].toString()) + QChar(':') + QString::number(port);
-
     alreadyPlayers = 0;
+    silence = sil;
 
     latency = lat;
     numPlayers = players;
@@ -36,6 +32,10 @@ Server::Server(int size, int lat, int players, bool strong, QObject *parent) :
         walls[m++][2] = 0;
     }
     generateMap();
+    QList<QHostAddress> l = QNetworkInterface::allAddresses();
+    for (int i = 0; i < l.size(); i++)
+        if (l[i].toIPv4Address() && l[i] != QHostAddress::LocalHost)
+            qDebug() << QString("server is upped on ") + QString(l[i].toString()) + QChar(':') + QString::number(port);
 
     gameStart = false;
 }
@@ -237,12 +237,15 @@ bool Server::isConnected() {
 }
 
 void Server::generateMap() {
-    qDebug() << "start generating map";
+    if (!silence)
+        qDebug() << "start generating map";
+
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
     for (int i = 0; i < 3000; i++) {
         if (i % 300 == 0)
-            qDebug() << i / 300 * 10 << "%";
+            if (!silence)
+                qDebug() << i / 300 * 10 << "%";
 
         int x = qrand() % n;
         int y = qrand() % n;

@@ -19,7 +19,11 @@
      <widget class="QFrame" name="frame_3">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLineEdit" name="name"/>
+        <widget class="QLineEdit" name="name">
+         <property name="text">
+          <string>vlad</string>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_3">
@@ -173,7 +177,6 @@
            </widget>
           </item>
          </layout>
-         <zorder>strong</zorder>
          <zorder>numberPlayers</zorder>
          <zorder>label</zorder>
          <zorder>horizontalSpacer</zorder>

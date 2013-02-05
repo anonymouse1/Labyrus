@@ -21,6 +21,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::start() {
     QStringList attributes;
+    attributes << "--silence";
     attributes << "-n";
     attributes << ui->fieldSize->text();
     attributes << "--latency" << ui->spinBox->text();
@@ -36,19 +37,33 @@ void MainWindow::start() {
     }
     this->hide();
     QProcess *server = new QProcess;
-    QObject::connect(this, SIGNAL(destroyed()), server, SLOT(terminate()));
-    server->start("/usr/bin/labyrus-server", attributes);
-
+    QProcess *client = new QProcess;
     QEventLoop *loop = new QEventLoop;
-    QTimer::singleShot(5000, loop, SLOT(quit()));
+    QTimer *timeout = new QTimer;
+
+    QObject::connect(timeout, SIGNAL(timeout()), loop, SLOT(quit()));
+    timeout->setInterval(5000);
+    timeout->start();
+
+
+    QObject::connect(client, SIGNAL(destroyed()), server, SLOT(terminate()));
+    QObject::connect(server, SIGNAL(readyRead()), loop, SLOT(quit()));
+    QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
+    server->setReadChannel(QProcess::StandardError);
+    server->start("labyrus-server", attributes);
+//    server->start("echo", attributes);
     loop->exec();
+
+    qDebug() << server->canReadLine();
+    QString res = server->readLine();
+    if (res != "map generated \n")
+        QMessageBox::about(this, QString("Die"), res);
 
     attributes.clear();
     attributes << "-n" << ui->name->text();
     attributes << "-p" << "7777";
     attributes << "-i" << "127.0.0.1" ;
     attributes << "--start";
-    QProcess *client = new QProcess;
     QObject::connect(client, SIGNAL(finished(int)), this, SLOT(close()));
     client->start("/usr/bin/labyrus-client", attributes);
 }

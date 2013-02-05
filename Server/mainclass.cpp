@@ -7,6 +7,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
     int latency = 16;
     int players = 1;
     bool strong = false;
+    bool silence = false;
     for (int i = 0; i < argc; i++)
         if ((QString(argv[i]) == "--help") || (QString(argv[i]) == "-h")) {
             printf("\tWelcome to Labyrus Server manual\n");
@@ -15,6 +16,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             printf("\t\t-l --latency <int> for setting latency\n");
             printf("\t\t-p --players <int> for setting number of players\n");
             printf("\t\t-s --strong for setting strong number of players\n");
+            printf("\t\t-i --silence for more silence\n");
             printf("\t\t-h --help to view this help\n");
             printf("\t\t-v --version to view version\n");
             die("");
@@ -37,9 +39,10 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             strong = true;
         } else if ((QString(argv[i]) == "-v") || (QString(argv[i]) == "--version")) {
             die("program has no version [alpha]");
-        }
+        } else if ((QString(argv[i]) == "-i") || (QString(argv[i]) == "--silence"))
+            silence = true;
 
-    server = new Server(n, latency, players, strong, this);
+    server = new Server(silence, n, latency, players, strong, this);
 }
 
 void MainClass::die(QString s) {

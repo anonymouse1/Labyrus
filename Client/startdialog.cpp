@@ -26,7 +26,6 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
     }
     scanSkins();
     if (st) {
-        hide();
         start();
         return;
     }
@@ -49,7 +48,6 @@ void startDialog::start() {
     if (ui->fullScreen->checkState() == Qt::Checked)
         QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showFullScreen()));
 
-//    command->show();
     this->hide();
 
     QEventLoop *loop = new QEventLoop;
