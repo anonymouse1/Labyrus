@@ -13,10 +13,10 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
             ui->spinBox->setValue(QString(argv[i + 1]).toInt());
         else if ((cur == "-n") || (cur == "--name"))
             ui->lineEdit->setText(QString(argv[i + 1]));
-        else if ((cur == "s") || (cur == "--start"))
+        else if ((cur == "-s") || (cur == "--start"))
             st = true;
         else if ((cur == "-h") || (cur == "--help")) {
-            printf("Welcome to labyrus-singleplayer documentation\n");
+            printf("Welcome to labyrus-client documentation\n");
             printf("-i --ip int.int.int.int        to set ip address\n");
             printf("-p --port int                  to set port number\n");
             printf("-n --name name                 to set name of player\n ");
@@ -37,6 +37,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
 void startDialog::start() {
     w = new MainWindow(app, QHostAddress(ui->lineEdit_2->text()), ui->spinBox->value(), ui->lineEdit->text().toAscii(), skinPath + ui->comboBox->currentText(), this);
     connectWindow = new Connection(QString("Connecting to: ") + ui->lineEdit_2->text() + ":" + ui->spinBox->text());
+    this->hide();
     connectWindow->show();
 
     QObject::connect(w, SIGNAL(fail()), this, SLOT(show()));
@@ -48,12 +49,11 @@ void startDialog::start() {
     if (ui->fullScreen->checkState() == Qt::Checked)
         QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showFullScreen()));
 
-    this->hide();
-
     QEventLoop *loop = new QEventLoop;
     loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
     loop->connect(w, SIGNAL(fail()), loop, SLOT(quit()));
     loop->exec();
+    this->hide();
 }
 
 void startDialog::scanSkins() {
