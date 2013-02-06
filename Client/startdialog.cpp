@@ -26,12 +26,11 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
     }
     scanSkins();
     if (st) {
-        start();
-        return;
+        QTimer::singleShot(100, this, SLOT(start()));
+    } else {
+        QObject::connect(ui->commandLinkButton, SIGNAL(clicked()), this, SLOT(start()));
+        QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
     }
-
-    QObject::connect(ui->commandLinkButton, SIGNAL(clicked()), this, SLOT(start()));
-    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
 }
 
 void startDialog::start() {
