@@ -61,6 +61,7 @@ void DrawGl::initializeGL() {
     textures[2] = bindTexture(QPixmap(skinPath + "/roof.png"), GL_TEXTURE_2D);
     textures[3] = bindTexture(QPixmap(skinPath + "/floor.png"), GL_TEXTURE_2D);
     textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
+    textures[5] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -68,18 +69,20 @@ void DrawGl::initializeGL() {
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_2D);
     float dir[3] = {0, 0, -1};
-    float pos[4] = {0.5, 0.5, 10, 200};
-    float color[4] = {200, 200, 200, 5};
+    float pos[4] = {0.5, 0.5, 1, 1};
+    float color[4] = {1, 1, 1, 1};
     float mat_specular[4] = {10, 10, 10, 10};
     GLfloat ambientLight[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
 
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
     glLightfv(GL_LIGHT0, GL_POSITION, pos);
     glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, color);
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_specular);
+
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_specular);
     glPointSize(10);
 }
 
@@ -109,6 +112,8 @@ void DrawGl::paintGL() {
     glTranslatef(-a->coord.x() / sizeView, -a->coord.y() / sizeView, ztra);
 
 //    drawAxis();
+    if (-ztra < wallHeight)
+        drawSkyBox();
     drawMaze();
 
     qglColor(Qt::red);
@@ -140,6 +145,20 @@ void DrawGl::drawAxis() {
     renderText(0, 0, 1, QString::number(1));
     renderText(0, 1, 0, QString::number(1));
     renderText(1, 0, 0, QString::number(1));
+}
+
+void DrawGl::drawSkyBox() {
+    loadTexture(textures[5]);
+    glBegin(GL_QUADS);
+        glVertex3f(0, 1 / sizeView * a->n, wallHeight);
+        glTexCoord2d(0, 0);
+        glVertex3f(0, 0, wallHeight);
+        glTexCoord2d(0, 1);
+        glVertex3f(1 / sizeView * a->n, 0, wallHeight);
+        glTexCoord2d(1, 1);
+        glVertex3f(1 / sizeView * a->n, 1 / sizeView * a->n, wallHeight);
+        glTexCoord2d(1, 0);
+    glEnd();
 }
 
 void DrawGl::drawQuad(double x1, double y1, double x2, double y2, bool shortWall) {

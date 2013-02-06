@@ -40,6 +40,7 @@ public:
 private:
     void drawAxis();
     void drawMaze();
+    void drawSkyBox();
 
     void drawQuad(double x1, double y1, double x2, double y2, bool shortWall);
     void loadTexture(GLuint);

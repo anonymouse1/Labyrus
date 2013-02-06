@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->widget->hide();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
@@ -46,9 +45,10 @@ void MainWindow::start() {
     timeout->start();
 
 
-    QObject::connect(client, SIGNAL(destroyed()), server, SLOT(terminate()));
+    QObject::connect(client, SIGNAL(finished(int)), server, SLOT(terminate()));
     QObject::connect(server, SIGNAL(readyRead()), loop, SLOT(quit()));
     QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
+    QObject::connect(server, SIGNAL(finished(int)), this, SLOT(close()));
     server->setReadChannel(QProcess::StandardError);
     server->start("labyrus-server", attributes);
 //    server->start("echo", attributes);
@@ -64,6 +64,5 @@ void MainWindow::start() {
     attributes << "-p" << "7777";
     attributes << "-i" << "127.0.0.1" ;
     attributes << "--start";
-    QObject::connect(client, SIGNAL(finished(int)), this, SLOT(close()));
     client->start("/usr/bin/labyrus-client", attributes);
 }
