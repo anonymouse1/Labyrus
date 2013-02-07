@@ -6,7 +6,9 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     login = myName;
     targetIp = ip;
     targetPort = port;
-    yAngle = -90;
+    yAngle = -80;
+    angle = 45;
+    fullRefresh = true;
     messages = new MessagesStack;
 }
 
@@ -20,9 +22,6 @@ void NetworkClass::run() {
     failConnectionTime->setInterval(5000);
     failConnectionTime->start();
     connect(failConnectionTime, SIGNAL(timeout()), this, SLOT(failConnection()), Qt::DirectConnection);
-
-    angle = 45;
-    fullRefresh = true;
 
     exec();
 }
