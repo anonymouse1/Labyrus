@@ -85,6 +85,8 @@ void CalculationThread::nextTime() {
     if (lookingUp)
         main->yAngle -= 1;
 
+    main->checkAngles();
+
     for (int i = 0; i < main->numberArsenals; i++)
         if (equal(main->coord, main->arsenal[i])) {
             main->patrons += 3;

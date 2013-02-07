@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     connection.cpp \
     networkclass.cpp \
     calculationthread.cpp \
-    messagesstack.cpp
+    messagesstack.cpp \
+    model.cpp
 
 HEADERS  += mainwindow.h \
     startdialog.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     networkclass.h \
     fieldinformation.h \
     calculationthread.h \
-    messagesstack.h
+    messagesstack.h \
+    model.h
 
 FORMS    += \
     startDialog.ui \

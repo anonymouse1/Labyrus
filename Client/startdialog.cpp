@@ -52,7 +52,6 @@ void startDialog::start() {
     loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
     loop->connect(w, SIGNAL(fail()), loop, SLOT(quit()));
     loop->exec();
-    this->hide();
 }
 
 void startDialog::scanSkins() {

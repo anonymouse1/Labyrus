@@ -49,7 +49,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[5];
+    GLuint textures[6];
     GLuint superFontList;
     QString currentText;
     bool enteringText;

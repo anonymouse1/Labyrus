@@ -43,6 +43,7 @@ public:
     int latency;
 
     void go(QString s, bool flush = false, bool addEndLine = true);
+    void checkAngles();
 private:
     QMutex processingInformation;
     QTcpSocket *mainSocket;

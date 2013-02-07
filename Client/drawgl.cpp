@@ -53,7 +53,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 void DrawGl::initializeGL() {
     qglClearColor(Qt::white);
     glEnable(GL_DEPTH_TEST);
-//    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_POINT_SMOOTH);
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
@@ -61,7 +61,11 @@ void DrawGl::initializeGL() {
     textures[2] = bindTexture(QPixmap(skinPath + "/roof.png"), GL_TEXTURE_2D);
     textures[3] = bindTexture(QPixmap(skinPath + "/floor.png"), GL_TEXTURE_2D);
     textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
-    textures[5] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
+    textures[5] = bindTexture(QPixmap(skinPath + "/realRoof.png"), GL_TEXTURE_2D);
+
+    for (int i = 0; i < 6; i++)
+        qDebug() << textures[i];
+//    textures[5] = textures[1];
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -103,7 +107,7 @@ void DrawGl::paintGL() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glRotatef(xRot + a->yAngle, 1.0f, 0.0f, 0.0f);
+    glRotatef(a->yAngle, 1.0f, 0.0f, 0.0f);
     glRotatef(yRot, 0.0f, 1.0f, 0.0f);
     glRotatef(a->angle, 0.0f, 0.0f, 1.0f);
 
@@ -112,7 +116,7 @@ void DrawGl::paintGL() {
     glTranslatef(-a->coord.x() / sizeView, -a->coord.y() / sizeView, ztra);
 
 //    drawAxis();
-    if (-ztra < wallHeight)
+//    if (-ztra < wallHeight)
         drawSkyBox();
     drawMaze();
 
@@ -150,14 +154,17 @@ void DrawGl::drawAxis() {
 void DrawGl::drawSkyBox() {
     loadTexture(textures[5]);
     glBegin(GL_QUADS);
-        glVertex3f(0, 1 / sizeView * a->n, wallHeight);
-        glTexCoord2d(0, 0);
-        glVertex3f(0, 0, wallHeight);
-        glTexCoord2d(0, 1);
-        glVertex3f(1 / sizeView * a->n, 0, wallHeight);
-        glTexCoord2d(1, 1);
-        glVertex3f(1 / sizeView * a->n, 1 / sizeView * a->n, wallHeight);
-        glTexCoord2d(1, 0);
+        for (int i = 0; i < a->n; i++)
+            for (int j = 0; j < a->n; j++) {
+                glVertex3f((i + 1) / sizeView, j / sizeView, wallHeight);
+                glTexCoord2d(1, 1);
+                glVertex3f(i / sizeView, j / sizeView, wallHeight);
+                glTexCoord2d(0, 1);
+                glVertex3f(i / sizeView, (j + 1) / sizeView, wallHeight);
+                glTexCoord2d(0, 0);
+                glVertex3f((i + 1) / sizeView, (j + 1) / sizeView, wallHeight);
+                glTexCoord2d(1, 0);
+            }
     glEnd();
 }
 
@@ -310,12 +317,12 @@ void DrawGl::drawMaze() {
                 glVertex3f(x + f, y + k, wallHeight + eps);
                 glTexCoord2d(1, 1);
             } else {
-                glVertex3f(x, y - f, wallHeight + eps);
-                glTexCoord2d(0, 1);
-                glVertex3f(x, y + f, wallHeight + eps);
-                glTexCoord2d(0, 0);
                 glVertex3f(x + k, y + f, wallHeight + eps);
                 glTexCoord2d(1, 0);
+                glVertex3f(x, y + f, wallHeight + eps);
+                glTexCoord2d(0, 0);
+                glVertex3f(x, y - f, wallHeight + eps);
+                glTexCoord2d(0, 1);
                 glVertex3f(x + k, y - f, wallHeight + eps);
                 glTexCoord2d(1, 1);
             }
@@ -326,12 +333,12 @@ void DrawGl::drawMaze() {
     glBegin(GL_QUADS);
         for (int i = 0; i < a->n; i++)
             for (int j = 0; j < a->n; j++) {
-                glVertex3f((i + 1) * k, j * k, -eps);
-                glTexCoord2d(0, 0);
-                glVertex3f(i * k, j * k, -eps);
-                glTexCoord2d(0, 1);
                 glVertex3f(i * k, (j + 1) * k, -eps);
                 glTexCoord2d(1, 1);
+                glVertex3f(i * k, j * k, -eps);
+                glTexCoord2d(0, 1);
+                glVertex3f((i + 1) * k, j * k, -eps);
+                glTexCoord2d(0, 0);
                 glVertex3f((i + 1) * k, (j + 1) * k, -eps);
                 glTexCoord2d(1, 0);
             }
@@ -382,6 +389,8 @@ void DrawGl::drawMaze() {
         glTexCoord2d(1, 0);
     glEnd();
     end2d();
+
+    glDisable(GL_BLEND);
 
     qglColor(Qt::red);
     if (enteringText)
@@ -465,7 +474,8 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     QCursor::setPos(width() / 2, height() / 2);
 
     a->angle += x;
-    xRot += y;
+    a->yAngle += y;
+    a->checkAngles();
 //    qDebug() << event->x() - width() / 2 - this->pos().x();
 }
 

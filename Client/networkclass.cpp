@@ -6,6 +6,7 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     login = myName;
     targetIp = ip;
     targetPort = port;
+    yAngle = -90;
     messages = new MessagesStack;
 }
 
@@ -159,5 +160,12 @@ void NetworkClass::failConnection() {
     emit connectionFailed();
 }
 
+void NetworkClass::checkAngles() {
+    if (yAngle > 0)
+        yAngle = 0;
+
+    if (yAngle < -180)
+        yAngle = -180;
+}
 
 
