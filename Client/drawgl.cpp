@@ -63,9 +63,7 @@ void DrawGl::initializeGL() {
     textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
     textures[5] = bindTexture(QPixmap(skinPath + "/realRoof.png"), GL_TEXTURE_2D);
 
-    for (int i = 0; i < 6; i++)
-        qDebug() << textures[i];
-//    textures[5] = textures[1];
+    I = new Model(skinPath + "/simple.s3d");
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -356,6 +354,7 @@ void DrawGl::drawMaze() {
 //            glVertex3f(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2);
             qglColor(QColor(0, a->otherAlive[i] * 200, 0));
             renderText(a->heroes[i].x() * k, a->heroes[i].y() * k, wallHeight / 2, a->heroNames[i], hudFont);
+            I->draw(1 / sizeView / 10, a->heroes[i].x() * k, a->heroes[i].y() * k, wallHeight / 3);
         }
 //    paintEngine()->drawEllipse(QRect(0, 0, 10, 10));
 //    paintEngine()->setActive(true);
@@ -404,6 +403,7 @@ void DrawGl::drawMaze() {
     drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
 
+//    I->draw(1 / sizeView / 10, a->coord.x() * k, a->coord.y() * k, wallHeight / 3);
     if (startingGame)
         renderText(this->width() / 2 - 100, this->height() / 2, QString("Starting after ") + QString::number((3000 - startAfter) / 1000) + QString(" seconds"), hudFont);
 }

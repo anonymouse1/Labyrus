@@ -8,6 +8,7 @@
 #include <QPixmap>
 #include <messagesstack.h>
 #include <QPicture>
+#include <model.h>
 
 class MainWindow;
 
@@ -56,6 +57,7 @@ private:
     QString skinPath;
     QPixmap generateCompass(double angle);
     QPixmap *compass;
+    Model *I;
 
     bool firstMouseMove;
     int lastClickX;
