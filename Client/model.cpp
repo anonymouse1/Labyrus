@@ -28,8 +28,11 @@ void Model::draw(double k, double x, double y, double z) {
         for (int j = 0; j < n; j++)
             for (int l = 0; l < n; l++) {
                 glVertex3f(r[i][0] * k, r[i][1] * k, r[i][2] * k);
+                glTexCoord2d(0, 0);
                 glVertex3f(r[j][0] * k, r[j][1] * k, r[j][2] * k);
+                glTexCoord2d(0, 1);
                 glVertex3f(r[l][0] * k, r[l][1] * k, r[l][2] * k);
+                glTexCoord2d(1, 0);
             }
 
     glEnd();

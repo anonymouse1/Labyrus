@@ -1,8 +1,6 @@
 #include "messagesstack.h"
 
-MessagesStack::MessagesStack(QObject *parent) :
-    QObject(parent)
-{
+MessagesStack::MessagesStack(QObject *parent): QObject(parent) {
 }
 
 QList<QString> MessagesStack::getMessages() {
