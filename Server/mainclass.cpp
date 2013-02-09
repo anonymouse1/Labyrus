@@ -4,7 +4,7 @@
 MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
     int n = 20;
-    int latency = 16;
+    int latency = 25;
     int players = 1;
     bool strong = false;
     bool silence = false;

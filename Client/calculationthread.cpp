@@ -44,10 +44,10 @@ void CalculationThread::nextTime() {
         main->coord.setY(main->coord.y() + deltaY);
     }
     if (leftPressed)
-        main->angle -= 1;
+        main->angle -= 100 * speed;
 
     if (rightPressed)
-        main->angle += 1;
+        main->angle += 100 * speed;
 
     if (downPressed) {
         double deltaX = -cos((-main->angle + 90) * M_PI / 180) * speed;

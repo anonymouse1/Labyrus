@@ -51,10 +51,9 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 }
 
 void DrawGl::initializeGL() {
-    qglClearColor(Qt::white);
+    qglClearColor(Qt::gray);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glEnable(GL_POINT_SMOOTH);
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
@@ -62,29 +61,34 @@ void DrawGl::initializeGL() {
     textures[3] = bindTexture(QPixmap(skinPath + "/floor.png"), GL_TEXTURE_2D);
     textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
     textures[5] = bindTexture(QPixmap(skinPath + "/realRoof.png"), GL_TEXTURE_2D);
+    textures[6] = bindTexture(QPixmap(skinPath + "/model.png"), GL_TEXTURE_2D);
 
     I = new Model(skinPath + "/simple.s3d");
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_2D);
-    float dir[3] = {0, 0, -1};
-    float pos[4] = {0.5, 0.5, 1, 1};
-    float color[4] = {1, 1, 1, 1};
-    float mat_specular[4] = {10, 10, 10, 10};
-    GLfloat ambientLight[] = {0.5f, 0.5f, 0.5f, 1.0f};
+
+    glFrontFace(GL_CCW);
+//    float dir[3] = {0, 0, -1};
+    GLfloat pos[4] = {0.5f, 0.5f, -0.2f, 1.0f};
+    GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat mat_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat ambientLight[] = {0.8f, 0.8f, 0.8f, 0.8f};
 
 
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 
     glLightfv(GL_LIGHT0, GL_POSITION, pos);
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, color);
+//    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
+    glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, color);
+    glEnable(GL_LIGHT0);
+
 
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_specular);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glPointSize(10);
 }
 
@@ -181,7 +185,7 @@ void DrawGl::drawMaze() {
     double k = 1.0 / a->n;
     k = 1.0 / sizeView;
     double f = k / 10;
-    qglColor(Qt::gray);
+    qglColor(Qt::white);
 //    float dir[3] = {1, 1, 1};
 //    float pos[4] = {(a->coord.x() + animX) * k, (a->coord.y() + animY) * k, 0.1, 1};
 
@@ -343,7 +347,7 @@ void DrawGl::drawMaze() {
     glEnd();
 
 
-
+    loadTexture(textures[model]);
     qglColor(QColor(0, 0, 250));
     for (int i = 0; i < a->numberArsenals; i++)
         renderText(a->arsenal[i].x() * k + k / 2, a->arsenal[i].y() * k + k / 2, wallHeight / 2, "Arsenal");

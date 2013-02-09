@@ -17,6 +17,16 @@ const double eps = 0.00001;
 const double sizeView = 10;
 //const QString skinPath = "../skins/default";
 
+enum {
+    defaultWall = 0,
+    shortWall = 1,
+    roof = 2,
+    Floor = 3,
+    compass = 4,
+    realRoof = 5,
+    model = 6
+};
+
 class DrawGl : public QGLWidget
 {
     Q_OBJECT
@@ -50,7 +60,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[6];
+    GLuint textures[7];
     GLuint superFontList;
     QString currentText;
     bool enteringText;

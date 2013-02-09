@@ -5,8 +5,7 @@ Model::Model(QString s) {
 
     char buf[255];
     fscanf(fin, "%s", buf);
-    if (buf != QString("#stdupid3dformat"))
-
+    if (buf != QString("#stdupid3dformat\n"))
         qDebug() << "model data is not correct";
 
     fscanf(fin, "%d", &n);
