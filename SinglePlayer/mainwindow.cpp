@@ -41,7 +41,7 @@ void MainWindow::start() {
     QTimer *timeout = new QTimer;
 
     QObject::connect(timeout, SIGNAL(timeout()), loop, SLOT(quit()));
-    timeout->setInterval(5000);
+    timeout->setInterval(7000);
     timeout->start();
 
 
@@ -51,7 +51,6 @@ void MainWindow::start() {
     QObject::connect(server, SIGNAL(finished(int)), this, SLOT(close()));
     server->setReadChannel(QProcess::StandardError);
     server->start("labyrus-server", attributes);
-//    server->start("echo", attributes);
     loop->exec();
 
     qDebug() << server->canReadLine();
@@ -64,5 +63,5 @@ void MainWindow::start() {
     attributes << "-p" << "7777";
     attributes << "-i" << "127.0.0.1" ;
     attributes << "--start";
-    client->start("/usr/bin/labyrus-client", attributes);
+    client->start("labyrus-client", attributes);
 }
