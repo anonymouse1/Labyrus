@@ -1,5 +1,4 @@
 #include "drawgl.h"
-//#include <Qt/qgl.h>
 #include <QtOpenGL/QGLWidget>
 #include <GL/glu.h>
 
