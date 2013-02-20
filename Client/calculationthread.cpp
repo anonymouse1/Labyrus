@@ -100,13 +100,6 @@ void CalculationThread::nextTime() {
         main->alive = true;
         main->go("l");
     }
-
-    if (rand() % 300 == 0) {
-        if (widget->perspective < 150)
-            widget->perspective++;
-        widget->needRefreshCursor = false;
-        widget->resize(widget->width(), widget->height() - 1);
-    }
 }
 
 void CalculationThread::refreshCoord() {

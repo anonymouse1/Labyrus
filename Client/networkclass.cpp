@@ -33,15 +33,6 @@ void NetworkClass::readField() {
         for (int j = 0; j < 3; j++)
             walls[i][j] = scanInt();
 
-    hospital.setX(scanInt());
-    hospital.setY(scanInt());
-
-    numberArsenals = scanInt();
-    for (int i = 0; i < numberArsenals; i++) {
-        arsenal[i].setX(scanInt());
-        arsenal[i].setY(scanInt());
-    }
-
     qDebug() << "fieldUpdate" << QTime::currentTime();
 }
 

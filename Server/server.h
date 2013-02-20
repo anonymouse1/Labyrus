@@ -28,8 +28,8 @@ class Server : public QTcpServer
 public:
     explicit Server(bool sil, int size, int lat, int players, bool strong, QObject *parent = 0);
     void processConnection(Player *player);
-    void sendFieldToPlayer(Player *);
-    void sendHeroesToPlayer(Player *);
+    void sendFieldToPlayer(Player *player, QByteArray *data = NULL);
+    void sendHeroesToPlayer(Player *player, QByteArray *data = NULL);
     int alreadyPlayers;
     void runCommand(QString command, Player *player);
     QMap<int, Player *> r;
@@ -46,6 +46,8 @@ private:
     int scanInt(QTcpSocket *);
     int findNap(QString);
     QPoint getFreePoint();
+    QByteArray *generateFieldMessage();
+    QByteArray *generateHeroMessage();
 
     bool isConnected();
     void generateMap();

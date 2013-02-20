@@ -70,24 +70,6 @@ void DrawGl::initializeGL() {
     glEnable(GL_2D);
 
     glFrontFace(GL_CCW);
-//    float dir[3] = {0, 0, -1};
-    GLfloat pos[4] = {0.5f, 0.5f, -0.2f, 1.0f};
-    GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat mat_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat ambientLight[] = {0.8f, 0.8f, 0.8f, 0.8f};
-
-
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
-
-    glLightfv(GL_LIGHT0, GL_POSITION, pos);
-//    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
-    glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, color);
-    glEnable(GL_LIGHT0);
-
-
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_specular);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glPointSize(10);
 }
 
@@ -117,8 +99,8 @@ void DrawGl::paintGL() {
     glTranslatef(-a->coord.x() / sizeView, -a->coord.y() / sizeView, ztra);
 
 //    drawAxis();
-//    if (-ztra < wallHeight)
-        drawSkyBox();
+    enableLight();
+    drawSkyBox();
     drawMaze();
 
     qglColor(Qt::red);
@@ -150,6 +132,28 @@ void DrawGl::drawAxis() {
     renderText(0, 0, 1, QString::number(1));
     renderText(0, 1, 0, QString::number(1));
     renderText(1, 0, 0, QString::number(1));
+}
+
+void DrawGl::enableLight() {
+        float dir[3] = {0, 0, -1};
+//    GLfloat pos[4] = {(float)(a->coord.x()), (float)(a->coord.y()), -wallHeight / 2, 1.0f};
+        GLfloat pos[4] = {0.5, 0.5, 0.01, 1.0f};
+        GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+        GLfloat mat_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+        GLfloat ambientLight[] = {0.1f, 0.1f, 0.1f, 0.8f};
+
+
+        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
+        glLightfv(GL_LIGHT0, GL_POSITION, pos);
+        glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
+        glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, color);
+        glEnable(GL_LIGHT0);
+
+
+
+        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_specular);
+        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 }
 
 void DrawGl::drawSkyBox() {
@@ -473,8 +477,8 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     if (botActive || (!this->isFullScreen()))
         return;
 
-    double x = (event->x() - width() / 2) / 5;
-    double y = (event->y() - height() / 2) / 5;
+    double x = (event->x() - width() / 2) / 3;
+    double y = (event->y() - height() / 2) / 3;
 
     QCursor::setPos(width() / 2, height() / 2);
 

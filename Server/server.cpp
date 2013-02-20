@@ -132,41 +132,22 @@ void Server::runCommand(QString command, Player *player) {
 //    qDebug() << "success" << *player->coord;
 }
 
-void Server::sendFieldToPlayer(Player *player) {
+void Server::sendFieldToPlayer(Player *player, QByteArray *data) {
     qDebug() << "sending field to player" << player->name << QTime::currentTime();
     player->sendingInformation.lock();
-    QTcpSocket *socket = player->socket;
+    if (data == NULL)
+        data = generateFieldMessage();
 
-    socket->write(QString("field\n").toAscii());
-    socket->write((QString::number(n) + QString("\n")).toAscii());
-    socket->write((QString::number(m) + QString("\n")).toAscii());
-    for (int i = 0; i < m; i++)
-        for (int j = 0; j < 3; j++)
-            socket->write((QString::number(walls[i][j]) + QString("\n")).toAscii());
-
-    //hospital
-    socket->write((QString::number(hospital.x()) + "\n" + QString::number(hospital.y()) + "\n").toAscii());
-    //arsenals
-    socket->write((QString::number(numberArsenals) + "\n").toAscii());
-    for (int i = 0; i < numberArsenals; i++)
-        socket->write((QString::number(arsenal[i].x()) + "\n" + QString::number(arsenal[i].y()) + "\n").toAscii());
-
-//    socket->flush(); I don't know if it is very strange bug, but comment it.
+    player->socket->write(*data);
     player->sendingInformation.unlock();
 }
 
-void Server::sendHeroesToPlayer(Player *player) {
+void Server::sendHeroesToPlayer(Player *player, QByteArray *data) {
     player->sendingInformation.lock();
-    QTcpSocket *socket = player->socket;
-    socket->write("hero\n");
-    socket->write((QString::number(alreadyPlayers) + "\n").toAscii());
-    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++) {
-        socket->write((QString::number(i.value()->socket->socketDescriptor()) + "\n" +
-                       QString::number(i.value()->coord->x()) + "\n" +
-                       QString::number(i.value()->coord->y()) + "\n" +
-                       i.value()->name + "\n").toAscii());
-        }
-  //  socket->flush(); //this is super very strange bug don't uncomment this
+    if (data == NULL)
+        data = generateHeroMessage();
+
+    player->socket->write(*data);
     player->sendingInformation.unlock();
 }
 
@@ -306,4 +287,29 @@ int Server::scanInt(QTcpSocket *socket) {
 
 void Server::forAllClients(QString s) {
     emit forAllClientsPrint(s);
+}
+
+QByteArray *Server::generateFieldMessage() {
+    QByteArray *result = new QByteArray;
+    result->append(QString("field\n"));
+    result->append(QString::number(n) + QString("\n"));
+    result->append(QString::number(m) + QString("\n"));
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < 3; j++)
+            result->append(QString::number(walls[i][j]) + QString("\n"));
+
+    return result;
+}
+
+QByteArray *Server::generateHeroMessage() {
+    QByteArray *result = new QByteArray;
+    result->append(QString("hero\n"));
+    result->append(QString::number(alreadyPlayers) + "\n");
+    for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
+        result->append(QString::number(i.value()->socket->socketDescriptor()) + "\n" +
+                       QString::number(i.value()->coord->x()) + "\n" +
+                       QString::number(i.value()->coord->y()) + "\n" +
+                       i.value()->name + "\n");
+
+    return result;
 }

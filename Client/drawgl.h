@@ -47,6 +47,7 @@ public:
     bool botActive;
     int perspective;
     bool needRefreshCursor;
+    void initializeGL();
 
 private:
     void drawAxis();
@@ -76,10 +77,10 @@ private:
     double plMouseYRot;
     bool mousePressed;
 
+    void enableLight();
     void begin2d();
     void end2d();
 protected:
-    void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
 
