@@ -24,15 +24,12 @@ public:
     QPointF coord;
     int otherHeroes;
     QPointF heroes[100];
-    int numberArsenals;
-    QPoint arsenal[100];
     QString heroNames[100];
     int otherAlive[100];
     int patrons;
     int wall;
     int destroy;
     bool alive;
-    QPoint hospital;
     int myDescriptor;
     int descriptors[100];
     double angle;

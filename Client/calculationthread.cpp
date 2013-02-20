@@ -86,20 +86,6 @@ void CalculationThread::nextTime() {
         main->yAngle -= 1;
 
     main->checkAngles();
-
-    for (int i = 0; i < main->numberArsenals; i++)
-        if (equal(main->coord, main->arsenal[i])) {
-            main->patrons += 3;
-            main->wall += 1;
-            main->destroy += 1;
-            main->go(QString("a") + "\n" + QString::number(i), false);
-            main->arsenal[i] = QPoint(-100, -100);
-        }
-
-    if (equal(main->coord, main->hospital)) {
-        main->alive = true;
-        main->go("l");
-    }
 }
 
 void CalculationThread::refreshCoord() {

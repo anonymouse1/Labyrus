@@ -352,10 +352,6 @@ void DrawGl::drawMaze() {
 
     loadTexture(textures[model]);
     qglColor(QColor(0, 0, 250));
-    for (int i = 0; i < a->numberArsenals; i++)
-        renderText(a->arsenal[i].x() * k + k / 2, a->arsenal[i].y() * k + k / 2, wallHeight / 2, "Arsenal");
-
-    renderText(a->hospital.x() * k + k / 2, a->hospital.y() * k + k / 2, wallHeight / 2, "Hospital");
     for (int i = 0; i < a->otherHeroes; i++)
         if ((a->heroes[i].x() != -1) || (a->heroes[i].y()) != -1) {
 //            glVertex3f(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2);
