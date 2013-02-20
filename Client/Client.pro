@@ -9,7 +9,9 @@ QT       += core gui
 QT       += network
 
 QT       += opengl
+
 LIBS += -L/usr/lib -lGLU
+
 greaterThan(QT_MAJOR_VERSION, 4):
 
 TARGET = Client
@@ -40,3 +42,5 @@ FORMS    += \
     startDialog.ui \
     mainwindow.ui \
     connection.ui
+
+DEFINES += PORTABLE

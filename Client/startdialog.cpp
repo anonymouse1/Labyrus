@@ -55,12 +55,13 @@ void startDialog::start() {
 }
 
 void startDialog::scanSkins() {
-    skinPath = "../skins/";
-    QFileInfoList list = QDir(skinPath).entryInfoList();
-    if (list.size() <= 2) {
+    #ifdef PORTABLE
+        skinPath = "../skins/";
+    #else
         skinPath = "/usr/share/labyrus/skins/";
-        list = QDir(skinPath).entryInfoList();
-    }
+    #endif
+
+    QFileInfoList list = QDir(skinPath).entryInfoList();
 
     for (int i = 0; i < list.size(); i++)
         if ((list.at(i).fileName() != ".")  && (list.at(i).fileName() != ".."))

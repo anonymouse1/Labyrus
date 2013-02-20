@@ -1,5 +1,5 @@
 pkgname=labyrus-git
-pkgver=20130217
+pkgver=20130220
 pkgrel=1
 pkgdesk="Qt Game written with OpenGL"
 arch=('i686' 'x86_64')
@@ -33,6 +33,7 @@ build() {
   cd ${srcdir}/build
 
   cd Client
+  cat Client.pro | grep -v PORTABLE > Client.pro
   qmake -makefile
   make
   cd ../Server
