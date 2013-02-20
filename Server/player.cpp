@@ -11,7 +11,7 @@ void Player::run() {
     socket->setSocketDescriptor(socketDescriptor);
 
     refresh = new QTimer;
-    refresh->setInterval(2000);
+    refresh->setInterval(10000);
     refresh->start();
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);

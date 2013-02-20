@@ -31,6 +31,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
         QObject::connect(ui->commandLinkButton, SIGNAL(clicked()), this, SLOT(start()));
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
     }
+    ui->comboBox->setCurrentIndex(ui->comboBox->findText("default"));
 }
 
 void startDialog::start() {
