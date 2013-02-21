@@ -16,7 +16,7 @@ Server::Server(bool rad, bool cheat, bool sil, int size, int lat, int players, b
     radiation = rad;
     if (radiation) {
         radiationTimer = new QTimer;
-        radiationTimer->setInterval(1500);
+        radiationTimer->setInterval(4000);
     }
     n = size;
     m = 0;

@@ -89,7 +89,7 @@ void DrawGl::paintGL() {
         a->radiation = false;
         if (perspective < 150)
             perspective++;
-        initializeGL();
+           this->resizeGL(this->width(), this->height());
     }
     fps++;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
