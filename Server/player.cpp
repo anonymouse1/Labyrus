@@ -17,6 +17,9 @@ void Player::run() {
     QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)), Qt::DirectConnection);
 
+    if (server->radiation)
+        QObject::connect(server->radiationTimer, SIGNAL(timeout()), this, SLOT(radiation()));
+
     sendHeroesTime = new QTimer;
     sendHeroesTime->setInterval(latency);
     server->processConnection(this);
@@ -54,5 +57,11 @@ void Player::sendHeroTime() {
 void Player::printString(QString s) {
     sendingInformation.lock();
     socket->write((s + "\n").toAscii());
+    sendingInformation.unlock();
+}
+
+void Player::radiation() {
+    sendingInformation.lock();
+    socket->write(QString("rad\n").toAscii());
     sendingInformation.unlock();
 }

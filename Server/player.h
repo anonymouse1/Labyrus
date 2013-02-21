@@ -35,6 +35,7 @@ private:
 private slots:
     void sendHeroTime();
     void printString(QString);
+    void radiation();
 public slots:
     void refreshTime();
     void readyRead();

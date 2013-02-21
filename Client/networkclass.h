@@ -30,6 +30,8 @@ public:
     int wall;
     int destroy;
     bool alive;
+    bool cheats;
+    bool radiation;
     int myDescriptor;
     int descriptors[100];
     double angle;

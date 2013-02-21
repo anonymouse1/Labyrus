@@ -26,7 +26,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(bool sil, int size, int lat, int players, bool strong, QObject *parent = 0);
+    explicit Server(bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent = 0);
     void processConnection(Player *player);
     void sendFieldToPlayer(Player *player, QByteArray *data = NULL);
     void sendHeroesToPlayer(Player *player, QByteArray *data = NULL);
@@ -34,6 +34,8 @@ public:
     void runCommand(QString command, Player *player);
     QMap<int, Player *> r;
     QSet<QString> names;
+    QTimer *radiationTimer;
+    bool radiation;
 
 private:
     void die(QString);
@@ -58,6 +60,7 @@ private:
     int latency, numPlayers;
     bool strongNumPlayers;
     bool gameStart;
+    bool cheats;
     int n;
     int m;
     int walls[10000][3]; // 3:    0 - сверху; 1 - слева

@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(bool sil, int size, int lat, int players, bool strong, QObject *parent) :
+Server::Server(bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -12,6 +12,12 @@ Server::Server(bool sil, int size, int lat, int players, bool strong, QObject *p
     latency = lat;
     numPlayers = players;
     strongNumPlayers = strong;
+    cheats = cheat;
+    radiation = rad;
+    if (radiation) {
+        radiationTimer = new QTimer;
+        radiationTimer->setInterval(1500);
+    }
     n = size;
     m = 0;
     for (int i = 0; i < n; i++) {
@@ -109,11 +115,19 @@ void Server::processConnection(Player *player) {
         qDebug() << "starting game";
         gameStart = true;
         emit forAllClientsPrint("gameStart");
-//        emit sendFields();
+        if (cheats) {
+            emit forAllClientsPrint("cheats");
+            emit forAllClientsPrint("S\nCheats allowed");
+        }
+
+        if (radiation) {
+            emit forAllClientsPrint("S\nThere is some radiation near");
+            radiationTimer->start();
+        }
     }
 
     sendFieldToPlayer(player);
-    emit forAllClientsPrint("S\n" + player->name + " connected\n");
+    emit forAllClientsPrint("S\n" + player->name + " connected");
 }
 
 void Server::runCommand(QString command, Player *player) {

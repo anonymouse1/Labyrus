@@ -52,10 +52,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         else
             widget->showNormal();
 
-    if (event->key() == Qt::Key_Q)
-        widget->ztra += 0.01;
-    else if (event->key() == Qt::Key_E)
-        widget->ztra -= 0.01;
+    if (input->cheats)
+        if (event->key() == Qt::Key_Q)
+            widget->ztra += 0.01;
+        else if (event->key() == Qt::Key_E)
+            widget->ztra -= 0.01;
 
     if (event->key() == Qt::Key_W)
         thread->upPressed = true;

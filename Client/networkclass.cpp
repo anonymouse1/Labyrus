@@ -8,6 +8,7 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     targetPort = port;
     yAngle = -80;
     angle = 45;
+    cheats = false;
     fullRefresh = true;
     messages = new MessagesStack;
 }
@@ -76,7 +77,11 @@ void NetworkClass::readInformation() {
             readHeroes();
         } else if (s == "S\n") {
             messages->addMessage(mainSocket->readLine());
-        } else{
+        } else if (s == "cheats\n") {
+            cheats = true;
+        } else if (s == "rad\n") {
+
+        } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         }
