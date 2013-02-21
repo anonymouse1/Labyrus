@@ -87,6 +87,8 @@ void DrawGl::resizeGL(int w, int h) {
 void DrawGl::paintGL() {
     if (a->radiation) {
         a->radiation = false;
+        if (perspective < 150)
+            perspective++;
         initializeGL();
     }
     fps++;

@@ -80,7 +80,7 @@ void NetworkClass::readInformation() {
         } else if (s == "cheats\n") {
             cheats = true;
         } else if (s == "rad\n") {
-
+            radiation = true;
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
