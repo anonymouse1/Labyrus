@@ -11,6 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->start, SIGNAL(clicked()), this, SLOT(start()));
     QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setShown(bool)));
 
+    #ifndef PORTABLE
+    prefix = "./";
+    #else
+    prefix = "/usr/bin/";
+    #endif
+
     ui->widget->hide();
 }
 
@@ -50,7 +56,7 @@ void MainWindow::start() {
     QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
     QObject::connect(server, SIGNAL(finished(int)), this, SLOT(close()));
     server->setReadChannel(QProcess::StandardError);
-    server->start("labyrus-server", attributes);
+    server->start(prefix + "labyrus-server", attributes);
     loop->exec();
 
     qDebug() << server->canReadLine();
@@ -63,5 +69,5 @@ void MainWindow::start() {
     attributes << "-p" << "7777";
     attributes << "-i" << "127.0.0.1" ;
     attributes << "--start";
-    client->start("labyrus-client", attributes);
+    client->start(prefix + "labyrus-client", attributes);
 }
