@@ -33,10 +33,17 @@ build() {
   cd ${srcdir}/build
 
   cd Client
+
   echo "Disabling portable version"
+  
   cat Client.pro | grep -v PORTABLE > Client1.pro
   mv Client1.pro Client.pro
+
+  cat SinglePlayer.pro | grep -v PORTABLE > SinglePlayer1.pro
+  mv SinglePlayer1.pro SinglePlayer.pro
+
   echo "disabled"
+
   qmake -makefile
   make
   cd ../Server
