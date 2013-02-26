@@ -11,10 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->start, SIGNAL(clicked()), this, SLOT(start()));
     QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setShown(bool)));
 
-    #ifndef PORTABLE
-    prefix = "./";
+    #ifdef PORTABLE
+        prefix = "./";
     #else
-    prefix = "/usr/bin/";
+        prefix = "/usr/bin/";
     #endif
 
     ui->widget->hide();
@@ -30,10 +30,13 @@ void MainWindow::start() {
     attributes << "-n";
     attributes << ui->fieldSize->text();
     attributes << "--latency" << ui->spinBox->text();
-    if (ui->allowConnections) {
+    if (ui->cheats->checkState() == Qt::Checked)
+        attributes << "--cheats";
+
+    if (ui->allowConnections->checkState() == Qt::Checked) {
         attributes << "-p";
         attributes << ui->numberPlayers->text();
-        if (ui->strong)
+        if (ui->strong->checkState() == Qt::Checked)
             attributes << "--strong";
     } else {
         attributes << "-p";

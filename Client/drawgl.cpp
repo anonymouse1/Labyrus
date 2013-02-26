@@ -77,7 +77,7 @@ void DrawGl::resizeGL(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
-    gluPerspective(perspective, w / (double)h, 0.001, 1000.0);
+    gluPerspective(perspective, w / (double)h, 0.001, 1000000.0);
     if (isFullScreen())
         QCursor::setPos(w / 2, h / 2);
 
@@ -165,7 +165,7 @@ void DrawGl::enableLight() {
 void DrawGl::drawSkyBox() {
     loadTexture(textures[5]);
     glBegin(GL_QUADS);
-        for (int i = 0; i < a->n; i++)
+   /*     for (int i = 0; i < a->n; i++)
             for (int j = 0; j < a->n; j++) {
                 glVertex3f((i + 1) / sizeView, j / sizeView, wallHeight);
                 glTexCoord2d(1, 1);
@@ -175,7 +175,15 @@ void DrawGl::drawSkyBox() {
                 glTexCoord2d(0, 0);
                 glVertex3f((i + 1) / sizeView, (j + 1) / sizeView, wallHeight);
                 glTexCoord2d(1, 0);
-            }
+            }*/
+        glVertex3f(50, -50, 10);
+        glTexCoord2d(1, 1);
+        glVertex3f(-50, -50, 10);
+        glTexCoord2d(0, 1);
+        glVertex3f(-50, 50, 10);
+        glTexCoord2d(0, 0);
+        glVertex3f(50, 50, 10);
+        glTexCoord2d(1, 0);
     glEnd();
 }
 

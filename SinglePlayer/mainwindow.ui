@@ -127,6 +127,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QCheckBox" name="cheats">
+      <property name="text">
+       <string>Cheats</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QCheckBox" name="allowConnections">
       <property name="text">
        <string>Allow remote connections</string>
