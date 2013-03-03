@@ -38,6 +38,7 @@ public:
     double yAngle;
     QString login;
     MessagesStack *messages;
+    QTime *pingTime;
 
     int latency;
 
@@ -47,7 +48,7 @@ private:
     QMutex processingInformation;
     QTcpSocket *mainSocket;
     QTimer *failConnectionTime;
-    QTimer *pingTime;
+    QTimer *pingTimer;
     bool fullRefresh;
 
     QHostAddress targetIp;

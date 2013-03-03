@@ -141,6 +141,8 @@ void Server::runCommand(QString command, Player *player) {
         forAllClientsPrint("S\n" + player->name + ": " + player->socket->readLine());
     } else if (command[0] == 'v') {
         player->setValid();
+    } else if (command[0] == 'p') {
+        player->socket->write("p\n");
     }
 
     if (player->socket->canReadLine())

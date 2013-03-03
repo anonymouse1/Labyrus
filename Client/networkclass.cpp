@@ -11,10 +11,10 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     cheats = false;
     fullRefresh = true;
     messages = new MessagesStack;
-    pingTime = new QTimer;
-    pingTime->setInterval(1000);
-    pingTime->start();
-    QObject::connect(pingTime, SIGNAL(timeout()), this, SLOT(ping()));
+    pingTimer = new QTimer;
+    pingTimer->setInterval(1000);
+    pingTimer->start();
+    QObject::connect(pingTimer, SIGNAL(timeout()), this, SLOT(ping()));
 }
 
 void NetworkClass::run() {
@@ -85,6 +85,9 @@ void NetworkClass::readInformation() {
             cheats = true;
         } else if (s == "rad\n") {
             radiation = true;
+        } else if (s == "p\n") {
+            messages->addMessage("Ping time: " + QString(pingTime->elapsed() + 1));
+            qDebug() << pingTime->elapsed();
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
