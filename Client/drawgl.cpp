@@ -526,6 +526,8 @@ void DrawGl::processText() {
         this->deleteLater();
     } else if (currentText == "BOT") {
         legacy->startBot();
+    } else if (currentText == "STOP") {
+        legacy->stopBot = true;
     }
 
     qDebug() << currentText << "processed";

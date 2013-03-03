@@ -42,6 +42,7 @@ public:
     ~MainWindow();
 
     void startBot();
+    bool stopBot;
 
 
     bool w[100][100];

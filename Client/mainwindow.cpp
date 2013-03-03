@@ -9,6 +9,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     app = a;
     repaintTimer = new QTimer;
     repaintTimer->setInterval(16);
+    stopBot = false;
 
     widget = new DrawGl(app, skin);
     widget->legacy = this;
@@ -31,10 +32,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     thread = new CalculationThread(widget, input);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     qDebug() << "destroying";
-    //    delete ui;
 }
 
 void MainWindow::close() {
@@ -156,6 +155,7 @@ void MainWindow::startBot() {
     integerCoord = getRealCoord();
     superDfs();
     widget->botActive = false;
+    stopBot = false;
     qDebug() << "bot finished";
 }
 
@@ -165,6 +165,9 @@ void MainWindow::startBot() {
 }*/
 
 void MainWindow::syncNap(int a) {
+    if (stopBot)
+        return;
+
     while (input->angle > a + 2)
         input->angle -= 360;
 
@@ -191,6 +194,9 @@ void MainWindow::syncNap(int a) {
 }
 
 void MainWindow::elementarMove() {
+    if (stopBot)
+        return;
+
     int time = thread->currentTime;
     while (time + 85 > thread->currentTime) {
         thread->upPressed = true;
@@ -207,6 +213,9 @@ void MainWindow::standartMove() {
 }
 
 bool MainWindow::superDfs() {
+    if (stopBot)
+        return 1;
+
     int a = input->angle;
     w[integerCoord.x()][integerCoord.y()] = true;
     if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
@@ -346,13 +355,15 @@ void MainWindow::sleep(int ms) {
 }
 
 QPoint MainWindow::getRealCoord() {
+    qDebug() << "detecting coords..." << input->coord;
     QPoint result;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
-            if (abs(result.x() - input->coord.x() + 0.5) + abs(result.y() - input->coord.y() + 0.5) >
-                    abs(j - input->coord.x() + 0.5) + abs(i - input->coord.y() + 0.5)) {
+            if (fabs(result.x() - input->coord.x() + 0.5) + fabs(result.y() - input->coord.y() + 0.5) >
+                    fabs(j - input->coord.x() + 0.5) + fabs(i - input->coord.y() + 0.5)) {
                 result.setX(j);
                 result.setY(i);
             }
+    qDebug() << "coord" << result;
     return result;
 }

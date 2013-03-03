@@ -55,6 +55,7 @@ void startDialog::start() {
     loop->exec();
 
     QObject::connect(w, SIGNAL(destroyed()), app, SLOT(quit()));
+    QObject::connect(w, SIGNAL(destroyed()), app, SLOT(deleteLater()));
 }
 
 void startDialog::scanSkins() {
