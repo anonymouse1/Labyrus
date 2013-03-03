@@ -47,6 +47,8 @@ public:
     bool botActive;
     int perspective;
     bool needRefreshCursor;
+    double k;
+    double f;
     void initializeGL();
 
 private:

@@ -19,6 +19,7 @@
 #include <QMutex>
 #include <QTime>
 #include <QEventLoop>
+#include <QApplication>
 #include <networkclass.h>
 #include <drawgl.h>
 #include <assert.h>
@@ -67,10 +68,10 @@ private:
     void processInformation();
     double scanInt();
 
-    /*bool isWallUp(QPointF c);
-    bool isWallDown(QPointF c);
-    bool isWallLeft(QPointF c);
-    bool isWallRight(QPointF c);*/
+    bool isWallUp(QPoint c);
+    bool isWallDown(QPoint c);
+    bool isWallLeft(QPoint c);
+    bool isWallRight(QPoint c);
 
     /*bool noWall(int d);
     void createWall(int x, int y, int flag);
@@ -79,10 +80,10 @@ private:
 
     int backward();*/
 
-//    bool superDfs();
-//    void strangeWait();
-  //  void syncNap(int);
-//    void standartMove(bool);
+    bool superDfs();
+    void elementarMove();
+    void syncNap(int);
+    void standartMove();
 
     double fabs(double);
 
@@ -92,7 +93,11 @@ private:
     CalculationThread *thread;
     QThread *netThread;
     NetworkClass *input;
+    QPoint integerCoord;
     int backupPerspective;
+    void sleep(int ms);
+    QPoint getRealCoord();
+
 
 signals:
     void successConnection();

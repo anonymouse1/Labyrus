@@ -81,6 +81,8 @@ void DrawGl::resizeGL(int w, int h) {
     if (isFullScreen())
         QCursor::setPos(w / 2, h / 2);
 
+    k = 1.0 / sizeView;
+    f = k / 10;
     needRefreshCursor = true;
 }
 
@@ -199,9 +201,6 @@ void DrawGl::drawQuad(double x1, double y1, double x2, double y2, bool shortWall
 }
 
 void DrawGl::drawMaze() {
-    double k = 1.0 / a->n;
-    k = 1.0 / sizeView;
-    double f = k / 10;
     qglColor(Qt::white);
 //    float dir[3] = {1, 1, 1};
 //    float pos[4] = {(a->coord.x() + animX) * k, (a->coord.y() + animY) * k, 0.1, 1};
@@ -525,9 +524,9 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         a->deleteLater();
         this->deleteLater();
-    } else/* if (currentText == "BOT") {
-        a->startBot();
-    }*/
+    } else if (currentText == "BOT") {
+        legacy->startBot();
+    }
 
     qDebug() << currentText << "processed";
 }

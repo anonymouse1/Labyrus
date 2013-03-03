@@ -1,5 +1,5 @@
 pkgname=labyrus-git
-pkgver=20130221
+pkgver=20130303
 pkgrel=1
 pkgdesk="Qt Game written with OpenGL"
 arch=('i686' 'x86_64')
@@ -39,11 +39,14 @@ build() {
   cat Client.pro | grep -v PORTABLE > Client1.pro
   mv Client1.pro Client.pro
 
+  cd ../SinglePlayer
+
   cat SinglePlayer.pro | grep -v PORTABLE > SinglePlayer1.pro
   mv SinglePlayer1.pro SinglePlayer.pro
 
   echo "disabled"
 
+  cd ../Client
   qmake -makefile
   make
   cd ../Server

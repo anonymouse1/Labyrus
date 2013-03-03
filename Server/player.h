@@ -31,6 +31,7 @@ public:
 private:
     QTimer *refresh;
     QTimer *sendHeroesTime;
+    QTimer *checkValid;
     int latency;
 private slots:
     void sendHeroTime();
@@ -40,6 +41,7 @@ public slots:
     void refreshTime();
     void readyRead();
     void disconnect();
+    void setValid();
 signals:
     void say(QString);
 protected:

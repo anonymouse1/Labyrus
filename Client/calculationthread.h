@@ -26,6 +26,8 @@ public:
     bool lookingUp;
     bool lookingDown;
     bool shiftPressed;
+
+    int currentTime;
 private:
     void run();
     DrawGl *widget;

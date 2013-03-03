@@ -14,6 +14,7 @@ CalculationThread::CalculationThread(DrawGl *wid, NetworkClass *m) : QThread()
     lookingDown = false;
     lookingUp = false;
     shiftPressed = false;
+    currentTime = 0;
 }
 
 void CalculationThread::run() {
@@ -34,6 +35,7 @@ void CalculationThread::run() {
 }
 
 void CalculationThread::nextTime() {
+    currentTime++;
     if (upPressed) {
         double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
         double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1);

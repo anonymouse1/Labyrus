@@ -1,8 +1,5 @@
 #include "mainwindow.h"
 
-#define GL true
-#define cheat false
-
 const double animXY = 0.01;
 const double animZRotone = 1;
 
@@ -25,6 +22,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(input, SIGNAL(gameStart()), this, SLOT(gameStart()));
     QObject::connect(input, SIGNAL(connectionFailed()), this, SLOT(connectionFailed()));
     QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
+    QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(deleteLater()));
 
     nap = 0;
     widget->a = input;
@@ -148,80 +146,102 @@ void MainWindow::eraseWall(int x, int y, int flag) {
             command->go("e\n" + QString::number(i));
 }*/
 
-/*void MainWindow::startBot() {
+void MainWindow::startBot() {
     qDebug() << "bot started";
     widget->botActive = true;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
+    for (int i = 0; i < input->n; i++)
+        for (int j = 0; j < input->n; j++)
             w[i][j] = false;
 
+    integerCoord = getRealCoord();
     superDfs();
     widget->botActive = false;
     qDebug() << "bot finished";
-}*/
+}
 
 /*void MainWindow::strangeWait() {
     while ((widget->animZRot != 0) || (widget->animX != 0) || (widget->animY != 0))
         app->processEvents(QEventLoop::AllEvents, 10);
 }*/
 
-/*void MainWindow::syncNap(int a) {
-    if (nap == (a + 3) % 4) {
-        nap = righter();
-        widget->animZRot += 90;
-        strangeWait();
+void MainWindow::syncNap(int a) {
+    while (input->angle > a + 2)
+        input->angle -= 360;
+
+    if (abs(input->angle - a) < 3)
+        return;
+
+    if (input->angle + 180 < a) {
+        input->angle += 360;
+        while (input->angle > a) {
+            thread->leftPressed = true;
+            thread->rightPressed = false;
+            app->processEvents(QEventLoop::AllEvents);
+        }
     } else {
-        while (nap != a) {
-            nap = lefter();
-            widget->animZRot -= 90;
-            strangeWait();
+        while (input->angle < a) {
+            thread->leftPressed = false;
+            thread->rightPressed = true;
+            app->processEvents(QEventLoop::AllEvents);
         }
     }
-}*/
 
-/*void MainWindow::standartMove(bool standart) {
-    if (!standart)
-        fgup();
-    else
-        fgdown();
+    thread->leftPressed = false;
+    thread->rightPressed = false;
+}
 
-    strangeWait();
+void MainWindow::elementarMove() {
+    int time = thread->currentTime;
+    while (time + 85 > thread->currentTime) {
+        thread->upPressed = true;
+        app->processEvents();
+        sleep(1);
+    }
+    thread->upPressed = false;
+}
+
+void MainWindow::standartMove() {
+    elementarMove();
     superDfs();
-    if (!standart)
-        fgup();
-    else
-        fgdown();
+    elementarMove();
+}
 
-    strangeWait();
-}*/
-
-/*bool MainWindow::superDfs() {
-    int a = nap;
-    w[coord.x()][coord.y()] = true;
-    if (!w[coord.x() - 1][coord.y()] && !isWallLeft(coord)) {
-        syncNap(3);
-        standartMove(false);
+bool MainWindow::superDfs() {
+    int a = input->angle;
+    w[integerCoord.x()][integerCoord.y()] = true;
+    if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
+        syncNap(270);
+        integerCoord.setX(integerCoord.x() - 1);
+        standartMove();
+        integerCoord.setX(integerCoord.x() + 1);
     }
 
-    if (!w[coord.x()][coord.y() - 1] && !isWallUp(coord)) {
-        syncNap(2);
-        standartMove(true);
-    }
-
-    if (!w[coord.x()][coord.y() + 1] && !isWallDown(coord)) {
+    if (!w[integerCoord.x()][integerCoord.y() + 1] && !isWallUp(integerCoord)) {
         syncNap(0);
-        standartMove(true);
+        integerCoord.setY(integerCoord.y() + 1);
+        standartMove();
+        integerCoord.setY(integerCoord.y() - 1);
     }
 
-    if (!w[coord.x() + 1][coord.y()] && !isWallRight(coord)) {
-        syncNap(1);
-        standartMove(false);
+    if (!w[integerCoord.x()][integerCoord.y() - 1] && !isWallDown(integerCoord)) {
+        syncNap(180);
+        integerCoord.setY(integerCoord.y() - 1);
+        standartMove();
+        integerCoord.setY(integerCoord.y() + 1);
     }
 
-    syncNap((a + 2) % 4);
+    if (!w[integerCoord.x() + 1][integerCoord.y()] && !isWallRight(integerCoord)) {
+        syncNap(90);
+        integerCoord.setX(integerCoord.x() + 1);
+        standartMove();
+        integerCoord.setX(integerCoord.x() - 1);
+    }
+
+    syncNap(a + 180);
     return 0;
 }
-*/
+
+
 void MainWindow::gameStart() {
     thread->start();
     input->readInformation();
@@ -287,4 +307,52 @@ void MainWindow::connectionFailed() {
 void MainWindow::connectedSuccess() {
     qDebug() << "success";
     emit successConnection();
+}
+
+bool MainWindow::isWallLeft(QPoint c) {
+    for (int i = 0; i < input->m; i++)
+        if ((input->walls[i][0] == c.x()) && (input->walls[i][1] == c.y()) && (input->walls[i][2] == 1))
+            return true;
+
+    return false;
+}
+
+bool MainWindow::isWallRight(QPoint c) {
+    for (int i = 0; i < input->m; i++)
+        if ((input->walls[i][0] == c.x() + 1) && (input->walls[i][1] == c.y()) && (input->walls[i][2] == 1))
+            return true;
+
+    return false;
+}
+bool MainWindow::isWallUp(QPoint c) {
+    for (int i = 0; i < input->m; i++)
+        if ((input->walls[i][0] == c.x()) && (input->walls[i][1] == c.y() + 1) && (input->walls[i][2] == 0))
+            return true;
+
+    return false;
+}
+bool MainWindow::isWallDown(QPoint c) {
+    for (int i = 0; i < input->m; i++)
+        if ((input->walls[i][0] == c.x()) && (input->walls[i][1] == c.y()) && (input->walls[i][2] == 0))
+            return true;
+
+    return false;
+}
+
+void MainWindow::sleep(int ms) {
+    QEventLoop *loop = new QEventLoop;
+    QTimer::singleShot(ms, loop, SLOT(quit()));
+    loop->exec();
+}
+
+QPoint MainWindow::getRealCoord() {
+    QPoint result;
+    for (int i = 0; i < input->n; i++)
+        for (int j = 0; j < input->n; j++)
+            if (abs(result.x() - input->coord.x() + 0.5) + abs(result.y() - input->coord.y() + 0.5) >
+                    abs(j - input->coord.x() + 0.5) + abs(i - input->coord.y() + 0.5)) {
+                result.setX(j);
+                result.setY(i);
+            }
+    return result;
 }

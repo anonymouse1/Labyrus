@@ -139,6 +139,8 @@ void Server::runCommand(QString command, Player *player) {
         player->coord->setY(s.left(s.length() - 1).toDouble());
     } else if (command[0] == 'I') {
         forAllClientsPrint("S\n" + player->name + ": " + player->socket->readLine());
+    } else if (command[0] == 'v') {
+        player->setValid();
     }
 
     if (player->socket->canReadLine())

@@ -53,6 +53,8 @@ void startDialog::start() {
     loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
     loop->connect(w, SIGNAL(fail()), loop, SLOT(quit()));
     loop->exec();
+
+    QObject::connect(w, SIGNAL(destroyed()), app, SLOT(quit()));
 }
 
 void startDialog::scanSkins() {

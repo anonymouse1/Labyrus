@@ -13,9 +13,15 @@ void Player::run() {
     refresh = new QTimer;
     refresh->setInterval(60000);
     refresh->start();
+
+    checkValid = new QTimer;
+    checkValid->setInterval(5000);
+    checkValid->start();
+
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)), Qt::DirectConnection);
+    QObject::connect(checkValid, SIGNAL(timeout()), this, SLOT(disconnect()));
 
     if (server->radiation)
         QObject::connect(server->radiationTimer, SIGNAL(timeout()), this, SLOT(radiation()));
@@ -64,4 +70,8 @@ void Player::radiation() {
     sendingInformation.lock();
     socket->write(QString("rad\n").toAscii());
     sendingInformation.unlock();
+}
+
+void Player::setValid() {
+    checkValid->start();
 }

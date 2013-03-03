@@ -47,6 +47,7 @@ private:
     QMutex processingInformation;
     QTcpSocket *mainSocket;
     QTimer *failConnectionTime;
+    QTimer *pingTime;
     bool fullRefresh;
 
     QHostAddress targetIp;
@@ -64,6 +65,7 @@ public slots:
 private slots:
     void connectionEstablished();
     void failConnection();
+    void ping();
 
 signals:
     void successConnection();

@@ -11,6 +11,10 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     cheats = false;
     fullRefresh = true;
     messages = new MessagesStack;
+    pingTime = new QTimer;
+    pingTime->setInterval(1000);
+    pingTime->start();
+    QObject::connect(pingTime, SIGNAL(timeout()), this, SLOT(ping()));
 }
 
 void NetworkClass::run() {
@@ -163,4 +167,6 @@ void NetworkClass::checkAngles() {
         yAngle = -180;
 }
 
-
+void NetworkClass::ping() {
+    go("v");
+}

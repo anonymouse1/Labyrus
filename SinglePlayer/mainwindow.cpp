@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     QObject::connect(ui->start, SIGNAL(clicked()), this, SLOT(start()));
     QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setShown(bool)));
+    QObject::connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(aboutQt()));
 
     #ifdef PORTABLE
         prefix = "./";
@@ -73,4 +74,8 @@ void MainWindow::start() {
     attributes << "-i" << "127.0.0.1" ;
     attributes << "--start";
     client->start(prefix + "labyrus-client", attributes);
+}
+
+void MainWindow::aboutQt() {
+    QMessageBox::aboutQt(this);
 }
