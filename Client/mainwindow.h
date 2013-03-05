@@ -90,6 +90,7 @@ private:
 
     double fabs(double);
 
+    bool ctrlPressed;
     QByteArray login;
     QTimeLine *startLine;
     QTimer *repaintTimer;

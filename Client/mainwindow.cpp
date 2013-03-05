@@ -26,6 +26,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
 
     nap = 0;
+    ctrlPressed = false;
     widget->a = input;
     repaintTimer->start();
     input->start();
@@ -74,6 +75,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (event->key() == Qt::Key_Shift)
         thread->shiftPressed = true;
     else if (event->key() == Qt::Key_Control) {
+        ctrlPressed = true;
         backupPerspective = widget->perspective;
         widget->perspective = 10;
         widget->needRefreshCursor = false;
@@ -128,6 +130,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     else if (event->key() == Qt::Key_Shift)
         thread->shiftPressed = false;
     else if (event->key() == Qt::Key_Control) {
+        #ifndef BEAUTIFULL_BUGS
+            if (!ctrlPressed)
+                return;
+        #endif
+        ctrlPressed = false;
         widget->perspective = backupPerspective;
         widget->needRefreshCursor = false;
         widget->resize(widget->width(), widget->height() - 1);

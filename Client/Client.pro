@@ -43,3 +43,4 @@ FORMS    += \
     connection.ui
 
 DEFINES += PORTABLE
+#DEFINES += BEAUTIFULL_BUGS
