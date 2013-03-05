@@ -249,7 +249,6 @@ bool MainWindow::superDfs() {
         integerCoord.setX(integerCoord.x() - 1);
     }
 
-//    syncNap(a + 180);
     return 0;
 }
 
