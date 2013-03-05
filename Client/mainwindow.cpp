@@ -177,12 +177,16 @@ void MainWindow::syncNap(int a) {
     if (input->angle + 180 < a) {
         input->angle += 360;
         while (input->angle > a) {
+            if (stopBot)
+                break;
             thread->leftPressed = true;
             thread->rightPressed = false;
             app->processEvents(QEventLoop::AllEvents);
         }
     } else {
         while (input->angle < a) {
+            if (stopBot)
+                break;
             thread->leftPressed = false;
             thread->rightPressed = true;
             app->processEvents(QEventLoop::AllEvents);
@@ -199,6 +203,8 @@ void MainWindow::elementarMove(double x, double y) {
 
     int time = thread->currentTime;
     while ((time + 90 > thread->currentTime) && (sqrt((x - input->coord.x()) * (x - input->coord.x()) + (y - input->coord.y()) * (y - input->coord.y())) > 0.1)) {
+        if (stopBot)
+            break;
         thread->upPressed = true;
         app->processEvents();
         sleep(1);
@@ -396,6 +402,7 @@ int MainWindow::getAngle(double x, double y, double x1, double y1) {
 }
 
 void MainWindow::legalStop() {
+    stopBot = true;
     if (thread->isRunning())
         thread->quit();
     if (input->isRunning())
