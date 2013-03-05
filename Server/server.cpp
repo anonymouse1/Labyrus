@@ -19,24 +19,6 @@ Server::Server(bool rad, bool cheat, bool sil, int size, int lat, int players, b
         radiationTimer->setInterval(4000);
     }
     n = size;
-    m = 0;
-    for (int i = 0; i < n; i++) {
-        walls[m][0] = 0;
-        walls[m][1] = i;
-        walls[m++][2] = 1;
-
-        walls[m][0] = n;
-        walls[m][1] = i;
-        walls[m++][2] = 1;
-
-        walls[m][0] = i;
-        walls[m][1] = 0;
-        walls[m++][2] = 0;
-
-        walls[m][0] = i;
-        walls[m][1] = n;
-        walls[m++][2] = 0;
-    }
     generateMap();
     QList<QHostAddress> l = QNetworkInterface::allAddresses();
     for (int i = 0; i < l.size(); i++)
@@ -225,8 +207,7 @@ bool Server::isConnected() {
         for (int j = 0; j < n; j++)
             w[i][j]= false;
 
-    QPoint p(0, 0);
-    dfs(p);
+    dfs(QPoint(0, 0));
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             if (!w[i][j])
@@ -238,6 +219,25 @@ bool Server::isConnected() {
 void Server::generateMap() {
     if (!silence)
         qDebug() << "start generating map";
+
+    m = 0;
+    for (int i = 0; i < n; i++) {
+        walls[m][0] = 0;
+        walls[m][1] = i;
+        walls[m++][2] = 1;
+
+        walls[m][0] = n;
+        walls[m][1] = i;
+        walls[m++][2] = 1;
+
+        walls[m][0] = i;
+        walls[m][1] = 0;
+        walls[m++][2] = 0;
+
+        walls[m][0] = i;
+        walls[m][1] = n;
+        walls[m++][2] = 0;
+    }
 
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
@@ -259,6 +259,7 @@ void Server::generateMap() {
                     (walls[i][1] == walls[m][1]) &&
                         (walls[i][2] == walls[m][2])) {
                             b = true;
+                            break;
                         }
         if (b)
             continue;
@@ -274,10 +275,8 @@ void Server::generateMap() {
 
     hospital = getFreePoint();
 
-    int a = qrand() % (4 * n);
-    walls[a][0] = -100;
-    walls[a][1] = -100;
-    walls[a][2] = -100;
+    walls[n * 4 - 1][0] = -100000;
+    walls[n * 4 - 1][1] = -100000;
 
     qDebug() << "map generated";
 }

@@ -48,6 +48,7 @@ public:
 
     bool w[100][100];
 
+    CalculationThread *thread;
     QApplication *app;
     DrawGl *widget;
     void keyPressEvent(QKeyEvent *);
@@ -92,7 +93,6 @@ private:
     QByteArray login;
     QTimeLine *startLine;
     QTimer *repaintTimer;
-    CalculationThread *thread;
     QThread *netThread;
     NetworkClass *input;
     QPoint integerCoord;

@@ -483,7 +483,7 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (botActive || (!this->isFullScreen()))
+    if (botActive || (!this->isFullScreen()) || (legacy->thread->currentTime < 100))
         return;
 
     double x = (event->x() - width() / 2) / 3;
