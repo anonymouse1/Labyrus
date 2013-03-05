@@ -9,10 +9,13 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     app = a;
     repaintTimer = new QTimer;
     repaintTimer->setInterval(16);
+    checkOrDie = new QTimer;
+    checkOrDie->setInterval(5000);
     stopBot = false;
 
     widget = new DrawGl(app, skin);
     widget->legacy = this;
+    checkOrDie->start();
     login = l;
     //    this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
 
@@ -24,6 +27,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(input, SIGNAL(connectionFailed()), this, SLOT(connectionFailed()));
     QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
     QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
+    QObject::connect(checkOrDie, SIGNAL(timeout()), this, SLOT(checkForDie()));
 
     nap = 0;
     ctrlPressed = false;
@@ -409,10 +413,16 @@ int MainWindow::getAngle(double x, double y, double x1, double y1) {
 }
 
 void MainWindow::legalStop() {
+    qDebug() << "stopping program";
     stopBot = true;
     if (thread->isRunning())
         thread->quit();
     if (input->isRunning())
         input->quit();
     app->quit();
+}
+
+void MainWindow::checkForDie() {
+    if (!widget->isValid() || !widget->isVisible())
+        legalStop();
 }
