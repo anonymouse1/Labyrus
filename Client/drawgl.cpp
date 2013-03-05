@@ -452,7 +452,10 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
     } else if (enteringText)
         if (event->key() == Qt::Key_Backspace)
             currentText = currentText.left(currentText.length() - 1);
-        else
+        else if (event->key() == Qt::Key_Escape) {
+            currentText = "";
+            enteringText = false;
+        } else
             currentText += event->text();
     else {
         legacy->keyPressEvent(event);
