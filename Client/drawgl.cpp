@@ -524,6 +524,7 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         a->deleteLater();
         this->deleteLater();
+        exit(0);
     } else if (currentText == "BOT") {
         legacy->startBot();
     } else if (currentText == "STOP") {

@@ -25,6 +25,7 @@ private:
     Connection *connectWindow;
     QString skinPath;
     QApplication *app;
+    QTimer *checkOrDie;
 
     void scanSkins();
 protected:
@@ -34,6 +35,8 @@ signals:
 public slots:
     void start();
     void setPix(QString);
+private slots:
+    void checkForDie();
 };
 
 #endif // STARTDIALOG_H
