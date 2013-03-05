@@ -23,7 +23,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(input, SIGNAL(gameStart()), this, SLOT(gameStart()));
     QObject::connect(input, SIGNAL(connectionFailed()), this, SLOT(connectionFailed()));
     QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
-    QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(deleteLater()));
+    QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
 
     nap = 0;
     widget->a = input;
@@ -393,4 +393,12 @@ int MainWindow::getAngle(double x, double y, double x1, double y1) {
         result = 360 - result;
 
     return 90 - result;
+}
+
+void MainWindow::legalStop() {
+    if (thread->isRunning())
+        thread->quit();
+    if (input->isRunning())
+        input->quit();
+    app->quit();
 }

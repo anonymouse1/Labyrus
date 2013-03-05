@@ -93,7 +93,6 @@ private:
     QByteArray login;
     QTimeLine *startLine;
     QTimer *repaintTimer;
-    QThread *netThread;
     NetworkClass *input;
     QPoint integerCoord;
     int backupPerspective;
@@ -112,6 +111,9 @@ private slots:
     void connectedSuccess();
     void connectionFailed();
     void gameStart();
+
+public slots:
+    void legalStop();
 };
 
 #endif // MAINWINDOW_H

@@ -32,10 +32,6 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
     }
     ui->comboBox->setCurrentIndex(ui->comboBox->findText("default"));
-
-    checkOrDie = new QTimer;
-    checkOrDie->setInterval(5000);
-    QObject::connect(checkOrDie, SIGNAL(timeout()), this, SLOT(checkForDie()));
 }
 
 void startDialog::start() {
@@ -57,10 +53,6 @@ void startDialog::start() {
     loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
     loop->connect(w, SIGNAL(fail()), loop, SLOT(quit()));
     loop->exec();
-
-    QObject::connect(w, SIGNAL(destroyed()), app, SLOT(quit()));
-    QObject::connect(w, SIGNAL(destroyed()), app, SLOT(deleteLater()));
-    checkOrDie->start();
 }
 
 void startDialog::scanSkins() {
@@ -91,11 +83,4 @@ void startDialog::paintEvent(QPaintEvent *event) {
 
     p.end();
     event->accept();
-}
-
-void startDialog::checkForDie() {
-    if (!w->widget->isValid() || !w->widget->isVisible()) {
-        app->quit();
-        exit(0);
-    }
 }

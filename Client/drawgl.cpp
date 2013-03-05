@@ -522,9 +522,7 @@ void DrawGl::processText() {
     a->go("I\n" + currentText);
     currentText = currentText.toUpper();
     if (currentText == "EXIT") {
-        a->deleteLater();
-        this->deleteLater();
-        exit(0);
+        legacy->legalStop();
     } else if (currentText == "BOT") {
         legacy->startBot();
     } else if (currentText == "STOP") {
