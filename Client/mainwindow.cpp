@@ -219,34 +219,46 @@ bool MainWindow::superDfs() {
 
     integerCoord = getRealCoord();
 
-    int a = input->angle;
     w[integerCoord.x()][integerCoord.y()] = true;
-    if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
-        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() - 0.5, integerCoord.y() + 0.5));
-        integerCoord.setX(integerCoord.x() - 1);
-        standartMove(integerCoord.x() + 1.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-        integerCoord.setX(integerCoord.x() + 1);
-    }
 
-    if (!w[integerCoord.x()][integerCoord.y() + 1] && !isWallUp(integerCoord)) {
-        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() + 1.5));
-        integerCoord.setY(integerCoord.y() + 1);
-        standartMove(integerCoord.x() + 0.5, integerCoord.y() - 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-        integerCoord.setY(integerCoord.y() - 1);
-    }
+    int sp[4];
+    for (int i = 0; i < 4; i++)
+        sp[i] = i;
+    for (int i = 1; i < 4; i++)
+        swap(sp[i], sp[rand() % i]);
 
-    if (!w[integerCoord.x()][integerCoord.y() - 1] && !isWallDown(integerCoord)) {
-        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() - 0.5));
-        integerCoord.setY(integerCoord.y() - 1);
-        standartMove(integerCoord.x() + 0.5, integerCoord.y() + 1.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-        integerCoord.setY(integerCoord.y() + 1);
-    }
+    for (int i = 0; i < 4; i++) {
+        if (sp[i] == 0)
+            if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
+                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() - 0.5, integerCoord.y() + 0.5));
+                integerCoord.setX(integerCoord.x() - 1);
+                standartMove(integerCoord.x() + 1.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
+                integerCoord.setX(integerCoord.x() + 1);
+            }
 
-    if (!w[integerCoord.x() + 1][integerCoord.y()] && !isWallRight(integerCoord)) {
-        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 1.5, integerCoord.y() + 0.5));
-        integerCoord.setX(integerCoord.x() + 1);
-        standartMove(integerCoord.x() - 0.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-        integerCoord.setX(integerCoord.x() - 1);
+        if (sp[i] == 1)
+            if (!w[integerCoord.x()][integerCoord.y() + 1] && !isWallUp(integerCoord)) {
+                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() + 1.5));
+                integerCoord.setY(integerCoord.y() + 1);
+                standartMove(integerCoord.x() + 0.5, integerCoord.y() - 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
+                integerCoord.setY(integerCoord.y() - 1);
+            }
+
+        if (sp[i] == 2)
+            if (!w[integerCoord.x()][integerCoord.y() - 1] && !isWallDown(integerCoord)) {
+                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() - 0.5));
+                integerCoord.setY(integerCoord.y() - 1);
+                standartMove(integerCoord.x() + 0.5, integerCoord.y() + 1.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
+                integerCoord.setY(integerCoord.y() + 1);
+            }
+
+        if (sp[i] == 3)
+            if (!w[integerCoord.x() + 1][integerCoord.y()] && !isWallRight(integerCoord)) {
+                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 1.5, integerCoord.y() + 0.5));
+                integerCoord.setX(integerCoord.x() + 1);
+                standartMove(integerCoord.x() - 0.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
+                integerCoord.setX(integerCoord.x() - 1);
+            }
     }
 
     return 0;
