@@ -63,6 +63,6 @@ package() {
   mkdir -p ../../pkg/usr/share/labyrus
   cp -rf Server/Server ../../pkg/usr/bin/labyrus-server
   cp -rf Client/Client ../../pkg/usr/bin/labyrus-client
-  cp -rf SinglePlayer/SinglePlayer ../../pkg/usr/bin/labyrus-SinglePlayer
+  cp -rf SinglePlayer/SinglePlayer ../../pkg/usr/bin/labyrus-singleplayer
   cp -rf skins ../../pkg/usr/share/labyrus/
 }

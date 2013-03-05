@@ -40,7 +40,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += \
     startDialog.ui \
-    mainwindow.ui \
     connection.ui
 
 DEFINES += PORTABLE

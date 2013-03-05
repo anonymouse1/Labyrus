@@ -11,7 +11,7 @@ void Player::run() {
     socket->setSocketDescriptor(socketDescriptor);
 
     refresh = new QTimer;
-    refresh->setInterval(60000);
+    refresh->setInterval(300000);
     refresh->start();
 
     checkValid = new QTimer;

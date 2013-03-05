@@ -13,7 +13,6 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     messages = new MessagesStack;
     pingTimer = new QTimer;
     pingTimer->setInterval(1000);
-    pingTimer->start();
     QObject::connect(pingTimer, SIGNAL(timeout()), this, SLOT(ping()));
 }
 
@@ -153,6 +152,7 @@ void NetworkClass::connectionEstablished() {
     myDescriptor = scanInt();
     latency = scanInt();
     connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()), Qt::DirectConnection);
+    pingTimer->start();
 
     if (mainSocket->canReadLine())
         readInformation();

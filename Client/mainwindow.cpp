@@ -193,12 +193,12 @@ void MainWindow::syncNap(int a) {
     thread->rightPressed = false;
 }
 
-void MainWindow::elementarMove() {
+void MainWindow::elementarMove(double x, double y) {
     if (stopBot)
         return;
 
     int time = thread->currentTime;
-    while (time + 85 > thread->currentTime) {
+    while ((time + 90 > thread->currentTime) && (sqrt((x - input->coord.x()) * (x - input->coord.x()) + (y - input->coord.y()) * (y - input->coord.y())) > 0.1)) {
         thread->upPressed = true;
         app->processEvents();
         sleep(1);
@@ -206,47 +206,50 @@ void MainWindow::elementarMove() {
     thread->upPressed = false;
 }
 
-void MainWindow::standartMove() {
-    elementarMove();
+void MainWindow::standartMove(double x1, double y1, double x2, double y2) {
+    elementarMove(x2, y2);
     superDfs();
-    elementarMove();
+    syncNap(getAngle(x2, y2, x1, y1));
+    elementarMove(x1, y1);
 }
 
 bool MainWindow::superDfs() {
     if (stopBot)
         return 1;
 
+    integerCoord = getRealCoord();
+
     int a = input->angle;
     w[integerCoord.x()][integerCoord.y()] = true;
     if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
-        syncNap(270);
+        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() - 0.5, integerCoord.y() + 0.5));
         integerCoord.setX(integerCoord.x() - 1);
-        standartMove();
+        standartMove(integerCoord.x() + 1.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
         integerCoord.setX(integerCoord.x() + 1);
     }
 
     if (!w[integerCoord.x()][integerCoord.y() + 1] && !isWallUp(integerCoord)) {
-        syncNap(0);
+        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() + 1.5));
         integerCoord.setY(integerCoord.y() + 1);
-        standartMove();
+        standartMove(integerCoord.x() + 0.5, integerCoord.y() - 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
         integerCoord.setY(integerCoord.y() - 1);
     }
 
     if (!w[integerCoord.x()][integerCoord.y() - 1] && !isWallDown(integerCoord)) {
-        syncNap(180);
+        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() - 0.5));
         integerCoord.setY(integerCoord.y() - 1);
-        standartMove();
+        standartMove(integerCoord.x() + 0.5, integerCoord.y() + 1.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
         integerCoord.setY(integerCoord.y() + 1);
     }
 
     if (!w[integerCoord.x() + 1][integerCoord.y()] && !isWallRight(integerCoord)) {
-        syncNap(90);
+        syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 1.5, integerCoord.y() + 0.5));
         integerCoord.setX(integerCoord.x() + 1);
-        standartMove();
+        standartMove(integerCoord.x() - 0.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
         integerCoord.setX(integerCoord.x() - 1);
     }
 
-    syncNap(a + 180);
+//    syncNap(a + 180);
     return 0;
 }
 
@@ -366,4 +369,17 @@ QPoint MainWindow::getRealCoord() {
             }
     qDebug() << "coord" << result;
     return result;
+}
+
+int MainWindow::getAngle(double x, double y, double x1, double y1) {
+    x1 -= x;
+    y1 -= y;
+    double module = sqrt(x1 * x1 + y1 * y1);
+    x1 /= module;
+    y1 /= module;
+    int result = acos(x1) / M_PI * 180;
+    if (y1 < 0)
+        result = 360 - result;
+
+    return 90 - result;
 }

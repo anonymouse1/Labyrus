@@ -27,6 +27,7 @@
 #include <calculationthread.h>
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 
 using std::swap;
 
@@ -82,9 +83,9 @@ private:
     int backward();*/
 
     bool superDfs();
-    void elementarMove();
+    void elementarMove(double x, double y);
     void syncNap(int);
-    void standartMove();
+    void standartMove(double x1, double y1, double x2, double y2);
 
     double fabs(double);
 
@@ -98,6 +99,7 @@ private:
     int backupPerspective;
     void sleep(int ms);
     QPoint getRealCoord();
+    int getAngle(double x, double y, double x1, double y1);
 
 
 signals:
