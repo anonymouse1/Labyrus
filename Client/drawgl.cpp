@@ -532,9 +532,8 @@ void DrawGl::processText() {
         a->go("p\n");
         a->pingTime = new QTime;
         a->pingTime->start();
-    } else if (currentText == "HELP") {
+    } else if (currentText == "HELP")
         a->messages->addMessage("Possible commands: help bot stop ping exit...");
-    }
 
     qDebug() << currentText << "processed";
 }
