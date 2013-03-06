@@ -16,7 +16,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     widget->legacy = this;
     checkOrDie->start();
     login = l;
-    //    this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
 
     qDebug() << ip.toString();
     input = new NetworkClass(ip, port, QString::fromLocal8Bit(login));
@@ -28,7 +27,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
     QObject::connect(checkOrDie, SIGNAL(timeout()), this, SLOT(checkForDie()));
 
-    nap = 0;
     ctrlPressed = false;
     widget->a = input;
     repaintTimer->start();
@@ -40,44 +38,41 @@ MainWindow::~MainWindow() {
     qDebug() << "destroying";
 }
 
-void MainWindow::close() {
-    qDebug() << "close called";
-    deleteLater();
-}
-
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
-    if (event->key() == Qt::Key_Z)
+    if (key == Qt::Key_Z) {
         if (!widget->isFullScreen())
             widget->showFullScreen();
         else
             widget->showNormal();
+    }
 
-    if (input->cheats)
-        if (event->key() == Qt::Key_Q)
+    if (input->cheats) {
+        if (key == Qt::Key_Q)
             widget->ztra += 0.01;
-        else if (event->key() == Qt::Key_E)
+        else if (key == Qt::Key_E)
             widget->ztra -= 0.01;
+    }
 
-    if (event->key() == Qt::Key_W)
+    if (key == Qt::Key_W)
         thread->upPressed = true;
-    else if (event->key() == Qt::Key_S)
+    else if (key == Qt::Key_S)
         thread->downPressed = true;
-    else if (event->key() == Qt::Key_Left)
+    else if (key == Qt::Key_Left)
         thread->leftPressed = true;
-    else if (event->key() == Qt::Key_Right)
+    else if (key == Qt::Key_Right)
         thread->rightPressed = true;
-    else if (event->key() == Qt::Key_A)
+    else if (key == Qt::Key_A)
         thread->leftStrife = true;
-    else if (event->key() == Qt::Key_D)
+    else if (key == Qt::Key_D)
         thread->rightStrife = true;
-    else if (event->key() == Qt::Key_Up)
+    else if (key == Qt::Key_Up)
         thread->lookingUp = true;
-    else if (event->key() == Qt::Key_Down)
+    else if (key == Qt::Key_Down)
         thread->lookingDown = true;
-    else if (event->key() == Qt::Key_Shift)
+    else if (key == Qt::Key_Shift)
         thread->shiftPressed = true;
-    else if (event->key() == Qt::Key_Control) {
+    else if (key == Qt::Key_Control) {
         ctrlPressed = true;
         backupPerspective = widget->perspective;
         widget->perspective = 10;

@@ -54,20 +54,7 @@ public:
     void keyPressEvent(QKeyEvent *);
     void keyReleaseEvent(QKeyEvent *);
 
-   /* int lefter();
-    int righter();*/
-    int nap;//0 - up
-            //1 - right
-            //2 - down
-            //3 -- left
-
-    /*void taskKill();
-    void fgup();
-    void fgleft();
-    void fgright();
-    void fgdown();*/
 private:
-    void close();
     void processInformation();
     double scanInt();
 
@@ -75,13 +62,6 @@ private:
     bool isWallDown(QPoint c);
     bool isWallLeft(QPoint c);
     bool isWallRight(QPoint c);
-
-    /*bool noWall(int d);
-    void createWall(int x, int y, int flag);
-    void eraseWall(int x, int y, int flag);
-    void invertNap();
-
-    int backward();*/
 
     bool superDfs();
     void elementarMove(double x, double y);
