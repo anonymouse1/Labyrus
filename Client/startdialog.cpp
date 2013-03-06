@@ -19,9 +19,10 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
             printf("Welcome to labyrus-client documentation\n");
             printf("-i --ip int.int.int.int        to set ip address\n");
             printf("-p --port int                  to set port number\n");
-            printf("-n --name name                 to set name of player\n ");
+            printf("-n --name name                 to set name of player\n");
             printf("-s --start                     to auto start game\n");
             printf("-h --help                      to show this help\n");
+            exit(0);
         }
     }
     scanSkins();
