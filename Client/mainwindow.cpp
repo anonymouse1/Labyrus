@@ -10,7 +10,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     repaintTimer = new QTimer;
     repaintTimer->setInterval(16);
     checkOrDie = new QTimer;
-    checkOrDie->setInterval(5000);
+    checkOrDie->setInterval(10000);
     stopBot = false;
     widget = new DrawGl(app, skin);
     widget->legacy = this;
