@@ -137,9 +137,9 @@ void DrawGl::drawAxis() {
         glVertex3f(0.0f, 0.0f, -1.0f);
     glEnd();
 
-    renderText(0, 0, 1, QString::number(1));
-    renderText(0, 1, 0, QString::number(1));
-    renderText(1, 0, 0, QString::number(1));
+    renderText(0.0, 0.0, 1.0, QString::number(1));
+    renderText(0.0, 1.0, 0.0, QString::number(1));
+    renderText(1.0, 0.0, 0.0, QString::number(1));
 }
 
 void DrawGl::enableLight() {
@@ -189,7 +189,7 @@ void DrawGl::drawSkyBox() {
     glEnd();
 }
 
-void DrawGl::drawQuad(double x1, double y1, double x2, double y2, bool shortWall) {
+void DrawGl::drawQuad(double x1, double y1, double x2, double y2) {
     glVertex3f(x1, y1, wallHeight);
     glTexCoord2d(0, 0);
     glVertex3f(x1, y1, 0);
@@ -296,11 +296,11 @@ void DrawGl::drawMaze() {
 //            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
 
             if (a->walls[i][2] == 0) {
-                drawQuad(x, y - f, x + k, y - f, false);
-                drawQuad(x + k, y + f, x, y + f, false);
+                drawQuad(x, y - f, x + k, y - f);
+                drawQuad(x + k, y + f, x, y + f);
             } else {
-                drawQuad(x + f, y, x + f, y + k, false);
-                drawQuad(x - f, y + k, x - f, y, false);
+                drawQuad(x + f, y, x + f, y + k);
+                drawQuad(x - f, y + k, x - f, y);
             }
         }
     glEnd();
@@ -311,11 +311,11 @@ void DrawGl::drawMaze() {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
             if (a->walls[i][2] == 0) {
-                drawQuad(x, y + f, x, y - f, true);
-                drawQuad(x + k, y - f, x + k, y + f, true);
+                drawQuad(x, y + f, x, y - f);
+                drawQuad(x + k, y - f, x + k, y + f);
             } else {
-                drawQuad(x - f, y, x + f, y, true);
-                drawQuad(x + f, y + k, x - f, y + k, true);
+                drawQuad(x - f, y, x + f, y);
+                drawQuad(x + f, y + k, x - f, y + k);
             }
         }
     glEnd();
