@@ -35,7 +35,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
 }
 
 void startDialog::start() {
-    w = new MainWindow(app, QHostAddress(ui->lineEdit_2->text()), ui->spinBox->value(), ui->lineEdit->text().toAscii(), skinPath + ui->comboBox->currentText(), this);
+    w = new MainWindow(app, QHostAddress(ui->lineEdit_2->text()), ui->spinBox->value(), ui->lineEdit->text().toLocal8Bit(), skinPath + ui->comboBox->currentText(), this);
     connectWindow = new Connection(QString("Connecting to: ") + ui->lineEdit_2->text() + ":" + ui->spinBox->text());
     this->hide();
     connectWindow->show();

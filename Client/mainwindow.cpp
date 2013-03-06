@@ -12,7 +12,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     checkOrDie = new QTimer;
     checkOrDie->setInterval(5000);
     stopBot = false;
-
     widget = new DrawGl(app, skin);
     widget->legacy = this;
     checkOrDie->start();
@@ -20,7 +19,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     //    this->setWindowTitle(ip.toString() + ":" + QString::number(port) +" by " + login);
 
     qDebug() << ip.toString();
-    input = new NetworkClass(ip, port, login);
+    input = new NetworkClass(ip, port, QString::fromLocal8Bit(login));
 
     QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
     QObject::connect(input, SIGNAL(gameStart()), this, SLOT(gameStart()));

@@ -68,7 +68,7 @@ void NetworkClass::readInformation() {
         return;
 
     while (mainSocket->canReadLine()) {
-        QString s = mainSocket->readLine();
+        QString s = QString::fromLocal8Bit(mainSocket->readLine());
         if ((s == "") || (s == "\n"))
             continue;
         if (s == "gameStart\n") {
@@ -79,7 +79,7 @@ void NetworkClass::readInformation() {
         } else if (s == "hero\n") {
             readHeroes();
         } else if (s == "S\n") {
-            messages->addMessage(mainSocket->readLine());
+            messages->addMessage(QString::fromLocal8Bit(mainSocket->readLine()));
         } else if (s == "cheats\n") {
             cheats = true;
         } else if (s == "rad\n") {
@@ -116,7 +116,7 @@ void NetworkClass::readHeroes() {
         if (!mainSocket->canReadLine())
             mainSocket->waitForReadyRead(latency);
 
-        heroNames[i] = mainSocket->readLine();
+        heroNames[i] = QString::fromLocal8Bit(mainSocket->readLine());
         heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
     }
 }
@@ -125,7 +125,7 @@ void NetworkClass::go(QString s, bool flush, bool addEndLine) {
     processingInformation.lock();
     if (addEndLine)
         s += "\n";
-    mainSocket->write(s.toAscii());
+    mainSocket->write(s.toLocal8Bit());
     if (flush)
         mainSocket->flush(); // it was a many strange bugs, was not it?
     processingInformation.unlock();

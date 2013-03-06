@@ -64,7 +64,7 @@ void Server::processConnection(Player *player) {
     }
     if (!socket->canReadLine())
         socket->waitForReadyRead(latency);
-    player->name = socket->readLine();
+    player->name = QString::fromLocal8Bit(socket->readLine());
     player->name.remove(player->name.length() - 1, 1);
     if (names.find(player->name) != names.end()) {
         qDebug() << "used login";
@@ -120,7 +120,7 @@ void Server::runCommand(QString command, Player *player) {
         s = player->socket->readLine();
         player->coord->setY(s.left(s.length() - 1).toDouble());
     } else if (command[0] == 'I') {
-        forAllClientsPrint("S\n" + player->name + ": " + player->socket->readLine());
+        forAllClientsPrint("S\n" + player->name + ": " + QString::fromLocal8Bit(player->socket->readLine()));
     } else if (command[0] == 'v') {
         player->setValid();
     } else if (command[0] == 'p') {

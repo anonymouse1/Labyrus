@@ -62,7 +62,7 @@ void Player::sendHeroTime() {
 
 void Player::printString(QString s) {
     sendingInformation.lock();
-    socket->write((s + "\n").toAscii());
+    socket->write((s + "\n").toLocal8Bit());
     sendingInformation.unlock();
 }
 
