@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent) :
+Server::Server(qint16 port, bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))

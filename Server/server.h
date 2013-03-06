@@ -17,8 +17,6 @@
 #include <QTimer>
 #include <QDateTime>
 
-const qint16 port = 7777;
-
 const int dx[4] = {0, 1, 0, -1};
 const int dy[4] = {1, 0, -1, 0};
 class Player;
@@ -26,7 +24,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent = 0);
+    explicit Server(qint16 port, bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent = 0);
     void processConnection(Player *player);
     void sendFieldToPlayer(Player *player, QByteArray *data = NULL);
     void sendHeroesToPlayer(Player *player, QByteArray *data = NULL);

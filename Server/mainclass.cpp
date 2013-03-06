@@ -6,6 +6,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
     int n = 20;
     int latency = 50;
     int players = 1;
+    qint16 port = 7777;
     bool strong = false;
     bool silence = false;
     bool cheats = false;
@@ -19,8 +20,9 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             printf("\t\t-p --players <int> for setting number of players\n");
             printf("\t\t-s --strong for setting strong number of players\n");
             printf("\t\t-i --silence for more silence\n");
-            printf("\t\t-t --radiation for enable radiation\n");
+            printf("\t\t-r --radiation for enable radiation\n");
             printf("\t\t-c --cheats for allow cheats\n");
+            printf("\t\t-t --port <int> for setting listening port\n");
             printf("\t\t-h --help to view this help\n");
             printf("\t\t-v --version to view version\n");
             die("");
@@ -49,8 +51,14 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             radiation = true;
           else if ((QString(argv[i]) == "-c") || (QString(argv[i]) == "--cheats"))
             cheats = true;
+          else if ((QString(argv[i]) == "-t") || (QString(argv[i]) == "--port")) {
+            bool a;
+            port = QString(argv[++i]).toInt(&a);
+            if (!a)
+                die("invalid number");
+        }
 
-    server = new Server(radiation, cheats, silence, n, latency, players, strong, this);
+    server = new Server(port, radiation, cheats, silence, n, latency, players, strong, this);
 }
 
 void MainClass::die(QString s) {
