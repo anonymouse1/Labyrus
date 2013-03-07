@@ -365,7 +365,7 @@ void DrawGl::drawMaze() {
             }
 
         for (int i = 0; i < a->m; i++)
-            if (a->walls[i][3] == 2)
+            if ((a->walls[i][3] == 2) && (a->h != 1))
                 drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2]);
     glEnd();
 
@@ -376,8 +376,8 @@ void DrawGl::drawMaze() {
         if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1) {
 //            glVertex3f(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2);
             qglColor(QColor(0, a->otherAlive[i] * 200, 0));
-            renderText(a->heroes[i].x * k, a->heroes[i].y * k, wallHeight / 2, a->heroNames[i], hudFont);
-            I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, wallHeight / 3);
+            renderText(a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k + k * 2, a->heroNames[i], hudFont);
+            I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k);
         }
 //    paintEngine()->drawEllipse(QRect(0, 0, 10, 10));
 //    paintEngine()->setActive(true);

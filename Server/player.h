@@ -8,6 +8,11 @@
 #include <QMutex>
 #include <QTimer>
 
+struct fpoint {
+    double x;
+    double y;
+    double h;
+};
 
 class Server;
 class Player : public QThread
@@ -17,7 +22,7 @@ public:
     explicit Player(int latency, QObject *parent = 0);
 
     QString name;
-    QPointF *coord;
+    fpoint coord;
     bool alive;
     int patrons;
     int walls;

@@ -37,8 +37,8 @@ void CalculationThread::run() {
 void CalculationThread::nextTime() {
     currentTime++;
     if (upPressed) {
-        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * cos((main->yAngle + 90) * M_PI / 180);
-        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * cos((main->yAngle + 90) * M_PI / 180);
+        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
+        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
         double deltaH = -sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
 
         check(deltaX, deltaY, deltaH);
@@ -54,8 +54,8 @@ void CalculationThread::nextTime() {
         main->angle += 100 * speed;
 
     if (downPressed) {
-        double deltaX = -cos((-main->angle + 90) * M_PI / 180) * speed;
-        double deltaY = -sin((-main->angle + 90) * M_PI / 180) * speed;
+        double deltaX = -cos((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
+        double deltaY = -sin((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
         double deltaH = sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
 
         check(deltaX, deltaY, deltaH);
@@ -104,15 +104,15 @@ void CalculationThread::checkForWall(double &dx, double &dy, double x1, double y
     assert(x1 <= x2);
     assert(y1 <= y2);
     if (x1 == x2) {
-        if ((main->coord.y >= y1) && (main->coord.y <= y2) && (fabs(main->coord.x - x1) < 0.2) && ((x1 - main->coord.x > 0) == (dx > 0)))
+        if ((main->coord.y >= y1) && (main->coord.y <= y2) && (fabs(main->coord.x - x1) < radiusOfPlayer) && ((x1 - main->coord.x > 0) == (dx > 0)))
             dx = 0;
     } else
-        if ((main->coord.x >= x1) && (main->coord.x <= x2) && (fabs(main->coord.y - y1) < 0.2) && ((y1 - main->coord.y > 0) == (dy > 0)))
+        if ((main->coord.x >= x1) && (main->coord.x <= x2) && (fabs(main->coord.y - y1) < radiusOfPlayer) && ((y1 - main->coord.y > 0) == (dy > 0)))
             dy = 0;
 }
 
 void CalculationThread::checkForDhWall(double &dh, double x, double y, double h, double x1, double y1) {
-    if ((h + (dh < 0) - 1 == main->getFloor()) && (fabs(h - main->coord.h) < 0.1) &&
+    if ((h + (dh < 0) - 1 == main->getFloor()) && (fabs(h - main->coord.h) < radiusOfPlayer) &&
             (main->coord.x >= x - eps) && (main->coord.x <= x1 + eps) &&
                 (main->coord.y >= y - eps) && (main->coord.y <= y1 + eps))
                     dh = 0;
@@ -120,6 +120,8 @@ void CalculationThread::checkForDhWall(double &dh, double x, double y, double h,
 
 void CalculationThread::check(double &dx, double &dy, double &dh) {
     double k = 1 / 10.0;
+    if (main->h == 1)
+        dh = 0;
     for (int i = 0; i < main->m; i++)
         if (main->walls[i][3] == 0) {
             if (heightEqualToMe(main->walls[i][2])) {
@@ -128,8 +130,8 @@ void CalculationThread::check(double &dx, double &dy, double &dh) {
                 checkForWall(dx, dy, main->walls[i][0] + 1, main->walls[i][1] - k, main->walls[i][0] + 1, main->walls[i][1] + k);
             }
 
-            checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k, main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + k);
-            checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k, main->walls[i][2] + 1, main->walls[i][0] + 1, main->walls[i][1] + k);
+            checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k * 1.5, main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + k * 1.5);
+            checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k * 1.5, main->walls[i][2] + 1, main->walls[i][0] + 1, main->walls[i][1] + k * 1.5);
         } else if (main->walls[i][3] == 1) {
             if (heightEqualToMe(main->walls[i][2])) {
                 checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0], main->walls[i][1] + 1);
@@ -137,8 +139,8 @@ void CalculationThread::check(double &dx, double &dy, double &dh) {
                 checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
             }
 
-            checkForDhWall(dh, main->walls[i][0] - k, main->walls[i][1], main->walls[i][2], main->walls[i][0] + k, main->walls[i][1] + 1);
-            checkForDhWall(dh, main->walls[i][0] - k, main->walls[i][1], main->walls[i][2] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
+            checkForDhWall(dh, main->walls[i][0] - k * 1.5, main->walls[i][1], main->walls[i][2], main->walls[i][0] + k * 1.5, main->walls[i][1] + 1);
+            checkForDhWall(dh, main->walls[i][0] - k * 1.5, main->walls[i][1], main->walls[i][2] + 1, main->walls[i][0] + k * 1.5, main->walls[i][1] + 1);
         } else if (main->walls[i][3] == 2) {
             checkForDhWall(dh, main->walls[i][0], main->walls[i][1], main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + 1);
         }
@@ -150,4 +152,11 @@ bool CalculationThread::equal(QPointF a, QPointF b) {
 
 bool CalculationThread::heightEqualToMe(double height) {
     return (main->coord.h >= height) && (main->coord.h <= height + 1);
+}
+
+double CalculationThread::max(double a, double b) {
+    if (a > b)
+        return a;
+    else
+        return b;
 }

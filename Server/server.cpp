@@ -81,8 +81,6 @@ void Server::processConnection(Player *player) {
     socket->write((QString::number(socket->socketDescriptor()) + "\n").toAscii());
     socket->write((QString::number(latency) + "\n").toAscii());
 
-    player->coord->setX(0.5);
-    player->coord->setY(0.5);
     player->socket = socket;
     player->patrons = 3;
     player->walls = 1;
@@ -117,9 +115,11 @@ void Server::runCommand(QString command, Player *player) {
     if (command[0] == 'n') {
         QString s;
         s = player->socket->readLine();
-        player->coord->setX(s.left(s.length() - 1).toDouble());
+        player->coord.x = s.left(s.length() - 1).toDouble();
         s = player->socket->readLine();
-        player->coord->setY(s.left(s.length() - 1).toDouble());
+        player->coord.y = s.left(s.length() - 1).toDouble();
+        s = player->socket->readLine();
+        player->coord.h = s.left(s.length() - 1).toDouble();
     } else if (command[0] == 'I') {
         forAllClientsPrint("S\n" + player->name + ": " + QString::fromLocal8Bit(player->socket->readLine()));
     } else if (command[0] == 'v') {
@@ -360,8 +360,9 @@ QByteArray *Server::generateHeroMessage() {
     result->append(QString::number(alreadyPlayers) + "\n");
     for (QMap<int, Player *>::Iterator i = r.begin(); i != r.end(); i++)
         result->append(QString::number(i.value()->socket->socketDescriptor()) + "\n" +
-                       QString::number(i.value()->coord->x()) + "\n" +
-                       QString::number(i.value()->coord->y()) + "\n" +
+                       QString::number(i.value()->coord.x) + "\n" +
+                       QString::number(i.value()->coord.y) + "\n" +
+                       QString::number(i.value()->coord.h) + "\n" +
                        i.value()->name + "\n");
 
     return result;

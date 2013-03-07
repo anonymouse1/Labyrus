@@ -103,12 +103,13 @@ void NetworkClass::readHeroes() {
         fpoint c;
         c.x = scanInt();
         c.y = scanInt();
-        c.h = 0.5;
+        c.h = scanInt();
         if (tmp == myDescriptor) {
             if (fullRefresh) {
                 coord = c;
                 fullRefresh = false;
             }
+            heroes[i].x = -1000000;
         } else {
             heroes[i] = c;
             descriptors[i] = tmp;

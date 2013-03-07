@@ -1,7 +1,9 @@
 #include "player.h"
 
 Player::Player(int lat, QObject *parent) : QThread(parent) {
-    coord = new QPointF(0.4, 0.4);
+    coord.x = 0.5;
+    coord.y = 0.5;
+    coord.h = 0.5;
     latency = lat;
     QObject::connect(this, SIGNAL(terminated()), this, SLOT(deleteLater()));
 }
