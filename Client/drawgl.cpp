@@ -390,7 +390,8 @@ void DrawGl::drawMaze() {
     renderText(5, this->height() - 40, QString("patrons: ") + QString::number(a->patrons), hudFont);
     renderText(5, this->height() - 60, QString("walls: ") + QString::number(a->wall), hudFont);
     renderText(5, this->height() - 80, QString("destroy: ") + QString::number(a->destroy), hudFont);
-    renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x) + " " + QString::number(a->coord.y) + " " + QString::number(a->coord.h));
+//    renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x) + " " + QString::number(a->coord.y) + " " + QString::number(a->coord.h));
+    renderText(5, this->height() - 100, QString("Floor number: ") + QString::number(a->getFloor()), hudFont);
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
