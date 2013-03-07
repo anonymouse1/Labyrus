@@ -14,16 +14,22 @@
 #include <QHostAddress>
 #include <messagesstack.h>
 
+struct fpoint {
+    double x;
+    double y;
+    double h;
+};
+
 class NetworkClass : public QThread
 {
     Q_OBJECT
 public:
     explicit NetworkClass(QHostAddress ip, quint16 port, QString myName, QThread *parent = 0);
-    int walls[10000][3];
-    int n, m;
-    QPointF coord;
+    int walls[10000][4];
+    int n, m, h;
+    fpoint coord;
     int otherHeroes;
-    QPointF heroes[100];
+    fpoint heroes[100];
     QString heroNames[100];
     int otherAlive[100];
     int patrons;

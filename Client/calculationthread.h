@@ -37,6 +37,7 @@ private:
     void check(double &dx, double &dy);
     bool equal(QPointF, QPointF);
     void checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2);
+    bool heightEqualToMe(double height);
 
 private slots:
     void nextTime();

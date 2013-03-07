@@ -49,9 +49,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
     if (input->cheats) {
         if (key == Qt::Key_Q)
-            widget->ztra += 0.01;
+            input->coord.h += 0.1;
         else if (key == Qt::Key_E)
-            widget->ztra -= 0.01;
+            input->coord.h -= 0.1;
     }
 
     if (key == Qt::Key_W)
@@ -150,7 +150,7 @@ void MainWindow::eraseWall(int x, int y, int flag) {
             command->go("e\n" + QString::number(i));
 }*/
 
-void MainWindow::startBot() {
+/*void MainWindow::startBot() {
     qDebug() << "bot started";
     widget->botActive = true;
     for (int i = 0; i < input->n; i++)
@@ -162,14 +162,14 @@ void MainWindow::startBot() {
     widget->botActive = false;
     stopBot = false;
     qDebug() << "bot finished";
-}
+}*/
 
 /*void MainWindow::strangeWait() {
     while ((widget->animZRot != 0) || (widget->animX != 0) || (widget->animY != 0))
         app->processEvents(QEventLoop::AllEvents, 10);
 }*/
 
-void MainWindow::syncNap(int a) {
+/*void MainWindow::syncNap(int a) {
     if (stopBot)
         return;
 
@@ -207,7 +207,7 @@ void MainWindow::elementarMove(double x, double y) {
         return;
 
     int time = thread->currentTime;
-    while ((time + 90 > thread->currentTime) && (sqrt((x - input->coord.x()) * (x - input->coord.x()) + (y - input->coord.y()) * (y - input->coord.y())) > 0.1)) {
+    while ((time + 90 > thread->currentTime) && (sqrt((x - input->coordX) * (x - input->coordX) + (y - input->coordY) * (y - input->coordY)) > 0.1)) {
         if (stopBot)
             break;
         thread->upPressed = true;
@@ -241,7 +241,7 @@ bool MainWindow::superDfs() {
     for (int i = 0; i < 4; i++) {
         if (sp[i] == 0)
             if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
-                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() - 0.5, integerCoord.y() + 0.5));
+                syncNap(getAngle(input->coordX, input->coord.y(), integerCoord.x() - 0.5, integerCoord.y() + 0.5));
                 integerCoord.setX(integerCoord.x() - 1);
                 standartMove(integerCoord.x() + 1.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
                 integerCoord.setX(integerCoord.x() + 1);
@@ -273,7 +273,7 @@ bool MainWindow::superDfs() {
     }
 
     return 0;
-}
+}*/
 
 
 void MainWindow::gameStart() {
@@ -293,7 +293,7 @@ void MainWindow::gameStart() {
 }
 
 void MainWindow::startTimerChanged(qreal a) {
-    widget->ztra = -0.1 - (1 - a) * 0.4;
+    widget->ztra = -(1 - a) * 0.4;
     widget->startAfter = startLine->currentTime();
 }
 
@@ -301,7 +301,6 @@ void MainWindow::startingFinished() {
     qDebug() << "finishStarting";
     widget->startingGame = false;
     widget->startAfter = startLine->currentTime();
-    widget->ztra = -0.1;
     delete startLine;
 }
 
@@ -379,8 +378,8 @@ void MainWindow::sleep(int ms) {
     loop->exec();
 }
 
-QPoint MainWindow::getRealCoord() {
-    qDebug() << "detecting coords..." << input->coord;
+/*QPoint MainWindow::getRealCoord() {
+    qDebug() << "detecting coords..." << input->coordX << input->coordY << input->coordH;
     QPoint result;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
@@ -391,7 +390,7 @@ QPoint MainWindow::getRealCoord() {
             }
     qDebug() << "coord" << result;
     return result;
-}
+}*/
 
 int MainWindow::getAngle(double x, double y, double x1, double y1) {
     x1 -= x;

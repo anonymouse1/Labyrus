@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(qint16 port, bool rad, bool cheat, bool sil, int size, int lat, int players, bool strong, QObject *parent) :
+Server::Server(qint16 port, bool rad, bool cheat, bool sil, int size, int height, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -19,6 +19,7 @@ Server::Server(qint16 port, bool rad, bool cheat, bool sil, int size, int lat, i
         radiationTimer->setInterval(4000);
     }
     n = size;
+    h = height;
     generateMap();
     QList<QHostAddress> l = QNetworkInterface::allAddresses();
     for (int i = 0; i < l.size(); i++)
@@ -151,67 +152,91 @@ void Server::sendHeroesToPlayer(Player *player, QByteArray *data) {
     player->sendingInformation.unlock();
 }
 
-bool Server::isWallDown(QPoint c) {
+bool Server::isWallDown(int x, int y, int k) {
     for (int i = 0; i < m; i ++)
-        if ((walls[i][0] == c.x()) && (walls[i][1] == c.y() + 1) && (walls[i][2] == 0))
+        if ((walls[i][0] == x) && (walls[i][1] == y) && (walls[i][2] == k) && (walls[i][3] == 2))
             return true;
 
     return false;
 }
 
-bool Server::isWallUp(QPoint c) {
+bool Server::isWallUp(int x, int y, int k) {
     for (int i = 0; i < m; i++)
-        if ((walls[i][0] == c.x()) && (walls[i][1] == c.y()) && (walls[i][2] == 0))
+        if ((walls[i][0] == x) && (walls[i][1] == y) && (walls[i][2] == k + 1) && (walls[i][3] == 2))
             return true;
 
     return false;
 }
 
-bool Server::isWallLeft(QPoint c) {
+bool Server::isWallLeft(int x, int y, int k) {
     for (int i = 0; i < m; i++)
-        if ((walls[i][0] == c.x()) && (walls[i][1] == c.y()) && (walls[i][2] == 1))
+        if ((walls[i][0] == x) && (walls[i][1] == y) && (walls[i][2] == k) && walls[i][3] == 1)
             return true;
 
     return false;
 }
 
-bool Server::isWallRight(QPoint c) {
+bool Server::isWallRight(int x, int y, int k) {
     for (int i = 0; i < m; i++)
-        if ((walls[i][0] == c.x() + 1) && (walls[i][1] == c.y()) && (walls[i][2] == 1))
+        if ((walls[i][0] == x + 1) && (walls[i][1] == y) && (walls[i][2] == k) && (walls[i][3] == 1))
             return true;
 
     return false;
 }
 
-void Server::dfs(QPoint a) {
-    if (w[a.x()][a.y()])
+bool Server::isWallForward(int x, int y, int k) {
+    for (int i = 0; i < m; i++)
+        if ((walls[i][0] == x) && (walls[i][1] == y + 1) && (walls[i][2] == k) && (walls[i][3] == 0))
+            return true;
+
+    return false;
+}
+
+bool Server::isWallBackward(int x, int y, int k) {
+    for (int i = 0; i < m; i++)
+        if ((walls[i][0] == x) && (walls[i][1] == y) && (walls[i][2] == k) && (walls[i][3] == 0))
+            return true;
+
+    return false;
+}
+
+void Server::dfs(int x, int y, int k) {
+    if (w[x][y][k])
         return;
 
-    w[a.x()][a.y()] = true;
+    w[x][y][k] = true;
 
-    if (!isWallLeft(a))
-        dfs(QPoint(a.x() - 1, a.y()));
+    if (!isWallLeft(x, y, k))
+        dfs(x - 1, y, k);
 
-    if (!isWallRight(a))
-        dfs(QPoint(a.x() + 1, a.y()));
+    if (!isWallRight(x, y, k))
+        dfs(x + 1, y, k);
 
-    if (!isWallUp(a))
-        dfs(QPoint(a.x(), a.y() - 1));
+    if (!isWallForward(x, y, k))
+        dfs(x, y + 1, k);
 
-    if (!isWallDown(a))
-        dfs(QPoint(a.x(), a.y() + 1));
+    if (!isWallBackward(x, y, k))
+        dfs(x, y - 1, k);
+
+    if (!isWallUp(x, y, k))
+        dfs(x, y, k + 1);
+
+    if (!isWallDown(x, y, k))
+        dfs(x, y, k - 1);
 }
 
 bool Server::isConnected() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            w[i][j]= false;
+            for (int k = 0; k <  h; k++)
+                w[i][j][k] = false;
 
-    dfs(QPoint(0, 0));
+    dfs(0, 0, 0);
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            if (!w[i][j])
-                return false;
+            for (int k = 0; k < h; k++)
+                if (!w[i][j][k])
+                    return false;
 
     return true;
 }
@@ -221,23 +246,41 @@ void Server::generateMap() {
         qDebug() << "start generating map";
 
     m = 0;
-    for (int i = 0; i < n; i++) {
-        walls[m][0] = 0;
-        walls[m][1] = i;
-        walls[m++][2] = 1;
+    for (int j = 0; j < h; j++)
+        for (int i = 0; i < n; i++) {
+            walls[m][0] = 0;
+            walls[m][1] = i;
+            walls[m][2] = j;
+            walls[m++][3] = 1;
 
-        walls[m][0] = n;
-        walls[m][1] = i;
-        walls[m++][2] = 1;
+            walls[m][0] = n;
+            walls[m][1] = i;
+            walls[m][2] = j;
+            walls[m++][3] = 1;
 
-        walls[m][0] = i;
-        walls[m][1] = 0;
-        walls[m++][2] = 0;
+            walls[m][0] = i;
+            walls[m][1] = 0;
+            walls[m][2] = j;
+            walls[m++][3] = 0;
 
-        walls[m][0] = i;
-        walls[m][1] = n;
-        walls[m++][2] = 0;
-    }
+            walls[m][0] = i;
+            walls[m][1] = n;
+            walls[m][2] = j;
+            walls[m++][3] = 0;
+        }
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++) {
+            walls[m][0] = i;
+            walls[m][1] = j;
+            walls[m][2] = 0;
+            walls[m++][3] = 2;
+
+            walls[m][0] = i;
+            walls[m][1] = j;
+            walls[m][2] = h;
+            walls[m++][3] = 2;
+        }
 
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
@@ -246,21 +289,19 @@ void Server::generateMap() {
             if (!silence)
                 qDebug() << i / 300 * 10 << "%";
 
-        int x = qrand() % n;
-        int y = qrand() % n;
-        int type = qrand() % 2;
-
-        walls[m][0] = x;
-        walls[m][1] = y;
-        walls[m][2] = type;
+        walls[m][0] = qrand() % n;
+        walls[m][1] = qrand() % n;
+        walls[m][2] = qrand() % h;
+        walls[m][3] = qrand() % 3;
         bool b = false;
         for (int i = 0; i < m; i++)
             if ((walls[i][0] == walls[m][0]) &&
                     (walls[i][1] == walls[m][1]) &&
-                        (walls[i][2] == walls[m][2])) {
-                            b = true;
-                            break;
-                        }
+                        (walls[i][2] == walls[m][2]) &&
+                            (walls[i][3] == walls[m][3])) {
+                                b = true;
+                                break;
+                            }
         if (b)
             continue;
         m++;
@@ -268,12 +309,6 @@ void Server::generateMap() {
         if (!isConnected())
             m--;
     }
-
-    numberArsenals = n / 4 + 1;
-    for (int i = 0; i < numberArsenals; i++)
-        arsenal[i] = getFreePoint();
-
-    hospital = getFreePoint();
 
     walls[n * 4 - 1][0] = -100000;
     walls[n * 4 - 1][1] = -100000;
@@ -310,9 +345,10 @@ QByteArray *Server::generateFieldMessage() {
     QByteArray *result = new QByteArray;
     result->append(QString("field\n"));
     result->append(QString::number(n) + QString("\n"));
+    result->append(QString::number(h) + QString("\n"));
     result->append(QString::number(m) + QString("\n"));
     for (int i = 0; i < m; i++)
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < 4; j++)
             result->append(QString::number(walls[i][j]) + QString("\n"));
 
     return result;

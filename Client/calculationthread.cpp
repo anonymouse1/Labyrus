@@ -37,13 +37,15 @@ void CalculationThread::run() {
 void CalculationThread::nextTime() {
     currentTime++;
     if (upPressed) {
-        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
-        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
+        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * cos((main->yAngle + 90) * M_PI / 180);
+        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * cos((main->yAngle + 90) * M_PI / 180);
+        double deltaH = -sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
 
         check(deltaX, deltaY);
 
-        main->coord.setX(main->coord.x() + deltaX);
-        main->coord.setY(main->coord.y() + deltaY);
+        main->coord.x += deltaX;
+        main->coord.y += deltaY;
+        main->coord.h += deltaH;
     }
     if (leftPressed)
         main->angle -= 100 * speed;
@@ -57,8 +59,8 @@ void CalculationThread::nextTime() {
 
         check(deltaX, deltaY);
 
-        main->coord.setX(main->coord.x() + deltaX);
-        main->coord.setY(main->coord.y() + deltaY);
+        main->coord.x = main->coord.x + deltaX;
+        main->coord.y = main->coord.y + deltaY;
     }
 
     if (leftStrife) {
@@ -67,8 +69,8 @@ void CalculationThread::nextTime() {
 
         check(deltaX, deltaY);
 
-        main->coord.setX(main->coord.x() + deltaX);
-        main->coord.setY(main->coord.y() + deltaY);
+        main->coord.x = main->coord.x + deltaX;
+        main->coord.y = main->coord.y + deltaY;
     }
 
     if (rightStrife) {
@@ -77,8 +79,8 @@ void CalculationThread::nextTime() {
 
         check(deltaX, deltaY);
 
-        main->coord.setX(main->coord.x() + deltaX);
-        main->coord.setY(main->coord.y() + deltaY);
+        main->coord.x = main->coord.x + deltaX;
+        main->coord.y = main->coord.y + deltaY;
     }
 
     if (lookingDown)
@@ -91,28 +93,28 @@ void CalculationThread::nextTime() {
 }
 
 void CalculationThread::refreshCoord() {
-    main->go(QString("n\n") + QString::number(main->coord.x()) + "\n" + QString::number(main->coord.y()) + "\n", false);
+    main->go(QString("n\n") + QString::number(main->coord.x) + "\n" + QString::number(main->coord.y) + "\n", false);
 }
 
 void CalculationThread::checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2) {
     assert(x1 <= x2);
     assert(y1 <= y2);
     if (x1 == x2) {
-        if ((main->coord.y() >= y1) && (main->coord.y() <= y2) && (fabs(main->coord.x() - x1) < 0.2) && ((x1 - main->coord.x() > 0) == (dx > 0)))
+        if ((main->coord.y >= y1) && (main->coord.y <= y2) && (fabs(main->coord.x - x1) < 0.2) && ((x1 - main->coord.x > 0) == (dx > 0)))
             dx = 0;
     } else
-        if ((main->coord.x() >= x1) && (main->coord.x() <= x2) && (fabs(main->coord.y() - y1) < 0.2) && ((y1 - main->coord.y() > 0) == (dy > 0)))
+        if ((main->coord.x >= x1) && (main->coord.x <= x2) && (fabs(main->coord.y - y1) < 0.2) && ((y1 - main->coord.y > 0) == (dy > 0)))
             dy = 0;
 }
 
 void CalculationThread::check(double &dx, double &dy) {
     double k = 1 / 10.0;
     for (int i = 0; i < main->m; i++)
-        if (main->walls[i][2] == 0) {
+        if ((main->walls[i][3] == 0) && (heightEqualToMe(main->walls[i][2]))) {
             checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0] + 1, main->walls[i][1]);
             checkForWall(dx, dy, main->walls[i][0], main->walls[i][1] - k, main->walls[i][0], main->walls[i][1] + k);
             checkForWall(dx, dy, main->walls[i][0] + 1, main->walls[i][1] - k, main->walls[i][0] + 1, main->walls[i][1] + k);
-        } else {
+        } else if ((main->walls[i][3] == 1) && (heightEqualToMe(main->walls[i][2]))) {
             checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0], main->walls[i][1] + 1);
             checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1], main->walls[i][0] + k, main->walls[i][1]);
             checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
@@ -121,4 +123,8 @@ void CalculationThread::check(double &dx, double &dy) {
 
 bool CalculationThread::equal(QPointF a, QPointF b) {
     return (fabs(a.x() - b.x()) < 1) && (fabs(a.y() - b.y()) < 1);
+}
+
+bool CalculationThread::heightEqualToMe(double height) {
+    return (main->coord.h >= height) && (main->coord.h <= height + 1);
 }

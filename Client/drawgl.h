@@ -12,10 +12,9 @@
 
 class MainWindow;
 
-const double wallHeight = 0.2;
+const double wallHeight = 0.1;
 const double eps = 0.00001;
 const double sizeView = 10;
-//const QString skinPath = "../skins/default";
 
 enum {
     defaultWall = 0,
@@ -56,7 +55,8 @@ private:
     void drawMaze();
     void drawSkyBox();
 
-    void drawQuad(double x1, double y1, double x2, double y2);
+    void drawQuad(double x1, double y1, double x2, double y2, double h);
+    void drawFloorPoint(double x1, double y1, double h);
     void loadTexture(GLuint);
 
     void drawText(double x, double y, double z, bool xForwarding, bool yForwarding, QString s);

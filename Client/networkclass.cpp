@@ -32,9 +32,10 @@ void NetworkClass::run() {
 
 void NetworkClass::readField() {
     n = scanInt();
+    h = scanInt();
     m = scanInt();
     for (int i = 0; i < m; i++)
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < 4; j++)
             walls[i][j] = scanInt();
 
     qDebug() << "fieldUpdate" << QTime::currentTime();
@@ -99,15 +100,14 @@ void NetworkClass::readHeroes() {
     otherHeroes = scanInt();
     for (int i = 0; i < otherHeroes; i++) {
         int tmp = scanInt();
-        QPointF c;
-        c.setX(scanInt());
-        c.setY(scanInt());
+        fpoint c;
+        c.x = scanInt();
+        c.y = scanInt();
+        c.h = 0.5;
         if (tmp == myDescriptor) {
             if (fullRefresh) {
                 coord = c;
                 fullRefresh = false;
-                heroes[i].setX(-1);
-                heroes[i].setY(-1);
             }
         } else {
             heroes[i] = c;

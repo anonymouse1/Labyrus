@@ -3,7 +3,8 @@
 
 MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
-    int n = 20;
+    int n = 10;
+    int h = 2;
     int latency = 50;
     int players = 1;
     qint16 port = 7777;
@@ -16,6 +17,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             printf("\tWelcome to Labyrus Server manual\n");
             printf("\tFor all questions please contact vladislav.tyulbashev@yandex.ru\n");
             printf("\t\t-n --size <int> for settin size of maze (-n 20)\n");
+            printf("\t\t-h --height <int> for setting height of maze\n");
             printf("\t\t-l --latency <int> for setting latency\n");
             printf("\t\t-p --players <int> for setting number of players\n");
             printf("\t\t-s --strong for setting strong number of players\n");
@@ -29,6 +31,11 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
         } else if ((QString(argv[i]) == "-n") || (QString(argv[i]) == "--size")) {
             bool a;
             n = QString(argv[++i]).toInt(&a);
+            if (!a)
+                die("invalid number");
+        } else if ((QString(argv[i]) == "-h") || (QString(argv[i]) == "--height")) {
+            bool a;
+            h = QString(argv[++i]).toInt(&a);
             if (!a)
                 die("invalid number");
         } else if ((QString(argv[i]) == "-l") || (QString(argv[i]) == "--latency")) {
@@ -58,7 +65,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
                 die("invalid number");
         }
 
-    server = new Server(port, radiation, cheats, silence, n, latency, players, strong, this);
+    server = new Server(port, radiation, cheats, silence, n, h, latency, players, strong, this);
 }
 
 void MainClass::die(QString s) {

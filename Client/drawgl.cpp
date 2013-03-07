@@ -20,7 +20,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     nSca = 1;
 
     xtra = ytra = 0;
-    ztra = -0.1;
+    ztra = -wallHeight / 2;
     startingGame = false;
 
     hudFont = QFont("FreeSans", 15, 20, true);
@@ -52,7 +52,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 void DrawGl::initializeGL() {
     qglClearColor(Qt::gray);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+//    glEnable(GL_CULL_FACE);
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
@@ -104,17 +104,12 @@ void DrawGl::paintGL() {
 
     nSca = a->n / 2.0;
     glScalef(nSca, nSca, nSca);
-    glTranslatef(-a->coord.x() / sizeView, -a->coord.y() / sizeView, ztra);
+    glTranslatef(-a->coord.x / sizeView, -a->coord.y / sizeView, ztra - a->coord.h / sizeView);
 
 //    drawAxis();
     enableLight();
     drawSkyBox();
     drawMaze();
-
-    qglColor(Qt::red);
-    glBegin(GL_POINT);
-        glVertex3f(a->coord.x() / sizeView, a->coord.y() / sizeView, wallHeight / 2);
-    glEnd();
 }
 
 void DrawGl::drawAxis() {
@@ -189,14 +184,14 @@ void DrawGl::drawSkyBox() {
     glEnd();
 }
 
-void DrawGl::drawQuad(double x1, double y1, double x2, double y2) {
-    glVertex3f(x1, y1, wallHeight);
+void DrawGl::drawQuad(double x1, double y1, double x2, double y2, double h) {
+    glVertex3f(x1, y1, h + wallHeight);
     glTexCoord2d(0, 0);
-    glVertex3f(x1, y1, 0);
+    glVertex3f(x1, y1, h);
     glTexCoord2d(1, 0);
-    glVertex3f(x2, y2, 0);
+    glVertex3f(x2, y2, h);
     glTexCoord2d(1, 1);
-    glVertex3f(x2, y2, wallHeight);
+    glVertex3f(x2, y2, h + wallHeight);
     glTexCoord2d(0, 1);
 }
 
@@ -293,14 +288,15 @@ void DrawGl::drawMaze() {
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
+            double h = a->walls[i][2] * wallHeight;
 //            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
 
-            if (a->walls[i][2] == 0) {
-                drawQuad(x, y - f, x + k, y - f);
-                drawQuad(x + k, y + f, x, y + f);
-            } else {
-                drawQuad(x + f, y, x + f, y + k);
-                drawQuad(x - f, y + k, x - f, y);
+            if (a->walls[i][3] == 0) {
+                drawQuad(x, y - f, x + k, y - f, h);
+                drawQuad(x + k, y + f, x, y + f, h);
+            } else if (a->walls[i][3] == 1) {
+                drawQuad(x + f, y, x + f, y + k, h);
+                drawQuad(x - f, y + k, x - f, y, h);
             }
         }
     glEnd();
@@ -310,12 +306,13 @@ void DrawGl::drawMaze() {
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
-            if (a->walls[i][2] == 0) {
-                drawQuad(x, y + f, x, y - f);
-                drawQuad(x + k, y - f, x + k, y + f);
-            } else {
-                drawQuad(x - f, y, x + f, y);
-                drawQuad(x + f, y + k, x - f, y + k);
+            double h = a->walls[i][2] * wallHeight;
+            if (a->walls[i][3] == 0) {
+                drawQuad(x, y + f, x, y - f, h);
+                drawQuad(x + k, y - f, x + k, y + f, h);
+            } else if (a->walls[i][3] == 1) {
+                drawQuad(x - f, y, x + f, y, h);
+                drawQuad(x + f, y + k, x - f, y + k, h);
             }
         }
     glEnd();
@@ -325,7 +322,7 @@ void DrawGl::drawMaze() {
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
-            if (a->walls[i][2] == 1) {
+            if (a->walls[i][3] == 1) {
                 glVertex3f(x - f, y + k, wallHeight + eps);
                 glTexCoord2d(0, 1);
                 glVertex3f(x - f, y, wallHeight + eps);
@@ -334,7 +331,7 @@ void DrawGl::drawMaze() {
                 glTexCoord2d(1, 0);
                 glVertex3f(x + f, y + k, wallHeight + eps);
                 glTexCoord2d(1, 1);
-            } else {
+            } else if (a->walls[i][3] == 0) {
                 glVertex3f(x + k, y + f, wallHeight + eps);
                 glTexCoord2d(1, 0);
                 glVertex3f(x, y + f, wallHeight + eps);
@@ -360,17 +357,21 @@ void DrawGl::drawMaze() {
                 glVertex3f((i + 1) * k, (j + 1) * k, -eps);
                 glTexCoord2d(1, 0);
             }
+
+        for (int i = 0; i < a->m; i++)
+            if (a->walls[i][3] == 2)
+                drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2]);
     glEnd();
 
 
     loadTexture(textures[model]);
     qglColor(QColor(0, 0, 250));
     for (int i = 0; i < a->otherHeroes; i++)
-        if ((a->heroes[i].x() != -1) || (a->heroes[i].y()) != -1) {
+        if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1) {
 //            glVertex3f(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2);
             qglColor(QColor(0, a->otherAlive[i] * 200, 0));
-            renderText(a->heroes[i].x() * k, a->heroes[i].y() * k, wallHeight / 2, a->heroNames[i], hudFont);
-            I->draw(1 / sizeView / 10, a->heroes[i].x() * k, a->heroes[i].y() * k, wallHeight / 3);
+            renderText(a->heroes[i].x * k, a->heroes[i].y * k, wallHeight / 2, a->heroNames[i], hudFont);
+            I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, wallHeight / 3);
         }
 //    paintEngine()->drawEllipse(QRect(0, 0, 10, 10));
 //    paintEngine()->setActive(true);
@@ -383,7 +384,7 @@ void DrawGl::drawMaze() {
     renderText(5, this->height() - 40, QString("patrons: ") + QString::number(a->patrons), hudFont);
     renderText(5, this->height() - 60, QString("walls: ") + QString::number(a->wall), hudFont);
     renderText(5, this->height() - 80, QString("destroy: ") + QString::number(a->destroy), hudFont);
-    renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x()) + " " + QString::number(a->coord.y()));
+    renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x) + " " + QString::number(a->coord.y) + " " + QString::number(a->coord.h));
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -420,8 +421,8 @@ void DrawGl::drawMaze() {
     drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
 
-    if (ztra < -wallHeight)
-        I->draw(1 / sizeView / 10, a->coord.x() * k, a->coord.y() * k, wallHeight / 3);
+//    if (ztra < -wallHeight)
+//        I->draw(1 / sizeView / 10, a->coord.x() * k, a->coord.y() * k, wallHeight / 3);
     if (startingGame)
         renderText(this->width() / 2 - 100, this->height() / 2, QString("Starting after ") + QString::number((3000 - startAfter) / 1000) + QString(" seconds"), hudFont);
 }
@@ -527,7 +528,7 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         legacy->legalStop();
     } else if (currentText == "BOT") {
-        legacy->startBot();
+//        legacy->startBot();
     } else if (currentText == "STOP") {
         legacy->stopBot = true;
     } else if (currentText == "PING") {
@@ -575,4 +576,15 @@ QPixmap DrawGl::generateCompass(double angle) {
     p.drawPixmap(-200, -200, QPixmap(skinPath + "/compass.png"));
     p.end();
     return res;
+}
+
+void DrawGl::drawFloorPoint(double x, double y, double h) {
+    glVertex3f(x * k, y * k, h * k);
+    glTexCoord2d(0, 0);
+    glVertex3f(x * k, (y + 1) * k, h * k);
+    glTexCoord2d(0, 1);
+    glVertex3f((x + 1) * k, (y + 1) * k, h * k);
+    glTexCoord2d(1, 1);
+    glVertex3f((x + 1) * k, y * k, h * k);
+    glTexCoord2d(1, 0);
 }
