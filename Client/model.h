@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <stdio.h>
 #include <QDebug>
+#include <assert.h>
 
 class Model {
     public:

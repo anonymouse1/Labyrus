@@ -46,7 +46,7 @@ public:
     bool stopBot;
 
 
-    bool w[100][100];
+    bool w[100][100][100];
 
     CalculationThread *thread;
     QApplication *app;
@@ -58,15 +58,17 @@ private:
     void processInformation();
     double scanInt();
 
-    bool isWallUp(QPoint c);
-    bool isWallDown(QPoint c);
-    bool isWallLeft(QPoint c);
-    bool isWallRight(QPoint c);
+    bool isWallUp(gpoint c);
+    bool isWallDown(gpoint c);
+    bool isWallLeft(gpoint c);
+    bool isWallRight(gpoint c);
+    bool isWallForward(gpoint c);
+    bool isWallBackward(gpoint c);
 
     bool superDfs();
-    void elementarMove(double x, double y);
-    void syncNap(int);
-    void standartMove(double x1, double y1, double x2, double y2);
+    void elementarMove(fpoint to);
+    void syncNap(int, int);
+    void standartMove(fpoint from, fpoint to);
 
     double fabs(double);
 
@@ -75,12 +77,15 @@ private:
     QTimeLine *startLine;
     QTimer *repaintTimer;
     NetworkClass *input;
-    QPoint integerCoord;
+    gpoint integerCoord;
     QTimer *checkOrDie;
     int backupPerspective;
     void sleep(int ms);
-    QPoint getRealCoord();
+    gpoint getRealCoord();
     int getAngle(double x, double y, double x1, double y1);
+    int getYAngle(double rast, double h, double h1);
+    fpoint genFPoint(double x, double y, double h);
+    double sqr(double);
 
 
 signals:

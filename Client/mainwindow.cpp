@@ -150,26 +150,22 @@ void MainWindow::eraseWall(int x, int y, int flag) {
             command->go("e\n" + QString::number(i));
 }*/
 
-/*void MainWindow::startBot() {
+void MainWindow::startBot() {
     qDebug() << "bot started";
     widget->botActive = true;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
-            w[i][j] = false;
+            for (int k = 0; k < input->h; k++)
+                w[i][j][k] = false;
 
     integerCoord = getRealCoord();
     superDfs();
     widget->botActive = false;
     stopBot = false;
     qDebug() << "bot finished";
-}*/
+}
 
-/*void MainWindow::strangeWait() {
-    while ((widget->animZRot != 0) || (widget->animX != 0) || (widget->animY != 0))
-        app->processEvents(QEventLoop::AllEvents, 10);
-}*/
-
-/*void MainWindow::syncNap(int a) {
+void MainWindow::syncNap(int a, int b) {
     if (stopBot)
         return;
 
@@ -202,12 +198,12 @@ void MainWindow::eraseWall(int x, int y, int flag) {
     thread->rightPressed = false;
 }
 
-void MainWindow::elementarMove(double x, double y) {
+void MainWindow::elementarMove(fpoint to) {
     if (stopBot)
         return;
 
     int time = thread->currentTime;
-    while ((time + 90 > thread->currentTime) && (sqrt((x - input->coordX) * (x - input->coordX) + (y - input->coordY) * (y - input->coordY)) > 0.1)) {
+    while ((time + 90 > thread->currentTime) && (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) > 0.2)) {
         if (stopBot)
             break;
         thread->upPressed = true;
@@ -217,11 +213,12 @@ void MainWindow::elementarMove(double x, double y) {
     thread->upPressed = false;
 }
 
-void MainWindow::standartMove(double x1, double y1, double x2, double y2) {
-    elementarMove(x2, y2);
+void MainWindow::standartMove(fpoint from, fpoint to) {
+    syncNap(getAngle(from.x, from.y, to.x, to.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h + to.h)), from.h, to.h));
+    elementarMove(to);
     superDfs();
-    syncNap(getAngle(x2, y2, x1, y1));
-    elementarMove(x1, y1);
+    syncNap(getAngle(to.x, to.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h + to.h)), to.h, from.h));
+    elementarMove(from);
 }
 
 bool MainWindow::superDfs() {
@@ -230,7 +227,7 @@ bool MainWindow::superDfs() {
 
     integerCoord = getRealCoord();
 
-    w[integerCoord.x()][integerCoord.y()] = true;
+    w[integerCoord.x][integerCoord.y][integerCoord.h] = true;
 
     int sp[4];
     for (int i = 0; i < 4; i++)
@@ -240,40 +237,40 @@ bool MainWindow::superDfs() {
 
     for (int i = 0; i < 4; i++) {
         if (sp[i] == 0)
-            if (!w[integerCoord.x() - 1][integerCoord.y()] && !isWallLeft(integerCoord)) {
-                syncNap(getAngle(input->coordX, input->coord.y(), integerCoord.x() - 0.5, integerCoord.y() + 0.5));
-                integerCoord.setX(integerCoord.x() - 1);
-                standartMove(integerCoord.x() + 1.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-                integerCoord.setX(integerCoord.x() + 1);
+            if (!w[integerCoord.x - 1][integerCoord.y][integerCoord.h] && !isWallLeft(integerCoord)) {
+                integerCoord.x -= 1;
+                standartMove(genFPoint(integerCoord.x + 1.5, integerCoord.y + 0.5, integerCoord.h + 0.5),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
+                integerCoord.x += 1;
             }
 
         if (sp[i] == 1)
-            if (!w[integerCoord.x()][integerCoord.y() + 1] && !isWallUp(integerCoord)) {
-                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() + 1.5));
-                integerCoord.setY(integerCoord.y() + 1);
-                standartMove(integerCoord.x() + 0.5, integerCoord.y() - 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-                integerCoord.setY(integerCoord.y() - 1);
+            if (!w[integerCoord.x][integerCoord.y + 1][integerCoord.h] && !isWallForward(integerCoord)) {
+                integerCoord.y += 1;
+                standartMove(genFPoint(integerCoord.x + 0.5, integerCoord.y - 0.5, integerCoord.h),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h));
+                integerCoord.y -= 1;
             }
 
         if (sp[i] == 2)
-            if (!w[integerCoord.x()][integerCoord.y() - 1] && !isWallDown(integerCoord)) {
-                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 0.5, integerCoord.y() - 0.5));
-                integerCoord.setY(integerCoord.y() - 1);
-                standartMove(integerCoord.x() + 0.5, integerCoord.y() + 1.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-                integerCoord.setY(integerCoord.y() + 1);
+            if (!w[integerCoord.x][integerCoord.y - 1][integerCoord.h] && !isWallBackward(integerCoord)) {
+                integerCoord.y -= 1;
+                standartMove(genFPoint(integerCoord.x + 0.5, integerCoord.y + 1.5, integerCoord.h + 0.5),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
+                integerCoord.y += 1;
             }
 
         if (sp[i] == 3)
-            if (!w[integerCoord.x() + 1][integerCoord.y()] && !isWallRight(integerCoord)) {
-                syncNap(getAngle(input->coord.x(), input->coord.y(), integerCoord.x() + 1.5, integerCoord.y() + 0.5));
-                integerCoord.setX(integerCoord.x() + 1);
-                standartMove(integerCoord.x() - 0.5, integerCoord.y() + 0.5, integerCoord.x() + 0.5, integerCoord.y() + 0.5);
-                integerCoord.setX(integerCoord.x() - 1);
+            if (!w[integerCoord.x + 1][integerCoord.y][integerCoord.h] && !isWallRight(integerCoord)) {
+                integerCoord.x += 1;
+                standartMove(genFPoint(integerCoord.x - 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
+                integerCoord.x -= 1;
             }
     }
 
     return 0;
-}*/
+}
 
 
 void MainWindow::gameStart() {
@@ -342,31 +339,47 @@ void MainWindow::connectedSuccess() {
     emit successConnection();
 }
 
-bool MainWindow::isWallLeft(QPoint c) {
+bool MainWindow::isWallLeft(gpoint c) {
     for (int i = 0; i < input->m; i++)
-        if ((input->walls[i][0] == c.x()) && (input->walls[i][1] == c.y()) && (input->walls[i][2] == 1))
+        if ((input->walls[i][0] == c.x) && (input->walls[i][1] == c.y) && (input->walls[i][3] == 1) && (input->walls[i][2] == c.h))
             return true;
 
     return false;
 }
 
-bool MainWindow::isWallRight(QPoint c) {
+bool MainWindow::isWallRight(gpoint c) {
     for (int i = 0; i < input->m; i++)
-        if ((input->walls[i][0] == c.x() + 1) && (input->walls[i][1] == c.y()) && (input->walls[i][2] == 1))
+        if ((input->walls[i][0] == c.x + 1) && (input->walls[i][1] == c.y) && (input->walls[i][3] == 1) && (input->walls[i][2] == c.h))
             return true;
 
     return false;
 }
-bool MainWindow::isWallUp(QPoint c) {
+bool MainWindow::isWallForward(gpoint c) {
     for (int i = 0; i < input->m; i++)
-        if ((input->walls[i][0] == c.x()) && (input->walls[i][1] == c.y() + 1) && (input->walls[i][2] == 0))
+        if ((input->walls[i][0] == c.x) && (input->walls[i][1] == c.y + 1) && (input->walls[i][3] == 0) && (input->walls[i][2] == c.h))
             return true;
 
     return false;
 }
-bool MainWindow::isWallDown(QPoint c) {
+bool MainWindow::isWallBackward(gpoint c) {
     for (int i = 0; i < input->m; i++)
-        if ((input->walls[i][0] == c.x()) && (input->walls[i][1] == c.y()) && (input->walls[i][2] == 0))
+        if ((input->walls[i][0] == c.x) && (input->walls[i][1] == c.y) && (input->walls[i][3] == 0) && (input->walls[i][2] == c.h))
+            return true;
+
+    return false;
+}
+
+bool MainWindow::isWallDown(gpoint c) {
+    for (int i = 0; i < input->m; i++)
+        if ((input->walls[i][0] == c.x) && (input->walls[i][1] == c.y) && (input->walls[i][2] == c.h) && (input->walls[i][3] == 2))
+            return true;
+
+    return false;
+}
+
+bool MainWindow::isWallUp(gpoint c) {
+    for (int i = 0; i < input->m; i++)
+        if ((input->walls[i][0] == c.x) && (input->walls[i][1] == c.y) && (input->walls[i][2] == c.h + 1) && (input->walls[i][3] == 2))
             return true;
 
     return false;
@@ -378,19 +391,19 @@ void MainWindow::sleep(int ms) {
     loop->exec();
 }
 
-/*QPoint MainWindow::getRealCoord() {
-    qDebug() << "detecting coords..." << input->coordX << input->coordY << input->coordH;
-    QPoint result;
+gpoint MainWindow::getRealCoord() {
+    qDebug() << "detecting coords..." << input->coord.x << input->coord.y << input->coord.h;
+    gpoint result;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
-            if (fabs(result.x() - input->coord.x() + 0.5) + fabs(result.y() - input->coord.y() + 0.5) >
-                    fabs(j - input->coord.x() + 0.5) + fabs(i - input->coord.y() + 0.5)) {
-                result.setX(j);
-                result.setY(i);
+            if (fabs(result.x - input->coord.x + 0.5) + fabs(result.y - input->coord.y + 0.5) >
+                    fabs(j - input->coord.x + 0.5) + fabs(i - input->coord.y + 0.5)) {
+                result.x = j;
+                result.y = i;
             }
-    qDebug() << "coord" << result;
+    result.h =  input->getFloor();
     return result;
-}*/
+}
 
 int MainWindow::getAngle(double x, double y, double x1, double y1) {
     x1 -= x;
@@ -403,6 +416,10 @@ int MainWindow::getAngle(double x, double y, double x1, double y1) {
         result = 360 - result;
 
     return 90 - result;
+}
+
+int MainWindow::getYAngle(double rast, double h, double h1) {
+    return asin((h1 - h) / rast);
 }
 
 void MainWindow::legalStop() {
@@ -418,4 +435,16 @@ void MainWindow::legalStop() {
 void MainWindow::checkForDie() {
     if (!widget->isValid() || !widget->isVisible())
         legalStop();
+}
+
+fpoint MainWindow::genFPoint(double x, double y, double h) {
+    fpoint result;
+    result.x = x;
+    result.y = y;
+    result.h = h;
+    return result;
+}
+
+double MainWindow::sqr(double a) {
+    return a * a;
 }

@@ -535,7 +535,7 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         legacy->legalStop();
     } else if (currentText == "BOT") {
-//        legacy->startBot();
+        legacy->startBot();
     } else if (currentText == "STOP") {
         legacy->stopBot = true;
     } else if (currentText == "PING") {

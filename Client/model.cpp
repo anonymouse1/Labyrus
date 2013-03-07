@@ -4,16 +4,16 @@ Model::Model(QString s) {
     FILE *fin = fopen(s.toAscii(), "r");
 
     char buf[255];
-    fscanf(fin, "%s", buf);
+    assert(fscanf(fin, "%s", buf) == 1);
     if (buf != QString("#stdupid3dformat\n"))
         qDebug() << "model data is not correct";
 
-    fscanf(fin, "%d", &n);
+    assert(fscanf(fin, "%d", &n) == 1);
     r = new int*[n];
     for (int i = 0; i < n; i++) {
         r[i] = new int[3];
         for (int j = 0; j < 3; j++)
-            fscanf(fin, "%d", &r[i][j]);
+            assert(fscanf(fin, "%d", &r[i][j]) == 1);
     }
 
     fclose(fin);

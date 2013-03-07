@@ -21,6 +21,12 @@ struct fpoint {
     double h;
 };
 
+struct gpoint {
+    int x;
+    int y;
+    int h;
+};
+
 class NetworkClass : public QThread
 {
     Q_OBJECT
