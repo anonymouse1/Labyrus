@@ -26,6 +26,8 @@ void CalculationThread::run() {
     nextTimeTimer->setInterval(10);
     nextTimeTimer->start();
 
+    fromStartOfGame.start();
+
     exec();
 }
 

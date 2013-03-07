@@ -29,6 +29,7 @@ public:
     bool shiftPressed;
 
     int currentTime;
+    QTime fromStartOfGame;
 private:
     void run();
     DrawGl *widget;
