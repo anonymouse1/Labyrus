@@ -195,6 +195,28 @@ void DrawGl::drawQuad(double x1, double y1, double x2, double y2, double h) {
     glTexCoord2d(0, 1);
 }
 
+void DrawGl::drawRoofPart(double x, double y, double h, int type) {
+    if (type == 1) {
+        glVertex3f(x - f, y + k, h + eps);
+        glTexCoord2d(0, 1);
+        glVertex3f(x - f, y, h + eps);
+        glTexCoord2d(0, 0);
+        glVertex3f(x + f, y, h + eps);
+        glTexCoord2d(1, 0);
+        glVertex3f(x + f, y + k, h + eps);
+        glTexCoord2d(1, 1);
+    } else if (type == 0) {
+        glVertex3f(x + k, y + f, h + eps);
+        glTexCoord2d(1, 0);
+        glVertex3f(x, y + f, h + eps);
+        glTexCoord2d(0, 0);
+        glVertex3f(x, y - f, h + eps);
+        glTexCoord2d(0, 1);
+        glVertex3f(x + k, y - f, h + eps);
+        glTexCoord2d(1, 1);
+    }
+}
+
 void DrawGl::drawMaze() {
     qglColor(Qt::white);
 //    float dir[3] = {1, 1, 1};
@@ -322,25 +344,9 @@ void DrawGl::drawMaze() {
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
-            if (a->walls[i][3] == 1) {
-                glVertex3f(x - f, y + k, wallHeight + eps);
-                glTexCoord2d(0, 1);
-                glVertex3f(x - f, y, wallHeight + eps);
-                glTexCoord2d(0, 0);
-                glVertex3f(x + f, y, wallHeight + eps);
-                glTexCoord2d(1, 0);
-                glVertex3f(x + f, y + k, wallHeight + eps);
-                glTexCoord2d(1, 1);
-            } else if (a->walls[i][3] == 0) {
-                glVertex3f(x + k, y + f, wallHeight + eps);
-                glTexCoord2d(1, 0);
-                glVertex3f(x, y + f, wallHeight + eps);
-                glTexCoord2d(0, 0);
-                glVertex3f(x, y - f, wallHeight + eps);
-                glTexCoord2d(0, 1);
-                glVertex3f(x + k, y - f, wallHeight + eps);
-                glTexCoord2d(1, 1);
-            }
+            double h = a->walls[i][2] * wallHeight;
+            drawRoofPart(x, y, h, a->walls[i][3]);
+            drawRoofPart(x, y, h + wallHeight, a->walls[i][3]);
         }
     glEnd();
 

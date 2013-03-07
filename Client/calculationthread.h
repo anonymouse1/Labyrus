@@ -34,9 +34,10 @@ private:
     QTimer *nextTimeTimer, *serverRefresh;
     NetworkClass *main;
 
-    void check(double &dx, double &dy);
+    void check(double &dx, double &dy, double &dh);
     bool equal(QPointF, QPointF);
     void checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2);
+    void checkForDhWall(double &dh, double x, double y, double h, double x1, double y1);
     bool heightEqualToMe(double height);
 
 private slots:

@@ -57,6 +57,7 @@ private:
 
     void drawQuad(double x1, double y1, double x2, double y2, double h);
     void drawFloorPoint(double x1, double y1, double h);
+    void drawRoofPart(double x, double y, double h, int type);
     void loadTexture(GLuint);
 
     void drawText(double x, double y, double z, bool xForwarding, bool yForwarding, QString s);

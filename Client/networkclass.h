@@ -13,6 +13,7 @@
 #include <QThread>
 #include <QHostAddress>
 #include <messagesstack.h>
+#include <math.h>
 
 struct fpoint {
     double x;
@@ -50,6 +51,7 @@ public:
 
     void go(QString s, bool flush = false, bool addEndLine = true);
     void checkAngles();
+    int getFloor();
 private:
     QMutex processingInformation;
     QTcpSocket *mainSocket;

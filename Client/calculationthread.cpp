@@ -41,7 +41,7 @@ void CalculationThread::nextTime() {
         double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * cos((main->yAngle + 90) * M_PI / 180);
         double deltaH = -sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
 
-        check(deltaX, deltaY);
+        check(deltaX, deltaY, deltaH);
 
         main->coord.x += deltaX;
         main->coord.y += deltaY;
@@ -56,18 +56,21 @@ void CalculationThread::nextTime() {
     if (downPressed) {
         double deltaX = -cos((-main->angle + 90) * M_PI / 180) * speed;
         double deltaY = -sin((-main->angle + 90) * M_PI / 180) * speed;
+        double deltaH = sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
 
-        check(deltaX, deltaY);
+        check(deltaX, deltaY, deltaH);
 
-        main->coord.x = main->coord.x + deltaX;
-        main->coord.y = main->coord.y + deltaY;
+        main->coord.x += deltaX;
+        main->coord.y += deltaY;
+        main->coord.h += deltaH;
     }
 
     if (leftStrife) {
         double deltaX = -cos(-main->angle * M_PI / 180) * speed;
         double deltaY = -sin(-main->angle * M_PI / 180) * speed;
+        double deltaH = 0;
 
-        check(deltaX, deltaY);
+        check(deltaX, deltaY, deltaH);
 
         main->coord.x = main->coord.x + deltaX;
         main->coord.y = main->coord.y + deltaY;
@@ -76,8 +79,9 @@ void CalculationThread::nextTime() {
     if (rightStrife) {
         double deltaX = -cos((-main->angle + 180) * M_PI / 180) * speed;
         double deltaY = -sin((-main->angle + 180) * M_PI / 180) * speed;
+        double deltaH = 0;
 
-        check(deltaX, deltaY);
+        check(deltaX, deltaY, deltaH);
 
         main->coord.x = main->coord.x + deltaX;
         main->coord.y = main->coord.y + deltaY;
@@ -107,17 +111,36 @@ void CalculationThread::checkForWall(double &dx, double &dy, double x1, double y
             dy = 0;
 }
 
-void CalculationThread::check(double &dx, double &dy) {
+void CalculationThread::checkForDhWall(double &dh, double x, double y, double h, double x1, double y1) {
+    if ((h + (dh < 0) - 1 == main->getFloor()) && (fabs(h - main->coord.h) < 0.1) &&
+            (main->coord.x >= x - eps) && (main->coord.x <= x1 + eps) &&
+                (main->coord.y >= y - eps) && (main->coord.y <= y1 + eps))
+                    dh = 0;
+}
+
+void CalculationThread::check(double &dx, double &dy, double &dh) {
     double k = 1 / 10.0;
     for (int i = 0; i < main->m; i++)
-        if ((main->walls[i][3] == 0) && (heightEqualToMe(main->walls[i][2]))) {
-            checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0] + 1, main->walls[i][1]);
-            checkForWall(dx, dy, main->walls[i][0], main->walls[i][1] - k, main->walls[i][0], main->walls[i][1] + k);
-            checkForWall(dx, dy, main->walls[i][0] + 1, main->walls[i][1] - k, main->walls[i][0] + 1, main->walls[i][1] + k);
-        } else if ((main->walls[i][3] == 1) && (heightEqualToMe(main->walls[i][2]))) {
-            checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0], main->walls[i][1] + 1);
-            checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1], main->walls[i][0] + k, main->walls[i][1]);
-            checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
+        if (main->walls[i][3] == 0) {
+            if (heightEqualToMe(main->walls[i][2])) {
+                checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0] + 1, main->walls[i][1]);
+                checkForWall(dx, dy, main->walls[i][0], main->walls[i][1] - k, main->walls[i][0], main->walls[i][1] + k);
+                checkForWall(dx, dy, main->walls[i][0] + 1, main->walls[i][1] - k, main->walls[i][0] + 1, main->walls[i][1] + k);
+            }
+
+            checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k, main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + k);
+            checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k, main->walls[i][2] + 1, main->walls[i][0] + 1, main->walls[i][1] + k);
+        } else if (main->walls[i][3] == 1) {
+            if (heightEqualToMe(main->walls[i][2])) {
+                checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0], main->walls[i][1] + 1);
+                checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1], main->walls[i][0] + k, main->walls[i][1]);
+                checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
+            }
+
+            checkForDhWall(dh, main->walls[i][0] - k, main->walls[i][1], main->walls[i][2], main->walls[i][0] + k, main->walls[i][1] + 1);
+            checkForDhWall(dh, main->walls[i][0] - k, main->walls[i][1], main->walls[i][2] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
+        } else if (main->walls[i][3] == 2) {
+            checkForDhWall(dh, main->walls[i][0], main->walls[i][1], main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + 1);
         }
 }
 

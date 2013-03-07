@@ -173,3 +173,9 @@ void NetworkClass::checkAngles() {
 void NetworkClass::ping() {
     go("v");
 }
+
+int NetworkClass::getFloor() {
+    for (int i = 0; i <= h; i++)
+        if (i + 1 > coord.h)
+            return i;
+}
