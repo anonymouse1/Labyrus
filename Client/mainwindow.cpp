@@ -172,30 +172,48 @@ void MainWindow::syncNap(int a, int b) {
     while (input->angle > a + 2)
         input->angle -= 360;
 
-    if (abs(input->angle - a) < 3)
-        return;
+    if (abs(input->angle - a) > 3) {
+        if (input->angle + 180 < a) {
+            input->angle += 360;
+            while (input->angle > a) {
+                if (stopBot)
+                    break;
+                thread->leftPressed = true;
+                app->processEvents(QEventLoop::AllEvents);
+            }
+        } else {
+            while (input->angle < a) {
+                if (stopBot)
+                    break;
+                thread->rightPressed = true;
+                app->processEvents(QEventLoop::AllEvents);
+            }
+        }
 
-    if (input->angle + 180 < a) {
-        input->angle += 360;
-        while (input->angle > a) {
+        thread->leftPressed = false;
+        thread->rightPressed = false;
+    }
+
+    if (input->h != 1) {
+        thread->lookingDown = false;
+        while (-input->yAngle - 90 < b) {
             if (stopBot)
                 break;
-            thread->leftPressed = true;
-            thread->rightPressed = false;
+            thread->lookingUp = true;
             app->processEvents(QEventLoop::AllEvents);
         }
-    } else {
-        while (input->angle < a) {
+
+        thread->lookingUp = false;
+        while (-input->yAngle - 90 > b) {
             if (stopBot)
                 break;
-            thread->leftPressed = false;
-            thread->rightPressed = true;
+            thread->lookingDown = true;
             app->processEvents(QEventLoop::AllEvents);
         }
     }
 
-    thread->leftPressed = false;
-    thread->rightPressed = false;
+    thread->lookingDown = false;
+    thread->lookingUp = false;
 }
 
 void MainWindow::elementarMove(fpoint to) {
@@ -214,10 +232,10 @@ void MainWindow::elementarMove(fpoint to) {
 }
 
 void MainWindow::standartMove(fpoint from, fpoint to) {
-    syncNap(getAngle(from.x, from.y, to.x, to.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h + to.h)), from.h, to.h));
+    syncNap(getAngle(from.x, from.y, to.x, to.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h - to.h)), from.h, to.h));
     elementarMove(to);
     superDfs();
-    syncNap(getAngle(to.x, to.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h + to.h)), to.h, from.h));
+    syncNap(getAngle(to.x, to.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h - to.h)), to.h, from.h));
     elementarMove(from);
 }
 
@@ -229,13 +247,13 @@ bool MainWindow::superDfs() {
 
     w[integerCoord.x][integerCoord.y][integerCoord.h] = true;
 
-    int sp[4];
-    for (int i = 0; i < 4; i++)
+    int sp[6];
+    for (int i = 0; i < 6; i++)
         sp[i] = i;
-    for (int i = 1; i < 4; i++)
+    for (int i = 1; i < 6; i++)
         swap(sp[i], sp[rand() % i]);
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 6; i++) {
         if (sp[i] == 0)
             if (!w[integerCoord.x - 1][integerCoord.y][integerCoord.h] && !isWallLeft(integerCoord)) {
                 integerCoord.x -= 1;
@@ -266,6 +284,21 @@ bool MainWindow::superDfs() {
                 standartMove(genFPoint(integerCoord.x - 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5),
                              genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
                 integerCoord.x -= 1;
+            }
+
+        if (sp[i] == 4)
+            if (!w[integerCoord.x][integerCoord.y][integerCoord.h + 1] && !isWallUp(integerCoord)) {
+                integerCoord.h += 1;
+                standartMove(genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h - 0.5),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
+                integerCoord.h -= 1;
+            }
+        if (sp[i] == 5)
+            if (!w[integerCoord.x][integerCoord.y][integerCoord.h - 1] && !isWallDown(integerCoord)) {
+                integerCoord.h -= 1;
+                standartMove(genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 1.5),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
+                integerCoord.h += 1;
             }
     }
 
@@ -406,6 +439,8 @@ gpoint MainWindow::getRealCoord() {
 }
 
 int MainWindow::getAngle(double x, double y, double x1, double y1) {
+    if ((x == x1) && (y == y1))
+        return input->angle;
     x1 -= x;
     y1 -= y;
     double module = sqrt(x1 * x1 + y1 * y1);
@@ -419,7 +454,7 @@ int MainWindow::getAngle(double x, double y, double x1, double y1) {
 }
 
 int MainWindow::getYAngle(double rast, double h, double h1) {
-    return asin((h1 - h) / rast);
+    return asin((h1 - h) / rast) / M_PI * 180;
 }
 
 void MainWindow::legalStop() {
