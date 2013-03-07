@@ -32,7 +32,7 @@ public:
 private:
     void run();
     DrawGl *widget;
-    QTimer *nextTimeTimer, *serverRefresh;
+    QTimer *nextTimeTimer;
     NetworkClass *main;
 
     void check(double &dx, double &dy, double &dh);
@@ -44,7 +44,6 @@ private:
 
 private slots:
     void nextTime();
-    void refreshCoord();
 };
 
 #endif // CALCULATIONTHREAD_H

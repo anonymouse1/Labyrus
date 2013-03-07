@@ -14,6 +14,9 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     pingTimer = new QTimer;
     pingTimer->setInterval(1000);
     QObject::connect(pingTimer, SIGNAL(timeout()), this, SLOT(ping()));
+    serverRefresh = new QTimer;
+    serverRefresh->setInterval(latency);
+    QObject::connect(serverRefresh, SIGNAL(timeout()), this, SLOT(refreshCoords()));
 }
 
 void NetworkClass::run() {
@@ -75,6 +78,7 @@ void NetworkClass::readInformation() {
         if (s == "gameStart\n") {
             qDebug() << "gameStart detected";
             emit gameStart();
+            serverRefresh->start();
         } else if (s == "field\n") {
             readField();
         } else if (s == "hero\n") {
@@ -181,4 +185,8 @@ int NetworkClass::getFloor() {
             return i;
 
     return 0;
+}
+
+void NetworkClass::refreshCoords() {
+    go("n\n" + QString::number(coord.x) + "\n" + QString::number(coord.y) + "\n" + QString::number(coord.h) + "\n");
 }

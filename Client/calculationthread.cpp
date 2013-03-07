@@ -20,16 +20,11 @@ CalculationThread::CalculationThread(DrawGl *wid, NetworkClass *m) : QThread()
 void CalculationThread::run() {
     qDebug() << "run called";
     nextTimeTimer = new QTimer;
-    serverRefresh = new QTimer;
 
     QObject::connect(nextTimeTimer, SIGNAL(timeout()), this, SLOT(nextTime()));
-    QObject::connect(serverRefresh, SIGNAL(timeout()), this, SLOT(refreshCoord()));
 
     nextTimeTimer->setInterval(10);
     nextTimeTimer->start();
-
-    serverRefresh->setInterval(main->latency);
-    serverRefresh->start();
 
     exec();
 }
@@ -94,10 +89,6 @@ void CalculationThread::nextTime() {
         main->yAngle -= 1;
 
     main->checkAngles();
-}
-
-void CalculationThread::refreshCoord() {
-    main->go(QString("n\n") + QString::number(main->coord.x) + "\n" + QString::number(main->coord.y) + "\n", false);
 }
 
 void CalculationThread::checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2) {

@@ -63,6 +63,7 @@ private:
     QTcpSocket *mainSocket;
     QTimer *failConnectionTime;
     QTimer *pingTimer;
+    QTimer *serverRefresh;
     bool fullRefresh;
 
     QHostAddress targetIp;
@@ -81,6 +82,7 @@ private slots:
     void connectionEstablished();
     void failConnection();
     void ping();
+    void refreshCoords();
 
 signals:
     void successConnection();
