@@ -55,15 +55,16 @@ public:
 
     int latency;
 
-    void go(QString s, bool flush = false, bool addEndLine = true);
     void checkAngles();
     int getFloor();
+    void go(QString s, bool flush = false, bool addEndLine = true);
 private:
     QMutex processingInformation;
     QTcpSocket *mainSocket;
     QTimer *failConnectionTime;
     QTimer *pingTimer;
     QTimer *serverRefresh;
+    QDataStream *stream;
     bool fullRefresh;
 
     QHostAddress targetIp;

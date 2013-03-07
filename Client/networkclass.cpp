@@ -11,16 +11,21 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     cheats = false;
     fullRefresh = true;
     messages = new MessagesStack;
-    pingTimer = new QTimer;
-    pingTimer->setInterval(1000);
-    QObject::connect(pingTimer, SIGNAL(timeout()), this, SLOT(ping()));
-    serverRefresh = new QTimer;
-    serverRefresh->setInterval(latency);
-    QObject::connect(serverRefresh, SIGNAL(timeout()), this, SLOT(refreshCoords()));
 }
 
 void NetworkClass::run() {
+    pingTimer = new QTimer(this);
+    pingTimer->setInterval(1000);
+    QObject::connect(pingTimer, SIGNAL(timeout()), this, SLOT(ping()));
+    serverRefresh = new QTimer(this);
+    QObject::connect(serverRefresh, SIGNAL(timeout()), this, SLOT(refreshCoords()));
+
     mainSocket = new QTcpSocket(this);
+
+    mainSocket->moveToThread(this);
+    pingTimer->moveToThread(this);
+    serverRefresh->moveToThread(this);
+
     connect(mainSocket, SIGNAL(connected()), this, SLOT(connectionEstablished()), Qt::DirectConnection);
 
     mainSocket->connectToHost(targetIp, targetPort, QTcpSocket::ReadWrite);
@@ -156,8 +161,10 @@ void NetworkClass::connectionEstablished() {
 
     myDescriptor = scanInt();
     latency = scanInt();
+    qDebug() << "latency" << latency;
     connect(mainSocket, SIGNAL(readyRead()), this, SLOT(readInformation()), Qt::DirectConnection);
     pingTimer->start();
+    serverRefresh->setInterval(latency);
 
     if (mainSocket->canReadLine())
         readInformation();

@@ -130,7 +130,6 @@ void Server::runCommand(QString command, Player *player) {
 
     if (player->socket->canReadLine())
         runCommand(player->socket->readLine(), player);
-//    qDebug() << "success" << *player->coord;
 }
 
 void Server::sendFieldToPlayer(Player *player, QByteArray *data) {
