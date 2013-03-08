@@ -387,7 +387,7 @@ void DrawGl::drawMaze() {
 //    qglColor(QColor(200, 150, 0));
     qglColor(Qt::blue);
 
-    renderText(5, 15, QString("From start game: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString(" secs"), hudFont);
+    renderText(5, 15, QString("From start game: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
     renderText(5, this->height() - 20, QString("Alive status: " + QString::number(a->alive)), hudFont);
     renderText(5, this->height() - 40, QString("patrons: ") + QString::number(a->patrons), hudFont);
     renderText(5, this->height() - 60, QString("walls: ") + QString::number(a->wall), hudFont);

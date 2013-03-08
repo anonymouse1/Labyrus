@@ -30,6 +30,7 @@ void MainWindow::start() {
     attributes << "--silence";
     attributes << "-n";
     attributes << ui->fieldSize->text();
+    attributes << "--height" << QString::number(ui->heightOfField->value());
     attributes << "--latency" << ui->spinBox->text();
     if (ui->cheats->checkState() == Qt::Checked)
         attributes << "--cheats";
