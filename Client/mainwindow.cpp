@@ -165,38 +165,39 @@ void MainWindow::startBot() {
     input->messages->addMessage("BOT finished");
 }
 
-void MainWindow::syncNap(int a, int b) {
+void MainWindow::syncNap(int a, int b, bool fly) {
     if (stopBot)
         return;
 
-    while (input->angle > a + 2)
+    while (input->angle > a + 5)
         input->angle -= 360;
 
     if (abs(input->angle - a) > 3) {
         if (input->angle + 180 < a) {
             input->angle += 360;
-            while (input->angle > a) {
+            while (input->angle > a + 1) {
                 if (stopBot)
                     break;
                 thread->leftPressed = true;
                 app->processEvents(QEventLoop::AllEvents);
             }
         } else {
-            while (input->angle < a) {
-                if (stopBot)
-                    break;
-                thread->rightPressed = true;
-                app->processEvents(QEventLoop::AllEvents);
+            while (input->angle < a - 1) {
+               if (stopBot)
+                   break;
+               thread->rightPressed = true;
+               app->processEvents(QEventLoop::AllEvents);
             }
         }
-
-        thread->leftPressed = false;
-        thread->rightPressed = false;
     }
 
-    if (input->h != 1) {
+    thread->leftPressed = false;
+    thread->rightPressed = false;
+
+
+    if ((input->h != 1) && (abs(b + input->angle + 90) > 3)) {
         thread->lookingDown = false;
-        while (-input->yAngle - 90 < b) {
+        while (-input->yAngle - 90 < b - 1) {
             if (stopBot)
                 break;
             thread->lookingUp = true;
@@ -204,7 +205,7 @@ void MainWindow::syncNap(int a, int b) {
         }
 
         thread->lookingUp = false;
-        while (-input->yAngle - 90 > b) {
+        while (-input->yAngle - 90 > b + 1) {
             if (stopBot)
                 break;
             thread->lookingDown = true;
@@ -221,7 +222,7 @@ void MainWindow::elementarMove(fpoint to) {
         return;
 
     int time = thread->currentTime;
-    while ((time + 90 > thread->currentTime) && (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) > 0.2)) {
+    while ((time + 85 > thread->currentTime) && (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) > 0.2)) {
         if (stopBot)
             break;
         thread->upPressed = true;
@@ -232,10 +233,10 @@ void MainWindow::elementarMove(fpoint to) {
 }
 
 void MainWindow::standartMove(fpoint from, fpoint to) {
-    syncNap(getAngle(from.x, from.y, to.x, to.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h - to.h)), from.h, to.h));
+    syncNap(getAngle(input->coord.x, input->coord.y, to.x, to.y), getYAngle(sqrt(sqr(input->coord.x - to.x) + sqr(input->coord.y - to.y) + sqr(input->coord.h - to.h)), input->coord.h, to.h), false);
     elementarMove(to);
     superDfs();
-    syncNap(getAngle(to.x, to.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - to.x) + sqr(from.y - to.y) + sqr(from.h - to.h)), to.h, from.h));
+    syncNap(getAngle(input->coord.x, input->coord.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - input->coord.x) + sqr(from.y - input->coord.y) + sqr(from.h - input->coord.h)), input->coord.h, from.h), false);
     elementarMove(from);
 }
 
@@ -265,8 +266,8 @@ bool MainWindow::superDfs() {
         if (sp[i] == 1)
             if (!w[integerCoord.x][integerCoord.y + 1][integerCoord.h] && !isWallForward(integerCoord)) {
                 integerCoord.y += 1;
-                standartMove(genFPoint(integerCoord.x + 0.5, integerCoord.y - 0.5, integerCoord.h),
-                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h));
+                standartMove(genFPoint(integerCoord.x + 0.5, integerCoord.y - 0.5, integerCoord.h + 0.5),
+                             genFPoint(integerCoord.x + 0.5, integerCoord.y + 0.5, integerCoord.h + 0.5));
                 integerCoord.y -= 1;
             }
 
@@ -439,7 +440,7 @@ gpoint MainWindow::getRealCoord() {
 }
 
 int MainWindow::getAngle(double x, double y, double x1, double y1) {
-    if ((x == x1) && (y == y1))
+    if (sqrt(sqr(x - x1) + sqr(y - y1)) < 0.2)
         return input->angle;
     x1 -= x;
     y1 -= y;
@@ -454,7 +455,7 @@ int MainWindow::getAngle(double x, double y, double x1, double y1) {
 }
 
 int MainWindow::getYAngle(double rast, double h, double h1) {
-    return asin((h1 - h) / rast) / M_PI * 180;
+    return asin((h1 - h) / (rast + eps)) / M_PI * 180;
 }
 
 void MainWindow::legalStop() {
