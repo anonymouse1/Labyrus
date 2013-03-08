@@ -22,6 +22,7 @@ public:
 private slots:
     void start();
     void aboutQt();
+    void about();
 private:
     Ui::MainWindow *ui;
 };

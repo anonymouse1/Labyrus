@@ -151,7 +151,7 @@ void MainWindow::eraseWall(int x, int y, int flag) {
 }*/
 
 void MainWindow::startBot() {
-    qDebug() << "bot started";
+    input->messages->addMessage("BOT started");
     widget->botActive = true;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
@@ -162,7 +162,7 @@ void MainWindow::startBot() {
     superDfs();
     widget->botActive = false;
     stopBot = false;
-    qDebug() << "bot finished";
+    input->messages->addMessage("BOT finished");
 }
 
 void MainWindow::syncNap(int a, int b) {

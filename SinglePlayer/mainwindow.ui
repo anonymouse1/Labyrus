@@ -202,6 +202,9 @@
     </item>
     <item>
      <widget class="QFrame" name="widget">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QCheckBox" name="strong">

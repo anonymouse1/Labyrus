@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->start, SIGNAL(clicked()), this, SLOT(start()));
     QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setShown(bool)));
     QObject::connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(aboutQt()));
+    QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
     #ifdef PORTABLE
         prefix = "./";
@@ -79,4 +80,8 @@ void MainWindow::start() {
 
 void MainWindow::aboutQt() {
     QMessageBox::aboutQt(this);
+}
+
+void MainWindow::about() {
+    QMessageBox::about(this, "About Labyrus", tr("Labyrus is crossplatform game\n written with opengl and QT\nWritten by Vladislav Tyulbashev"));
 }
