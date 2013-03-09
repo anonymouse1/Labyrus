@@ -180,6 +180,7 @@ void MainWindow::syncNap(int a, int b, bool fly) {
                     break;
                 thread->leftPressed = true;
                 app->processEvents(QEventLoop::AllEvents);
+                sleep(5);
             }
         } else {
             while (input->angle < a - 1) {
@@ -187,6 +188,7 @@ void MainWindow::syncNap(int a, int b, bool fly) {
                    break;
                thread->rightPressed = true;
                app->processEvents(QEventLoop::AllEvents);
+               sleep(5);
             }
         }
     }
@@ -197,19 +199,23 @@ void MainWindow::syncNap(int a, int b, bool fly) {
 
     if ((input->h != 1) && (abs(b + input->angle + 90) > 3)) {
         thread->lookingDown = false;
-        while (-input->yAngle - 90 < b - 1) {
+        bool turned = false;
+        while (-input->yAngle - 90 < b) {
             if (stopBot)
                 break;
             thread->lookingUp = true;
             app->processEvents(QEventLoop::AllEvents);
+            sleep(5);
+            turned = true;
         }
 
         thread->lookingUp = false;
-        while (-input->yAngle - 90 > b + 1) {
+        while (!turned && (-input->yAngle - 90 > b)) {
             if (stopBot)
                 break;
             thread->lookingDown = true;
             app->processEvents(QEventLoop::AllEvents);
+            sleep(5);
         }
     }
 
@@ -222,12 +228,17 @@ void MainWindow::elementarMove(fpoint to) {
         return;
 
     int time = thread->currentTime;
-    while ((time + 85 > thread->currentTime) && (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) > 0.2)) {
+    fpoint prev = input->coord;
+    while (time + 85 > thread->currentTime) {
+        prev = input->coord;
         if (stopBot)
             break;
         thread->upPressed = true;
         app->processEvents();
-        sleep(1);
+        sleep(5);
+        if (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) >
+                sqrt(sqr(to.x - prev.x) + sqr(to.y - prev.y) + sqr(to.h - prev.h)))
+            break;
     }
     thread->upPressed = false;
 }
@@ -244,7 +255,7 @@ bool MainWindow::superDfs() {
     if (stopBot)
         return 1;
 
-    integerCoord = getRealCoord();
+//    integerCoord = getRealCoord();
 
     w[integerCoord.x][integerCoord.y][integerCoord.h] = true;
 
