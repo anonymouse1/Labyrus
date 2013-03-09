@@ -26,13 +26,16 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
         }
     }
     scanSkins();
+
+    ui->comboBox->setCurrentIndex(ui->comboBox->findText("default"));
+
     if (st) {
         QTimer::singleShot(100, this, SLOT(start()));
     } else {
         QObject::connect(ui->commandLinkButton, SIGNAL(clicked()), this, SLOT(start()));
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
+        loadSettings();
     }
-    ui->comboBox->setCurrentIndex(ui->comboBox->findText("default"));
     ui->commandLinkButton->setFocus();
 }
 
@@ -58,12 +61,6 @@ void startDialog::start() {
 }
 
 void startDialog::scanSkins() {
-    #ifdef PORTABLE
-        skinPath = "../skins/";
-    #else
-        skinPath = "/usr/share/labyrus/skins/";
-    #endif
-
     QFileInfoList list = QDir(skinPath).entryInfoList();
 
     for (int i = 0; i < list.size(); i++)
@@ -85,4 +82,28 @@ void startDialog::paintEvent(QPaintEvent *event) {
 
     p.end();
     event->accept();
+}
+
+void startDialog::saveSettings() {
+    QSettings s(settingsFile, QSettings::IniFormat);
+    s.setValue("dialogGeometry", QVariant(saveGeometry()));
+    s.setValue("ip", QVariant(ui->lineEdit_2->text()));
+    s.setValue("name", QVariant(ui->lineEdit->text()));
+    s.setValue("port", QVariant(ui->spinBox->value()));
+    s.setValue("fullscreen", QVariant(ui->fullScreen->checkState() == Qt::Checked));
+    s.setValue("skin", QVariant(ui->comboBox->currentText()));
+}
+
+void startDialog::loadSettings() {
+    QSettings s(settingsFile, QSettings::IniFormat);
+    restoreGeometry(s.value("dialogGeometry").toByteArray());
+    ui->lineEdit->setText(s.value("name", QVariant("127.0.0.1")).toString());
+    ui->lineEdit_2->setText(s.value("ip", QVariant("vlad")).toString());
+    ui->spinBox->setValue(s.value("port", QVariant(7777)).toInt());
+    ui->fullScreen->setChecked(s.value("fullscreen", QVariant(true)).toBool());
+    ui->comboBox->setCurrentIndex(ui->comboBox->findText(s.value("skin", QVariant("default")).toString()));
+}
+
+startDialog::~startDialog() {
+    saveSettings();
 }

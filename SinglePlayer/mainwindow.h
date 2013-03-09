@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QDebug>
+#include <QSettings>
 
 namespace Ui {
     class MainWindow;
@@ -18,11 +19,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     QString prefix;
+    QString settingsFile;
     ~MainWindow();
 private slots:
     void start();
     void aboutQt();
     void about();
+    void saveSettings();
+    void loadSettings();
 private:
     Ui::MainWindow *ui;
 };

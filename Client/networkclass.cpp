@@ -197,3 +197,7 @@ int NetworkClass::getFloor() {
 void NetworkClass::refreshCoords() {
     go("n\n" + QString::number(coord.x) + "\n" + QString::number(coord.y) + "\n" + QString::number(coord.h) + "\n");
 }
+
+void NetworkClass::runCommand(QString s) {
+    go(s);
+}

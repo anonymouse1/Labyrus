@@ -532,7 +532,7 @@ void DrawGl::drawText(double x, double y, double z, bool xForwarding, bool yForw
 void DrawGl::processText() {
     if (currentText == "")
         return;
-    a->go("I\n" + currentText);
+    emit runCommand("I\n" + currentText);
     currentText = currentText.toUpper();
     if (currentText == "EXIT") {
         legacy->legalStop();
@@ -541,7 +541,7 @@ void DrawGl::processText() {
     } else if (currentText == "STOP") {
         legacy->stopBot = true;
     } else if (currentText == "PING") {
-        a->go("p\n");
+        emit runCommand("p\n");
         a->pingTime = new QTime;
         a->pingTime->start();
     } else if (currentText == "HELP") {

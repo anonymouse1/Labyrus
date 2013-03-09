@@ -95,7 +95,8 @@ protected:
 //    void wheelEvent(QWheelEvent *);
 
 signals:
-    
+    void runCommand(QString);
+
 public slots:
     void onx();
     void drawFPS();

@@ -78,6 +78,7 @@ protected:
 
 public slots:
     void readInformation();
+    void runCommand(QString);
 
 private slots:
     void connectionEstablished();
@@ -89,7 +90,6 @@ signals:
     void successConnection();
     void connectionFailed();
     void gameStart();
-public slots:
     
 };
 

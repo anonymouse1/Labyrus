@@ -15,14 +15,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     #ifdef PORTABLE
         prefix = "./";
+        settingsFile = "../labyrus.ini";
     #else
         prefix = "/usr/bin/";
+        settingsFile = "~/.labyrus/labyrus.ini";
     #endif
 
-    ui->widget->hide();
+    loadSettings();
 }
 
 MainWindow::~MainWindow() {
+    saveSettings();
     delete ui;
 }
 
@@ -83,5 +86,32 @@ void MainWindow::aboutQt() {
 }
 
 void MainWindow::about() {
-    QMessageBox::about(this, "About Labyrus", tr("Labyrus is crossplatform game\n written with opengl and QT\nWritten by Vladislav Tyulbashev"));
+    QMessageBox::about(this, "About Labyrus", tr("Labyrus is crossplatform game written with opengl and QT Written by Vladislav Tyulbashev"));
+}
+
+void MainWindow::saveSettings() {
+    QSettings s(settingsFile, QSettings::IniFormat);
+    s.setValue("singlePlayerGeometry", QVariant(saveGeometry()));
+    s.setValue("name", QVariant(ui->name->text()));
+    s.setValue("size", QVariant(ui->fieldSize->value()));
+    s.setValue("height", QVariant(ui->heightOfField->value()));
+    s.setValue("cheats", QVariant(ui->cheats->checkState() == Qt::Checked));
+    s.setValue("allowRemoteConnections", QVariant(ui->allowConnections->checkState() == Qt::Checked));
+    s.setValue("strongNumberPlayers", QVariant(ui->strong->checkState() == Qt::Checked));
+    s.setValue("numberPlayers", QVariant(ui->numberPlayers->value()));
+    s.setValue("latency", QVariant(ui->spinBox->value()));
+}
+
+void MainWindow::loadSettings() {
+    QSettings s(settingsFile, QSettings::IniFormat);
+    restoreGeometry(s.value("singlePlayerGeometry").toByteArray());
+    ui->name->setText(s.value("name", QVariant("vlad")).toString());
+    ui->fieldSize->setValue(s.value("size", QVariant(10)).toInt());
+    ui->heightOfField->setValue(s.value("height", QVariant(1)).toInt());
+    ui->cheats->setChecked(s.value("cheats", QVariant(false)).toBool());
+    ui->allowConnections->setChecked(s.value("allowRemoteConnections", QVariant(false)).toBool());
+    ui->widget->setVisible(ui->allowConnections->checkState() == Qt::Checked);
+    ui->strong->setChecked(s.value("strongNumberPlayers", QVariant(false)).toBool());
+    ui->numberPlayers->setValue(s.value("numberPlayers", QVariant(1)).toInt());
+    ui->spinBox->setValue(s.value("latency", QVariant(25)).toInt());
 }

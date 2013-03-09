@@ -26,6 +26,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
     QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
     QObject::connect(checkOrDie, SIGNAL(timeout()), this, SLOT(checkForDie()));
+    QObject::connect(widget, SIGNAL(runCommand(QString)), input, SLOT(runCommand(QString)));
 
     ctrlPressed = false;
     widget->a = input;
@@ -255,7 +256,7 @@ bool MainWindow::superDfs() {
     if (stopBot)
         return 1;
 
-//    integerCoord = getRealCoord();
+    integerCoord = getRealCoord();
 
     w[integerCoord.x][integerCoord.y][integerCoord.h] = true;
 
