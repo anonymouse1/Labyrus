@@ -176,7 +176,7 @@ void MainWindow::syncNap(int a, int b, bool fly) {
     if (abs(input->angle - a) > 3) {
         if (input->angle + 180 < a) {
             input->angle += 360;
-            while (input->angle > a + 1) {
+            while (input->angle > a) {
                 if (stopBot)
                     break;
                 thread->leftPressed = true;
@@ -184,7 +184,7 @@ void MainWindow::syncNap(int a, int b, bool fly) {
                 sleep(5);
             }
         } else {
-            while (input->angle < a - 1) {
+            while (input->angle < a) {
                if (stopBot)
                    break;
                thread->rightPressed = true;
@@ -267,6 +267,7 @@ bool MainWindow::superDfs() {
         swap(sp[i], sp[rand() % i]);
 
     for (int i = 0; i < 6; i++) {
+        integerCoord = getRealCoord();
         if (sp[i] == 0)
             if (!w[integerCoord.x - 1][integerCoord.y][integerCoord.h] && !isWallLeft(integerCoord)) {
                 integerCoord.x -= 1;
@@ -448,6 +449,7 @@ gpoint MainWindow::getRealCoord() {
                 result.y = i;
             }
     result.h =  input->getFloor();
+    qDebug() << "result: " << result.x << result.y << result.h;
     return result;
 }
 

@@ -188,7 +188,7 @@ void NetworkClass::ping() {
 
 int NetworkClass::getFloor() {
     for (int i = 0; i <= h; i++)
-        if (i + 1 > coord.h)
+        if (i + 1 >= coord.h)
             return i;
 
     return 0;

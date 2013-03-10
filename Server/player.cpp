@@ -70,7 +70,7 @@ void Player::printString(QString s) {
 
 void Player::radiation() {
     sendingInformation.lock();
-    socket->write(QString("rad\n").toAscii());
+    socket->write(QString("rad\n").toLocal8Bit());
     sendingInformation.unlock();
 }
 

@@ -1,7 +1,7 @@
 #include "model.h"
 
 Model::Model(QString s) {
-    FILE *fin = fopen(s.toAscii(), "r");
+    FILE *fin = fopen(s.toLocal8Bit(), "r");
 
     char buf[255];
     assert(fscanf(fin, "%s", buf) == 1);

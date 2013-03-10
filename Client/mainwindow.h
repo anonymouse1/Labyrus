@@ -20,6 +20,7 @@
 #include <QTime>
 #include <QEventLoop>
 #include <QApplication>
+#include <QString>
 #include <networkclass.h>
 #include <drawgl.h>
 #include <assert.h>

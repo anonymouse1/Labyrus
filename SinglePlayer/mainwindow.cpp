@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
     QObject::connect(ui->start, SIGNAL(clicked()), this, SLOT(start()));
-    QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setShown(bool)));
+    QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setVisible(bool)));
     QObject::connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(aboutQt()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 

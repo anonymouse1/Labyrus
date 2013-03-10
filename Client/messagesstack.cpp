@@ -11,6 +11,9 @@ void MessagesStack::addMessage(QString s) {
     if (list.size() == 10)
         list.removeFirst();
 
+    if (s[s.length() - 1] == '\n')
+        s.remove(s.length() - 1, 1);
+
     list.append(s);
     if (list.size() != 10) {
         QTimer *timer = new QTimer;

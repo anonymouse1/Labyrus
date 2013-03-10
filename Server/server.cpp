@@ -78,8 +78,8 @@ void Server::processConnection(Player *player) {
     r[player->socketDescriptor] = player;
     names.insert(player->name);
     socket->write("success\n");
-    socket->write((QString::number(socket->socketDescriptor()) + "\n").toAscii());
-    socket->write((QString::number(latency) + "\n").toAscii());
+    socket->write((QString::number(socket->socketDescriptor()) + "\n").toLocal8Bit());
+    socket->write((QString::number(latency) + "\n").toLocal8Bit());
 
     player->socket = socket;
     player->patrons = 3;

@@ -102,6 +102,7 @@ void startDialog::loadSettings() {
     ui->spinBox->setValue(s.value("port", QVariant(7777)).toInt());
     ui->fullScreen->setChecked(s.value("fullscreen", QVariant(true)).toBool());
     ui->comboBox->setCurrentIndex(ui->comboBox->findText(s.value("skin", QVariant("default")).toString()));
+    setPix(ui->comboBox->currentText());
 }
 
 startDialog::~startDialog() {
