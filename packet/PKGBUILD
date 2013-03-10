@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesk="Qt Game written with OpenGL"
 arch=('i686' 'x86_64')
 license=('LGPL')
-depends=('qt5')
+depends=('qt5-base')
 makedepends=('git')
 
 _gitroot="git://gitorious.org/labyrus/labyrus.git"
