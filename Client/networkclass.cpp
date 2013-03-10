@@ -146,7 +146,7 @@ void NetworkClass::connectionEstablished() {
     go("Hello maze\n" + login, true);
     qDebug() << mainSocket->state();
     if (!mainSocket->canReadLine())
-        mainSocket->waitForReadyRead(100);
+        mainSocket->waitForReadyRead(1000);
 
     QString s = mainSocket->readLine();
     if (s != "success\n") {

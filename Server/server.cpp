@@ -34,7 +34,7 @@ void Server::die(QString s) {
     exit(0);
 }
 
-void Server::incomingConnection(int handle) {
+void Server::incomingConnection(qintptr handle) {
     qDebug() << "new connection detected " << handle;
     if (strongNumPlayers && (alreadyPlayers == numPlayers)) {
         qDebug() << "too many connections";

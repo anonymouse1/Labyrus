@@ -73,7 +73,7 @@ private:
 private slots:
     void forAllClients(QString);
 protected:
-    void incomingConnection(int handle);
+    void incomingConnection(qintptr handle);
 
 signals:
     void sendFields();
