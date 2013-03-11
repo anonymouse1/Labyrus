@@ -1,5 +1,5 @@
 pkgname=labyrus-git
-pkgver=20130310
+pkgver=20130311
 pkgrel=1
 pkgdesk="Qt Game written with OpenGL"
 arch=('i686' 'x86_64')
@@ -7,20 +7,14 @@ license=('LGPL')
 depends=('qt5-base')
 makedepends=('git')
 
-_gitroot="git://gitorious.org/labyrus/labyrus.git"
+_gitroot="https://git.gitorious.org/labyrus/labyrus.git"
 _gitname="labyrus"
 
 build() {
   cd $srcdir
+  rm -rf ./*
   msg "Conencting to the GIT server..."
-
-  if [[ -d $srcdir/$_gitname ]] ; then
-    cd $_gitname
-    git pull origin
-    msg "The local files are updated."
-  else
-    git clone $_gitroot --depth=1
-  fi
+  git clone $_gitroot
 
   msg "GIT checkout done"
   msg "Starting make"
