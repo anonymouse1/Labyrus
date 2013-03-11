@@ -97,8 +97,8 @@ void startDialog::saveSettings() {
 void startDialog::loadSettings() {
     QSettings s(settingsFile, QSettings::IniFormat);
     restoreGeometry(s.value("dialogGeometry").toByteArray());
-    ui->lineEdit->setText(s.value("name", QVariant("127.0.0.1")).toString());
-    ui->lineEdit_2->setText(s.value("ip", QVariant("vlad")).toString());
+    ui->lineEdit->setText(s.value("name", QVariant("vlad")).toString());
+    ui->lineEdit_2->setText(s.value("ip", QVariant("127.0.0.1")).toString());
     ui->spinBox->setValue(s.value("port", QVariant(7777)).toInt());
     ui->fullScreen->setChecked(s.value("fullscreen", QVariant(true)).toBool());
     ui->comboBox->setCurrentIndex(ui->comboBox->findText(s.value("skin", QVariant("default")).toString()));

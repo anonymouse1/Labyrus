@@ -18,7 +18,7 @@ const int dy[4]={1, 0, -1, 0};
     const QString settingsFile = "../labyrus.ini";
 #else
     const QString skinPath = "/usr/share/labyrus/skins/";
-    const QString settingsFile = "~/.labyrus/labyrus.ini";
+    const QString settingsFile = QDir::homePath() + "/.labyrus/labyrus.ini";
 #endif
 
 
