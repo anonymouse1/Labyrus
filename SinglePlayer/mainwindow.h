@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QSettings>
+#include <QDir>
+
 
 namespace Ui {
     class MainWindow;

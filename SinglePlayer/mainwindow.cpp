@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
         settingsFile = "../labyrus.ini";
     #else
         prefix = "/usr/bin/";
-        settingsFile = "~/.labyrus/labyrus.ini";
+        settingsFile = QDir::homePath() + "/.labyrus/labyrus.ini";
     #endif
 
     loadSettings();
