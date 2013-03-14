@@ -49,12 +49,16 @@ public:
     bool needRefreshCursor;
     double k;
     double f;
+    double mouseSensitivity;
     void initializeGL();
 
 private:
     void drawAxis();
     void drawMaze();
     void drawSkyBox();
+    void drawHeroes();
+    void drawCompass();
+    void drawHUD();
 
     void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
     void drawFloorPoint(double x1, double y1, double h, bool b);

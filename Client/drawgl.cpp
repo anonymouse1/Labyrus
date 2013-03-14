@@ -47,6 +47,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
+    mouseSensitivity = 1 / 3;
 }
 
 void DrawGl::initializeGL() {
@@ -76,7 +77,6 @@ void DrawGl::initializeGL() {
 }
 
 void DrawGl::resizeGL(int w, int h) {
-    qDebug() << "resizing widget";
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
@@ -113,6 +113,9 @@ void DrawGl::paintGL() {
     enableLight();
     drawSkyBox();
     drawMaze();
+    drawHeroes();
+    drawCompass();
+    drawHUD();
 }
 
 void DrawGl::drawAxis() {
@@ -244,100 +247,12 @@ void DrawGl::drawRoofPart(double x, double y, double h, int type, bool b) {
 
 void DrawGl::drawMaze() {
     qglColor(Qt::white);
-//    float dir[3] = {1, 1, 1};
-//    float pos[4] = {(a->coord.x() + animX) * k, (a->coord.y() + animY) * k, 0.1, 1};
-
-    /*glBegin(GL_TRIANGLES);
-        qglColor(Qt::gray);
-        for (int i = 0; i < a->m; i++) {
-            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
-            if (a->walls[i][2] == 0) {
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k - f, 0.0);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k - f, 0.0);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k - f, wallHeight);
-
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k + f, 0.0);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k + f, 0.0);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k + f, wallHeight);
-                //-----------------------------------------------
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k - f, 0.0);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k + f, 0.0);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k + f, wallHeight);
-
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k + f, wallHeight);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k - f, wallHeight);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k - f, 0.0);
-                //-----------------------------------------------
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k - f, wallHeight);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k - f, 0.0);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k - f, wallHeight);
-
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k + f, 0.0);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k + f, wallHeight);
-                glVertex3f(a->walls[i][0] * k, a->walls[i][1] * k + f, wallHeight);
-                //------------------------------------------------
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k - f, 0.0);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k + f, 0.0);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k + f, wallHeight);
-
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k + f, wallHeight);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k - f, wallHeight);
-                glVertex3f((a->walls[i][0] + 1) * k, a->walls[i][1] * k - f, 0.0);
-            } else {
-                glVertex3f(a->walls[i][0] * k - f, a->walls[i][1] * k, 0.0);
-                glVertex3f(a->walls[i][0] * k - f, (a->walls[i][1] + 1) * k, 0.0);
-                glVertex3f(a->walls[i][0] * k - f, (a->walls[i][1] + 1) * k, wallHeight);
-
-                glVertex3f(a->walls[i][0] * k + f, a->walls[i][1] * k, 0.0);
-                glVertex3f(a->walls[i][0] * k + f, (a->walls[i][1] + 1) * k, 0.0);
-                glVertex3f(a->walls[i][0] * k + f, (a->walls[i][1] + 1) * k, wallHeight);
-                //-------------------------------------------------
-                glVertex3f(a->walls[i][0] * k + f, a->walls[i][1] * k, 0.0);
-                glVertex3f(a->walls[i][0] * k + f, a->walls[i][1] * k, wallHeight);
-                glVertex3f(a->walls[i][0] * k - f, a->walls[i][1] * k, wallHeight);
-
-                glVertex3f(a->walls[i][0] * k - f, a->walls[i][1] * k, wallHeight);
-                glVertex3f(a->walls[i][0] * k + f, a->walls[i][1] * k, 0.0);
-                glVertex3f(a->walls[i][0] * k - f, a->walls[i][1] * k, 0.0);
-                //-------------------------------------------------
-                glVertex3f(a->walls[i][0] * k - f, (a->walls[i][1] + 1) * k, wallHeight);
-                glVertex3f(a->walls[i][0] * k - f, a->walls[i][1] * k, 0.0);
-                glVertex3f(a->walls[i][0] * k - f, a->walls[i][1] * k, wallHeight);
-
-                glVertex3f(a->walls[i][0] * k + f, (a->walls[i][1] + 1) * k, wallHeight);
-                glVertex3f(a->walls[i][0] * k + f, a->walls[i][1] * k, 0.0);
-                glVertex3f(a->walls[i][0] * k + f, a->walls[i][1] * k, wallHeight);
-                //---------------------------------------------------
-                glVertex3f(a->walls[i][0] * k + f, (a->walls[i][1] + 1) * k, 0.0);
-                glVertex3f(a->walls[i][0] * k + f, (a->walls[i][1] + 1) * k, wallHeight);
-                glVertex3f(a->walls[i][0] * k - f, (a->walls[i][1] + 1) * k, wallHeight);
-
-                glVertex3f(a->walls[i][0] * k - f, (a->walls[i][1] + 1) * k, wallHeight);
-                glVertex3f(a->walls[i][0] * k + f, (a->walls[i][1] + 1) * k, 0.0);
-                glVertex3f(a->walls[i][0] * k - f, (a->walls[i][1] + 1) * k, 0.0);
-            }
-        }
-
-        qglColor(Qt::black);
-        glVertex3f(0, 0, 0);
-        glVertex3f(0, 1, 0);
-        glVertex3f(1, 0, 0);
-
-        glVertex3f(0, 1, 0);
-        glVertex3f(1, 0, 0);
-        glVertex3f(1, 1, 0);
-    glEnd();
-*/
-
-
     loadTexture(textures[0]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
             double h = a->walls[i][2] * wallHeight;
-//            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
-
             if (a->walls[i][3] == 0) {
                 drawQuad(x, y - f, x + k, y - f, h, wallHeight);
                 drawQuad(x + k, y + f, x, y + f, h, wallHeight);
@@ -412,55 +327,7 @@ void DrawGl::drawMaze() {
     glEnd();
 
 
-    loadTexture(textures[model]);
-    qglColor(QColor(0, 0, 250));
-    for (int i = 0; i < a->otherHeroes; i++)
-        if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1) {
-            qglColor(QColor(0, a->otherAlive[i] * 200, 0));
-            renderText(a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k + k * 2, a->heroNames[i], hudFont);
-            I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k);
-        }
-//    qglColor(QColor(200, 150, 0));
     qglColor(Qt::blue);
-
-    renderText(5, 15, QString("From start game: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
-    renderText(5, this->height() - 20, QString("Alive status: " + QString::number(a->alive)), hudFont);
-    renderText(5, this->height() - 40, QString("patrons: ") + QString::number(a->patrons), hudFont);
-    renderText(5, this->height() - 60, QString("walls: ") + QString::number(a->wall), hudFont);
-    renderText(5, this->height() - 80, QString("destroy: ") + QString::number(a->destroy), hudFont);
-//    renderText(5, this->height() - 100, QString("debug: ") + QString::number(a->coord.x) + " " + QString::number(a->coord.y) + " " + QString::number(a->coord.h));
-    renderText(5, this->height() - 100, QString("Floor number: ") + QString::number(a->getFloor()), hudFont);
-    renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-
-    deleteTexture(textures[4]);
-    textures[4] = bindTexture(generateCompass(a->angle), GL_TEXTURE_2D);
-    begin2d();
-    loadTexture(textures[4]);
-    glBegin(GL_QUADS);
-        glVertex2d(this->width() - 200, 0);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width(), 0);
-        glTexCoord2d(0, 1);
-        glVertex2d(this->width(), 200);
-        glTexCoord2d(1, 1);
-        glVertex2d(this->width() - 200, 200);
-        glTexCoord2d(1, 0);
-    glEnd();
-    end2d();
-
-    glDisable(GL_BLEND);
-
-    qglColor(Qt::red);
-    if (enteringText)
-        renderText(5, this->height() - 120, "-" + currentText, hudFont);
-
-    loadTexture(textures[2]);
-    QList<QString> list = a->messages->getMessages();
-    for (int i = 0; i < list.size(); i++)
-        renderText(5, this->height() - 120 - 20 * (list.size() - i), list[i], hudFont);
 
     glLineWidth(1);
     drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
@@ -535,8 +402,8 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     if (botActive || (!this->isFullScreen()) || (legacy->thread->currentTime < 100))
         return;
 
-    double x = (event->x() - width() / 2) / 3;
-    double y = (event->y() - height() / 2) / 3;
+    double x = (event->x() - width() / 2) * mouseSensitivity;
+    double y = (event->y() - height() / 2)  * mouseSensitivity;
 
     QCursor::setPos(width() / 2, height() / 2);
 
@@ -643,4 +510,59 @@ void DrawGl::drawFloorPoint(double x, double y, double h, bool b) {
         glVertex3f(x * k, (y + 1) * k, h * k - k / 10);
         glTexCoord2d(0, 1);
     }
+}
+
+void DrawGl::drawHeroes() {
+    qglColor(Qt::black);
+    loadTexture(textures[model]);
+    for (int i = 0; i < a->otherHeroes; i++)
+        if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1) {
+            qglColor(QColor(0, a->otherAlive[i] * 200, 0));
+
+            renderText(a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k + 3 * f, a->heroNames[i], hudFont);
+            I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k);
+        }
+}
+
+void DrawGl::drawCompass() {
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
+    deleteTexture(textures[4]);
+    textures[4] = bindTexture(generateCompass(a->angle), GL_TEXTURE_2D);
+    begin2d();
+    loadTexture(textures[4]);
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() - 200, 0);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width(), 0);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width(), 200);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() - 200, 200);
+        glTexCoord2d(1, 0);
+    glEnd();
+    end2d();
+
+    glDisable(GL_BLEND);
+}
+
+void DrawGl::drawHUD() {
+    qglColor(Qt::blue);
+    renderText(5, 15, QString("From start game: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
+    renderText(5, this->height() - 20, QString("Alive status: " + QString::number(a->alive)), hudFont);
+    renderText(5, this->height() - 40, QString("patrons: ") + QString::number(a->patrons), hudFont);
+    renderText(5, this->height() - 60, QString("walls: ") + QString::number(a->wall), hudFont);
+    renderText(5, this->height() - 80, QString("destroy: ") + QString::number(a->destroy), hudFont);
+    renderText(5, this->height() - 100, QString("Floor number: ") + QString::number(a->getFloor()), hudFont);
+    renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
+
+    qglColor(Qt::red);
+    if (enteringText)
+        renderText(5, this->height() - 120, "-" + currentText, hudFont);
+
+    loadTexture(textures[2]);
+    QList<QString> list = a->messages->getMessages();
+    for (int i = 0; i < list.size(); i++)
+        renderText(5, this->height() - 120 - 20 * (list.size() - i), list[i], hudFont);
 }

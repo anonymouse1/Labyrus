@@ -17,7 +17,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     checkOrDie->start();
     login = l;
 
-    qDebug() << ip.toString();
+    qDebug() << "connecting to " + ip.toString() + ":" + QString::number(port);
     input = new NetworkClass(ip, port, QString::fromLocal8Bit(login));
 
     QObject::connect(repaintTimer, SIGNAL(timeout()), widget, SLOT(repaint()));
@@ -76,7 +76,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (key == Qt::Key_Control) {
         if (ctrlPressed)
             return;
-        qDebug() << "control detected";
         ctrlPressed = true;
         backupPerspective = widget->perspective;
         widget->perspective = 10;
@@ -93,7 +92,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
     /*if ((key == Qt::Key_Space) && (alive) && (patrons)) {
         taskKill();
-    } else if ((key == Qt::Key_B) && (alive) && (wall)) {it
+    } else if ((key == Qt::Key_B) && (alive) && (wall)) {
         if (nap == 2)
             createWall(coord.x(), coord.y(), 0);
         else if (nap == 3)

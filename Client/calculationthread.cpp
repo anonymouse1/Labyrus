@@ -136,7 +136,6 @@ void CalculationThread::check(double &dx, double &dy, double &dh) {
         } else if (main->walls[i][3] == 2) {
             checkForDhWall(dh, main->walls[i][0], main->walls[i][1], main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + 1);
             if ((main->walls[i][2] - k < main->coord.h) && (main->coord.h < main->walls[i][2] + k)) {
-                qDebug() << "checking" << rand();
                 checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0] + 1, main->walls[i][1]);
                 checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0], main->walls[i][1] + 1);
                 checkForWall(dx, dy, main->walls[i][0] + 1, main->walls[i][1], main->walls[i][0] + 1, main->walls[i][1] + 1);

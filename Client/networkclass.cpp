@@ -14,13 +14,13 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
 }
 
 void NetworkClass::run() {
-    pingTimer = new QTimer(this);
+    pingTimer = new QTimer();
     pingTimer->setInterval(1000);
     QObject::connect(pingTimer, SIGNAL(timeout()), this, SLOT(ping()));
-    serverRefresh = new QTimer(this);
+    serverRefresh = new QTimer();
     QObject::connect(serverRefresh, SIGNAL(timeout()), this, SLOT(refreshCoords()));
 
-    mainSocket = new QTcpSocket(this);
+    mainSocket = new QTcpSocket();
 
     mainSocket->moveToThread(this);
     pingTimer->moveToThread(this);
@@ -142,7 +142,7 @@ void NetworkClass::go(QString s, bool flush, bool addEndLine) {
 }
 
 void NetworkClass::connectionEstablished() {
-    qDebug() << "connection established" << this->currentThread();
+    qDebug() << "connection established";
     go("Hello maze\n" + login, true);
     qDebug() << mainSocket->state();
     if (!mainSocket->canReadLine())
@@ -187,11 +187,7 @@ void NetworkClass::ping() {
 }
 
 int NetworkClass::getFloor() {
-    for (int i = 0; i <= h; i++)
-        if (i + 1 >= coord.h)
-            return i;
-
-    return 0;
+    return coord.h;
 }
 
 void NetworkClass::refreshCoords() {

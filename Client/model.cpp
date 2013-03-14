@@ -5,7 +5,7 @@ Model::Model(QString s) {
 
     char buf[255];
     assert(fscanf(fin, "%s", buf) == 1);
-    if (buf != QString("#stdupid3dformat"))
+    if (QString(buf) != QString("#stupid3dformat"))
         qDebug() << "model data is not correct";
 
     assert(fscanf(fin, "%d", &n) == 1);
