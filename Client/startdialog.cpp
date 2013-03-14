@@ -71,7 +71,7 @@ void startDialog::scanSkins() {
 }
 
 void startDialog::setPix(QString s) {
-    pix = new QPixmap(skinPath + s + "/defaultWall.png");
+    pix = new QPixmap(skinPath + s + "/defaultWall.jpg");
     repaint();
 }
 
