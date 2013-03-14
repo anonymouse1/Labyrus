@@ -43,6 +43,7 @@ build() {
   cd ../Client
   qmake -makefile
   make
+  lrelease -compress ru_RU.tr
   cd ../Server
   qmake -makefile
   make
@@ -55,8 +56,10 @@ package() {
   cd ${srcdir}/build
   mkdir -p ../../pkg/usr/bin
   mkdir -p ../../pkg/usr/share/labyrus
+  mkdir -p ../../pkg/usr/share/labyrus/translations/
   cp -rf Server/Server ../../pkg/usr/bin/labyrus-server
   cp -rf Client/Client ../../pkg/usr/bin/labyrus-client
+  cp -rf Client/ru_RU.qm ../../pkg/usr/bin/labyrus/translations/labyrus-ru_RU.qm
   cp -rf SinglePlayer/SinglePlayer ../../pkg/usr/bin/labyrus-singleplayer
   cp -rf skins ../../pkg/usr/share/labyrus/
 }
