@@ -22,8 +22,9 @@ enum {
     roof = 2,
     Floor = 3,
     compass = 4,
-    realRoof = 5,
-    model = 6
+    sky = 5,
+    model = 6,
+    realRoof = 7
 };
 
 class DrawGl : public QGLWidget
@@ -55,16 +56,16 @@ private:
     void drawMaze();
     void drawSkyBox();
 
-    void drawQuad(double x1, double y1, double x2, double y2, double h);
-    void drawFloorPoint(double x1, double y1, double h);
-    void drawRoofPart(double x, double y, double h, int type);
+    void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
+    void drawFloorPoint(double x1, double y1, double h, bool b);
+    void drawRoofPart(double x, double y, double h, int type, bool b);
     void loadTexture(GLuint);
 
     void drawText(double x, double y, double z, bool xForwarding, bool yForwarding, QString s);
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[7];
+    GLuint textures[8];
     GLuint superFontList;
     QString currentText;
     bool enteringText;

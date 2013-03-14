@@ -52,15 +52,17 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 void DrawGl::initializeGL() {
     qglClearColor(Qt::gray);
     glEnable(GL_DEPTH_TEST);
-//    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.png"), GL_TEXTURE_2D);
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.png"), GL_TEXTURE_2D);
     textures[2] = bindTexture(QPixmap(skinPath + "/roof.png"), GL_TEXTURE_2D);
     textures[3] = bindTexture(QPixmap(skinPath + "/floor.png"), GL_TEXTURE_2D);
     textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
-    textures[5] = bindTexture(QPixmap(skinPath + "/realRoof.png"), GL_TEXTURE_2D);
+    textures[5] = bindTexture(QPixmap(skinPath + "/sky.png"), GL_TEXTURE_2D);
     textures[6] = bindTexture(QPixmap(skinPath + "/model.png"), GL_TEXTURE_2D);
+    textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.png"), GL_TEXTURE_2D);
+
 
     I = new Model(skinPath + "/simple.s3d");
 
@@ -184,36 +186,58 @@ void DrawGl::drawSkyBox() {
     glEnd();
 }
 
-void DrawGl::drawQuad(double x1, double y1, double x2, double y2, double h) {
-    glVertex3f(x1, y1, h + wallHeight);
+void DrawGl::drawQuad(double x1, double y1, double x2, double y2, double h, double height) {
+    glVertex3f(x1, y1, h + height);
     glTexCoord2d(0, 0);
     glVertex3f(x1, y1, h);
     glTexCoord2d(1, 0);
     glVertex3f(x2, y2, h);
     glTexCoord2d(1, 1);
-    glVertex3f(x2, y2, h + wallHeight);
+    glVertex3f(x2, y2, h + height);
     glTexCoord2d(0, 1);
 }
 
-void DrawGl::drawRoofPart(double x, double y, double h, int type) {
+void DrawGl::drawRoofPart(double x, double y, double h, int type, bool b) {
     if (type == 1) {
-        glVertex3f(x - f, y + k, h + eps);
-        glTexCoord2d(0, 1);
-        glVertex3f(x - f, y, h + eps);
-        glTexCoord2d(0, 0);
-        glVertex3f(x + f, y, h + eps);
-        glTexCoord2d(1, 0);
-        glVertex3f(x + f, y + k, h + eps);
-        glTexCoord2d(1, 1);
+        if (b) {
+            glVertex3f(x - f, y + k, h + eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x - f, y, h + eps);
+            glTexCoord2d(0, 0);
+            glVertex3f(x + f, y, h + eps);
+            glTexCoord2d(1, 0);
+            glVertex3f(x + f, y + k, h + eps);
+            glTexCoord2d(1, 1);
+        } else {
+            glVertex3f(x + f, y, h + eps);
+            glTexCoord2d(1, 0);
+            glVertex3f(x - f, y, h + eps);
+            glTexCoord2d(0, 0);
+            glVertex3f(x - f, y + k, h + eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x + f, y + k, h + eps);
+            glTexCoord2d(1, 1);
+        }
     } else if (type == 0) {
-        glVertex3f(x + k, y + f, h + eps);
-        glTexCoord2d(1, 0);
-        glVertex3f(x, y + f, h + eps);
-        glTexCoord2d(0, 0);
-        glVertex3f(x, y - f, h + eps);
-        glTexCoord2d(0, 1);
-        glVertex3f(x + k, y - f, h + eps);
-        glTexCoord2d(1, 1);
+        if (b) {
+            glVertex3f(x + k, y + f, h + eps);
+            glTexCoord2d(1, 0);
+            glVertex3f(x, y + f, h + eps);
+            glTexCoord2d(0, 0);
+            glVertex3f(x, y - f, h + eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x + k, y - f, h + eps);
+            glTexCoord2d(1, 1);
+        } else {
+            glVertex3f(x, y - f, h + eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x, y + f, h + eps);
+            glTexCoord2d(0, 0);
+            glVertex3f(x + k, y + f, h + eps);
+            glTexCoord2d(1, 0);
+            glVertex3f(x + k, y - f, h + eps);
+            glTexCoord2d(1, 1);
+        }
     }
 }
 
@@ -314,11 +338,16 @@ void DrawGl::drawMaze() {
 //            glColor3ub((a->walls[i][0] + 1) * 10, (a->walls[i][1] + 1) * 10, (a->walls[i][2] + 1) * 100);
 
             if (a->walls[i][3] == 0) {
-                drawQuad(x, y - f, x + k, y - f, h);
-                drawQuad(x + k, y + f, x, y + f, h);
+                drawQuad(x, y - f, x + k, y - f, h, wallHeight);
+                drawQuad(x + k, y + f, x, y + f, h, wallHeight);
             } else if (a->walls[i][3] == 1) {
-                drawQuad(x + f, y, x + f, y + k, h);
-                drawQuad(x - f, y + k, x - f, y, h);
+                drawQuad(x + f, y, x + f, y + k, h, wallHeight);
+                drawQuad(x - f, y + k, x - f, y, h, wallHeight);
+            } else {
+                drawQuad(x, y, x + k, y, h - f, f * 2);
+                drawQuad(x, y + k, x, y, h - f, f * 2);
+                drawQuad(x + k, y, x + k, y + k, h - f, f * 2);
+                drawQuad(x + k, y + k, x, y + k, h - f, f * 2);
             }
         }
     glEnd();
@@ -330,11 +359,11 @@ void DrawGl::drawMaze() {
             double y = a->walls[i][1] * k;
             double h = a->walls[i][2] * wallHeight;
             if (a->walls[i][3] == 0) {
-                drawQuad(x, y + f, x, y - f, h);
-                drawQuad(x + k, y - f, x + k, y + f, h);
+                drawQuad(x, y + f, x, y - f, h, wallHeight);
+                drawQuad(x + k, y - f, x + k, y + f, h, wallHeight);
             } else if (a->walls[i][3] == 1) {
-                drawQuad(x - f, y, x + f, y, h);
-                drawQuad(x + f, y + k, x - f, y + k, h);
+                drawQuad(x - f, y, x + f, y, h, wallHeight);
+                drawQuad(x + f, y + k, x - f, y + k, h, wallHeight);
             }
         }
     glEnd();
@@ -345,8 +374,8 @@ void DrawGl::drawMaze() {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
             double h = a->walls[i][2] * wallHeight;
-            drawRoofPart(x, y, h, a->walls[i][3]);
-            drawRoofPart(x, y, h + wallHeight, a->walls[i][3]);
+            drawRoofPart(x, y, h, a->walls[i][3], false);
+            drawRoofPart(x, y, h + wallHeight, a->walls[i][3], true);
         }
     glEnd();
 
@@ -364,9 +393,21 @@ void DrawGl::drawMaze() {
                 glTexCoord2d(1, 0);
             }
 
+    glEnd();
+
+    loadTexture(textures[realRoof]);
+    glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++)
             if ((a->walls[i][3] == 2) && (a->h != 1))
-                drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2]);
+                drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2], false);
+
+    glEnd();
+
+    loadTexture(textures[Floor]);
+    glBegin(GL_QUADS);
+        for (int i = 0; i < a->m; i++)
+            if ((a->walls[i][3] == 2) && (a->h != 1))
+                drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2], true);
     glEnd();
 
 
@@ -374,16 +415,10 @@ void DrawGl::drawMaze() {
     qglColor(QColor(0, 0, 250));
     for (int i = 0; i < a->otherHeroes; i++)
         if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1) {
-//            glVertex3f(a->heroes[i].x() * k + k / 2, a->heroes[i].y() * k + k / 2, wallHeight / 2);
             qglColor(QColor(0, a->otherAlive[i] * 200, 0));
             renderText(a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k + k * 2, a->heroNames[i], hudFont);
             I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k);
         }
-//    paintEngine()->drawEllipse(QRect(0, 0, 10, 10));
-//    paintEngine()->setActive(true);
-//    qDebug() << paintEngine()->isActive();
-//    paintEngine()->drawEllipse(QRect(1, 1, 10, 10));
-
 //    qglColor(QColor(200, 150, 0));
     qglColor(Qt::blue);
 
@@ -587,13 +622,24 @@ QPixmap DrawGl::generateCompass(double angle) {
     return res;
 }
 
-void DrawGl::drawFloorPoint(double x, double y, double h) {
-    glVertex3f(x * k, y * k, h * k);
-    glTexCoord2d(0, 0);
-    glVertex3f(x * k, (y + 1) * k, h * k);
-    glTexCoord2d(0, 1);
-    glVertex3f((x + 1) * k, (y + 1) * k, h * k);
-    glTexCoord2d(1, 1);
-    glVertex3f((x + 1) * k, y * k, h * k);
-    glTexCoord2d(1, 0);
+void DrawGl::drawFloorPoint(double x, double y, double h, bool b) {
+    if (b) {
+        glVertex3f((x + 1) * k, (y + 1) * k, h * k + k / 10);
+        glTexCoord2d(1, 1);
+        glVertex3f(x * k, (y + 1) * k, h * k + k / 10);
+        glTexCoord2d(0, 1);
+        glVertex3f(x * k, y * k, h * k + k / 10);
+        glTexCoord2d(0, 0);
+        glVertex3f((x + 1) * k, y * k, h * k + k / 10);
+        glTexCoord2d(1, 0);
+    } else {
+        glVertex3f((x + 1) * k, (y + 1) * k, h * k - k / 10);
+        glTexCoord2d(1, 1);
+        glVertex3f((x + 1) * k, y * k, h * k - k / 10);
+        glTexCoord2d(1, 0);
+        glVertex3f(x * k, y * k, h * k - k / 10);
+        glTexCoord2d(0, 0);
+        glVertex3f(x * k, (y + 1) * k, h * k - k / 10);
+        glTexCoord2d(0, 1);
+    }
 }
