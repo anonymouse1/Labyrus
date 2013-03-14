@@ -74,18 +74,26 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     else if (key == Qt::Key_Shift)
         thread->shiftPressed = true;
     else if (key == Qt::Key_Control) {
+        if (ctrlPressed)
+            return;
+        qDebug() << "control detected";
         ctrlPressed = true;
         backupPerspective = widget->perspective;
         widget->perspective = 10;
         widget->needRefreshCursor = false;
-        widget->resize(widget->width(), widget->height() - 1);
+        #ifdef BEAUTIFULL_BUGS
+            widget->resize(widget->width(), widget->height() - 1);
+        #else
+            widget->resize(widget->width(), widget->height() - 1);
+            widget->resize(widget->width(), widget->height() + 1);
+        #endif
     }
 
 
 
     /*if ((key == Qt::Key_Space) && (alive) && (patrons)) {
         taskKill();
-    } else if ((key == Qt::Key_B) && (alive) && (wall)) {
+    } else if ((key == Qt::Key_B) && (alive) && (wall)) {it
         if (nap == 2)
             createWall(coord.x(), coord.y(), 0);
         else if (nap == 3)
@@ -137,6 +145,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         widget->perspective = backupPerspective;
         widget->needRefreshCursor = false;
         widget->resize(widget->width(), widget->height() - 1);
+        widget->resize(widget->width(), widget->height() + 1);
     }
 }
 

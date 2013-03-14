@@ -76,6 +76,7 @@ void DrawGl::initializeGL() {
 }
 
 void DrawGl::resizeGL(int w, int h) {
+    qDebug() << "resizing widget";
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
