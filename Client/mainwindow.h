@@ -68,7 +68,7 @@ private:
 
     bool superDfs();
     void elementarMove(fpoint to);
-    void syncNap(int, int, bool);
+    void syncNap(int, int);
     void standartMove(fpoint from, fpoint to);
 
     double fabs(double);

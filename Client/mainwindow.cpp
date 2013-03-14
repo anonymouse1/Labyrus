@@ -174,7 +174,7 @@ void MainWindow::startBot() {
     input->messages->addMessage("BOT finished");
 }
 
-void MainWindow::syncNap(int a, int b, bool fly) {
+void MainWindow::syncNap(int a, int b) {
     if (stopBot)
         return;
 
@@ -253,10 +253,10 @@ void MainWindow::elementarMove(fpoint to) {
 }
 
 void MainWindow::standartMove(fpoint from, fpoint to) {
-    syncNap(getAngle(input->coord.x, input->coord.y, to.x, to.y), getYAngle(sqrt(sqr(input->coord.x - to.x) + sqr(input->coord.y - to.y) + sqr(input->coord.h - to.h)), input->coord.h, to.h), false);
+    syncNap(getAngle(input->coord.x, input->coord.y, to.x, to.y), getYAngle(sqrt(sqr(input->coord.x - to.x) + sqr(input->coord.y - to.y) + sqr(input->coord.h - to.h)), input->coord.h, to.h));
     elementarMove(to);
     superDfs();
-    syncNap(getAngle(input->coord.x, input->coord.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - input->coord.x) + sqr(from.y - input->coord.y) + sqr(from.h - input->coord.h)), input->coord.h, from.h), false);
+    syncNap(getAngle(input->coord.x, input->coord.y, from.x, from.y), getYAngle(sqrt(sqr(from.x - input->coord.x) + sqr(from.y - input->coord.y) + sqr(from.h - input->coord.h)), input->coord.h, from.h);
     elementarMove(from);
 }
 
