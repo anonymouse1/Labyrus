@@ -43,8 +43,8 @@ MainWindow::~MainWindow() {
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
-    QString text = event->text();
-    if ((key == Qt::Key_Z) || (text == tr("z"))) {
+    QString text = event->text().toUpper();
+    if ((key == Qt::Key_Z) || (text == tr("Z"))) {
         if (!widget->isFullScreen())
             widget->showFullScreen();
         else
@@ -52,23 +52,23 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     }
 
     if (input->cheats) {
-        if ((key == Qt::Key_Q) || (text == tr("q")))
+        if ((key == Qt::Key_Q) || (text == tr("Q")))
             input->coord.h += 0.1;
-        else if ((key == Qt::Key_E) || (text == tr("e")))
+        else if ((key == Qt::Key_E) || (text == tr("E")))
             input->coord.h -= 0.1;
     }
 
-    if ((key == Qt::Key_W) || (text == tr("w")))
+    if ((key == Qt::Key_W) || (text == tr("W")))
         thread->upPressed = true;
-    else if ((key == Qt::Key_S) || (text == tr("s")))
+    else if ((key == Qt::Key_S) || (text == tr("S")))
         thread->downPressed = true;
     else if (key == Qt::Key_Left)
         thread->leftPressed = true;
     else if (key == Qt::Key_Right)
         thread->rightPressed = true;
-    else if ((key == Qt::Key_A) || (text == tr("a")))
+    else if ((key == Qt::Key_A) || (text == tr("A")))
         thread->leftStrife = true;
-    else if ((key == Qt::Key_D) || (text == tr("d")))
+    else if ((key == Qt::Key_D) || (text == tr("D")))
         thread->rightStrife = true;
     else if (key == Qt::Key_Up)
         thread->lookingUp = true;
@@ -123,18 +123,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     int key = event->key();
-    QString text = event->text();
-    if ((key == Qt::Key_W) || (text == tr("w")))
+    QString text = event->text().toUpper();
+    if ((key == Qt::Key_W) || (text == tr("W")))
         thread->upPressed = false;
     else if (key == Qt::Key_Left)
         thread->leftPressed = false;
     else if (key == Qt::Key_Right)
         thread->rightPressed = false;
-    else if ((key == Qt::Key_S) || (text == tr("s")))
+    else if ((key == Qt::Key_S) || (text == tr("S")))
         thread->downPressed = false;
-    else if ((key == Qt::Key_A) || (text == tr("a")))
+    else if ((key == Qt::Key_A) || (text == tr("A")))
         thread->leftStrife = false;
-    else if ((key == Qt::Key_D) || (text == tr("d")))
+    else if ((key == Qt::Key_D) || (text == tr("D")))
         thread->rightStrife = false;
     else if (event->key() == Qt::Key_Up)
         thread->lookingUp = false;
