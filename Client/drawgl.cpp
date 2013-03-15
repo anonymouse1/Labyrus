@@ -259,7 +259,7 @@ void DrawGl::drawMaze() {
             } else if (a->walls[i][3] == 1) {
                 drawQuad(x + f, y, x + f, y + k, h, wallHeight);
                 drawQuad(x - f, y + k, x - f, y, h, wallHeight);
-            } else {
+            } else if (a->h != 1) {
                 drawQuad(x, y, x + k, y, h - f, f * 2);
                 drawQuad(x, y + k, x, y, h - f, f * 2);
                 drawQuad(x + k, y, x + k, y + k, h - f, f * 2);
@@ -336,7 +336,7 @@ void DrawGl::drawMaze() {
 //    if (ztra < -wallHeight)
 //        I->draw(1 / sizeView / 10, a->coord.x() * k, a->coord.y() * k, wallHeight / 3);
     if (startingGame)
-        renderText(this->width() / 2 - 100, this->height() / 2, QString("Starting after ") + QString::number((3000 - startAfter) / 1000) + QString(" seconds"), hudFont);
+        renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - startAfter) / 1000) + QString(" seconds"), hudFont);
 }
 
 void DrawGl::onx() {

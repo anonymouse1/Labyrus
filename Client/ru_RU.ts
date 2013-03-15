@@ -6,45 +6,50 @@
     <message>
         <location filename="connection.ui" line="26"/>
         <source>Connecting</source>
-        <translation type="unfinished">Подключение</translation>
+        <translation>Подключение</translation>
     </message>
     <message>
         <location filename="connection.ui" line="32"/>
         <source>Connecting to</source>
-        <translation type="unfinished">Подключаемся к</translation>
+        <translation>Подключаемся к</translation>
     </message>
     <message>
         <location filename="connection.ui" line="39"/>
         <source>Please wait...</source>
-        <translation type="unfinished">Пожалуйста, ждите...</translation>
+        <translation>Пожалуйста, ждите...</translation>
     </message>
 </context>
 <context>
     <name>DrawGl</name>
     <message>
+        <location filename="drawgl.cpp" line="339"/>
+        <source>Starting after </source>
+        <translation>Старт через</translation>
+    </message>
+    <message>
         <location filename="drawgl.cpp" line="552"/>
         <source>From start game: </source>
-        <translation type="unfinished">Со старта игры:</translation>
+        <translation>Со старта игры:</translation>
     </message>
     <message>
         <location filename="drawgl.cpp" line="553"/>
         <source>Alive status: </source>
-        <translation type="unfinished">Живой:</translation>
+        <translation>Живой:</translation>
     </message>
     <message>
         <location filename="drawgl.cpp" line="554"/>
         <source>patrons: </source>
-        <translation type="unfinished">Патронов:</translation>
+        <translation>Патронов:</translation>
     </message>
     <message>
         <location filename="drawgl.cpp" line="555"/>
         <source>walls: </source>
-        <translation type="unfinished">Стен:</translation>
+        <translation>Стен:</translation>
     </message>
     <message>
         <location filename="drawgl.cpp" line="556"/>
         <source>destroy: </source>
-        <translation type="unfinished">Гранат:</translation>
+        <translation>Гранат:</translation>
     </message>
     <message>
         <location filename="drawgl.cpp" line="557"/>
@@ -57,37 +62,37 @@
     <message>
         <location filename="startDialog.ui" line="32"/>
         <source>Maze</source>
-        <translation type="unfinished">Лабиринт</translation>
+        <translation>Лабиринт</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="49"/>
         <source>Login</source>
-        <translation type="unfinished">Логин</translation>
+        <translation>Логин</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="62"/>
         <source>vlad</source>
-        <translation type="unfinished">Влад</translation>
+        <translation>Влад</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="78"/>
         <source>start!</source>
-        <translation type="unfinished">Старт!</translation>
+        <translation>Старт!</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="102"/>
         <source>Ip</source>
-        <translation type="unfinished">Ip</translation>
+        <translation>Ip</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="115"/>
         <source>127.0.0.1</source>
-        <translation type="unfinished">127.0.0.1</translation>
+        <translation>127.0.0.1</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="136"/>
         <source>Port</source>
-        <translation type="unfinished">порт</translation>
+        <translation>порт</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="170"/>
@@ -97,7 +102,7 @@
     <message>
         <location filename="startDialog.ui" line="200"/>
         <source>FullScreen</source>
-        <translation type="unfinished">Полноэкранный режим</translation>
+        <translation>Полноэкранный режим</translation>
     </message>
 </context>
 <context>
@@ -110,36 +115,36 @@
     <message>
         <location filename="mainwindow.cpp" line="53"/>
         <source>q</source>
-        <translation type="unfinished">й</translation>
+        <translation>й</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="55"/>
         <source>e</source>
-        <translation type="unfinished">у</translation>
+        <translation>у</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="59"/>
         <location filename="mainwindow.cpp" line="123"/>
         <source>w</source>
-        <translation type="unfinished">ц</translation>
+        <translation>ц</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="61"/>
         <location filename="mainwindow.cpp" line="129"/>
         <source>s</source>
-        <translation type="unfinished">ы</translation>
+        <translation>ы</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="67"/>
         <location filename="mainwindow.cpp" line="131"/>
         <source>a</source>
-        <translation type="unfinished">ф</translation>
+        <translation>ф</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="69"/>
         <location filename="mainwindow.cpp" line="133"/>
         <source>d</source>
-        <translation type="unfinished">в</translation>
+        <translation>в</translation>
     </message>
 </context>
 </TS>

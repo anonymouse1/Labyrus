@@ -3,7 +3,7 @@
 
 MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
-    int n = 15;
+    int n = 100;
     int h = 1;
     int latency = 50;
     int players = 1;
@@ -65,6 +65,8 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
                 die("invalid number");
         }
 
+    if (n * n * h > 3000)
+        die("The maze is too big");
     server = new Server(port, radiation, cheats, silence, n, h, latency, players, strong, this);
 }
 

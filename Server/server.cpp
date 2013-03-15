@@ -283,15 +283,34 @@ void Server::generateMap() {
 
     qsrand(QDateTime::currentDateTime().toMSecsSinceEpoch());
 
-    for (int i = 0; i < 3000; i++) {
-        if (i % 300 == 0)
-            if (!silence)
-                qDebug() << i / 300 * 10 << "%";
+    int tmpWalls[n * n * h * 3][4];
+    int cur = 0;
 
-        walls[m][0] = qrand() % n;
-        walls[m][1] = qrand() % n;
-        walls[m][2] = qrand() % h;
-        walls[m][3] = qrand() % 3;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            for (int k = 0; k < h; k++)
+                for (int z = 0; z < 3; z++) {
+                    tmpWalls[cur][0] = i;
+                    tmpWalls[cur][1] = j;
+                    tmpWalls[cur][2] = k;
+                    tmpWalls[cur][3] = z;
+                    cur++;
+                }
+
+    for (int i = 1; i < cur; i++) {
+        int j = qrand() % i;
+        for (int k = 0; k < 4; k++)
+            swap(tmpWalls[i][k], tmpWalls[j][k]);
+    }
+
+    for (int i = 0; i < cur; i++) {
+        if (i % (cur / 10) == 0)
+            if (!silence)
+                qDebug() << i / (cur / 10) * 10 << "%";
+
+        for (int k = 0; k < 4; k++)
+            walls[m][k] = tmpWalls[i][k];
+
         bool b = false;
         for (int i = 0; i < m; i++)
             if ((walls[i][0] == walls[m][0]) &&
