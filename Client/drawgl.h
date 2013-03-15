@@ -31,7 +31,7 @@ class DrawGl : public QGLWidget
 {
     Q_OBJECT
 public:
-    explicit DrawGl(QApplication *app, QString skin, QWidget *parent = 0);
+    explicit DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent = 0);
     NetworkClass *a;
     MainWindow *legacy;
     QApplication *application;
@@ -41,7 +41,7 @@ public:
     GLfloat animX, animY;
     GLfloat nSca;
     GLfloat xtra, ytra, ztra;
-    QFont hudFont;
+    QFont hudFont, menuFont;
     bool startingGame;
     qreal startAfter;
     bool botActive;
@@ -59,6 +59,7 @@ private:
     void drawHeroes();
     void drawCompass();
     void drawHUD();
+    void drawMenu();
 
     void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
     void drawFloorPoint(double x1, double y1, double h, bool b);

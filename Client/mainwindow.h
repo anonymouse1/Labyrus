@@ -40,7 +40,7 @@ class MainWindow : public QObject
     Q_OBJECT
     
 public:
-    explicit MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArray l, QString skin, QObject *parent = 0);
+    explicit MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArray l, QString skin, double mouseSensitivity, QObject *parent = 0);
     ~MainWindow();
 
     void startBot();

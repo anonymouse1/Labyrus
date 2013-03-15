@@ -35,6 +35,7 @@ private:
     QPixmap *pix;
     Connection *connectWindow;
     QApplication *app;
+    double mouseSensitivity;
 
     void scanSkins();
 protected:

@@ -3,7 +3,7 @@
 const double animXY = 0.01;
 const double animZRotone = 1;
 
-MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArray l,  QString skin, QObject *parent) :
+MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArray l,  QString skin, double mouseSensitivity, QObject *parent) :
     QObject(parent)
 {
     app = a;
@@ -12,8 +12,10 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     checkOrDie = new QTimer;
     checkOrDie->setInterval(10000);
     stopBot = false;
-    widget = new DrawGl(app, skin);
+    widget = new DrawGl(app, skin, mouseSensitivity);
     widget->legacy = this;
+    widget->setMinimumHeight(480);
+    widget->setMinimumWidth(640);
     checkOrDie->start();
     login = l;
 
@@ -87,6 +89,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
             widget->resize(widget->width(), widget->height() - 1);
             widget->resize(widget->width(), widget->height() + 1);
         #endif
+    } else if (key == Qt::Key_Escape) {
+        input->escapeMode = !input->escapeMode;
     }
 
 

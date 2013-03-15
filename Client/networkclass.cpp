@@ -11,6 +11,7 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     cheats = false;
     fullRefresh = true;
     messages = new MessagesStack;
+    escapeMode = false;
 }
 
 void NetworkClass::run() {

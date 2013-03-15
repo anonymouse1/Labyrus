@@ -52,6 +52,7 @@ public:
     QString login;
     MessagesStack *messages;
     QTime *pingTime;
+    bool escapeMode;
 
     int latency;
 

@@ -2,7 +2,7 @@
 #include <QtOpenGL/QGLWidget>
 #include <GL/glu.h>
 
-DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
+DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     QGLWidget(parent)
 {
     application = app;
@@ -24,17 +24,14 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
     startingGame = false;
 
     hudFont = QFont("FreeSans", 15, 20, true);
+    menuFont = QFont("FreeSans", 30, 40, true);
 
-//    t = new QTimer;
     timeFPS = new QTimer;
-//    t->setInterval(3);
     timeFPS->setInterval(1000);
     startAfter = 666;
 
-//    QObject::connect(t, SIGNAL(timeout()), this, SLOT(onx()));
     QObject::connect(timeFPS, SIGNAL(timeout()), this, SLOT(drawFPS()));
     this->setFocus();
-//    t->start();
     timeFPS->start();
 
 
@@ -47,7 +44,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
-    mouseSensitivity = 1 / 3.0;
+    mouseSensitivity = mouse;
 }
 
 void DrawGl::initializeGL() {
@@ -116,6 +113,8 @@ void DrawGl::paintGL() {
     drawHeroes();
     drawCompass();
     drawHUD();
+    if (a->escapeMode)
+        drawMenu();
 }
 
 void DrawGl::drawAxis() {
@@ -356,6 +355,9 @@ void DrawGl::drawFPS() {
 
 void DrawGl::keyPressEvent(QKeyEvent *event) {
     if (event->key() == (Qt::Key_Enter xor 1)) {
+        if (a->escapeMode)
+            legacy->legalStop();
+
         enteringText = !enteringText;
         if (!enteringText)
             processText();
@@ -399,7 +401,10 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (botActive || (!this->isFullScreen()) || (legacy->thread->currentTime < 100))
+    if (legacy->thread->currentTime < 100)
+        QCursor::setPos(width() / 2, height() / 2);
+
+    if (botActive || (!this->isFullScreen()))
         return;
 
     double x = (event->x() - width() / 2) * mouseSensitivity;
@@ -410,7 +415,7 @@ void DrawGl::mouseMoveEvent(QMouseEvent *event) {
     a->angle += x;
     a->yAngle += y;
     a->checkAngles();
-//    qDebug() << event->x() - width() / 2 - this->pos().x();
+    event->accept();
 }
 
 
@@ -565,4 +570,8 @@ void DrawGl::drawHUD() {
     QList<QString> list = a->messages->getMessages();
     for (int i = 0; i < list.size(); i++)
         renderText(5, this->height() - 120 - 20 * (list.size() - i), list[i], hudFont);
+}
+
+void DrawGl::drawMenu() {
+    renderText(this->width() / 2, this->height() / 2, tr("Exit?"), menuFont);
 }
