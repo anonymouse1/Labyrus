@@ -29,7 +29,7 @@
     <message>
         <location filename="drawgl.cpp" line="553"/>
         <source>Alive status: </source>
-        <translation type="unfinished">Живаой:</translation>
+        <translation type="unfinished">Живой:</translation>
     </message>
     <message>
         <location filename="drawgl.cpp" line="554"/>
@@ -92,7 +92,7 @@
     <message>
         <location filename="startDialog.ui" line="170"/>
         <source>Skin</source>
-        <translation type="unfinished">Скин</translation>
+        <translation>Скин</translation>
     </message>
     <message>
         <location filename="startDialog.ui" line="200"/>
@@ -105,7 +105,7 @@
     <message>
         <location filename="mainwindow.cpp" line="45"/>
         <source>z</source>
-        <translation type="unfinished">я</translation>
+        <translation>я</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="53"/>

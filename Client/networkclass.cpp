@@ -187,7 +187,10 @@ void NetworkClass::ping() {
 }
 
 int NetworkClass::getFloor() {
-    return coord.h;
+    if (coord.h < 0)
+        return -int(-coord.h) - 1;
+    else
+        return coord.h;
 }
 
 void NetworkClass::refreshCoords() {

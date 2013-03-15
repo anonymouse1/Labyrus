@@ -47,7 +47,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, QWidget *parent) :
 
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
-    mouseSensitivity = 1 / 3;
+    mouseSensitivity = 1 / 3.0;
 }
 
 void DrawGl::initializeGL() {
