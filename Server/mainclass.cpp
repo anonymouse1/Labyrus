@@ -3,7 +3,7 @@
 
 MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
-    int n = 100;
+    int n = 10;
     int h = 1;
     int latency = 50;
     int players = 1;

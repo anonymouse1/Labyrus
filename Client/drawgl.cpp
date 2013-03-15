@@ -332,8 +332,10 @@ void DrawGl::drawMaze() {
     drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
 
-//    if (ztra < -wallHeight)
-//        I->draw(1 / sizeView / 10, a->coord.x() * k, a->coord.y() * k, wallHeight / 3);
+    loadTexture(textures[model]);
+    if (a->h == 1)
+        if (a->coord.h > 1)
+            I->draw(1 / sizeView / 10, a->coord.x * k, a->coord.y * k, wallHeight / 3);
     if (startingGame)
         renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - startAfter) / 1000) + QString(" seconds"), hudFont);
 }
