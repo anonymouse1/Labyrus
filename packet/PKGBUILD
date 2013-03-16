@@ -12,7 +12,6 @@ _gitname="labyrus"
 
 build() {
   cd $srcdir
-  rm -rf ./*
   msg "Conencting to the GIT server..."
   if [[ -d $srcdir/$_gitname ]] ; then
     cd $_gitname
@@ -38,6 +37,8 @@ build() {
   
   cat Client.pro | grep -v PORTABLE > Client1.pro
   mv Client1.pro Client.pro
+
+  cd ..
   lrelease -compress ru_RU.ts
 
   cd ../SinglePlayer
