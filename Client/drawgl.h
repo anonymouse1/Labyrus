@@ -9,11 +9,21 @@
 #include <messagesstack.h>
 #include <QPicture>
 #include <model.h>
+#include <QSettings>
+
 
 class MainWindow;
 
+#ifdef PORTABLE
+    const QString skinPath = "../skins/";
+    const QString settingsFile = "../labyrus.ini";
+#else
+    const QString skinPath = "/usr/share/labyrus/skins/";
+    const QString settingsFile = QDir::homePath() + "/.labyrus/labyrus.ini";
+#endif
+
 const double wallHeight = 0.1;
-const double eps = 0.00001;
+const double eps = 0.0001;
 const double sizeView = 10;
 
 enum {
@@ -24,7 +34,8 @@ enum {
     compass = 4,
     sky = 5,
     model = 6,
-    realRoof = 7
+    realRoof = 7,
+    icon = 8
 };
 
 class DrawGl : public QGLWidget
@@ -32,6 +43,7 @@ class DrawGl : public QGLWidget
     Q_OBJECT
 public:
     explicit DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent = 0);
+    ~DrawGl();
     NetworkClass *a;
     MainWindow *legacy;
     QApplication *application;
@@ -85,6 +97,7 @@ private:
     double plMouseXRot;
     double plMouseYRot;
     bool mousePressed;
+    int activePoint;
 
     void enableLight();
     void begin2d();

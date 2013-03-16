@@ -13,15 +13,6 @@
 const int dx[4]={0, 1, 0, -1};
 const int dy[4]={1, 0, -1, 0};
 
-#ifdef PORTABLE
-    const QString skinPath = "../skins/";
-    const QString settingsFile = "../labyrus.ini";
-#else
-    const QString skinPath = "/usr/share/labyrus/skins/";
-    const QString settingsFile = QDir::homePath() + "/.labyrus/labyrus.ini";
-#endif
-
-
 class startDialog : public QWidget
 {
     Q_OBJECT

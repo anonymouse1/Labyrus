@@ -93,8 +93,6 @@ void CalculationThread::nextTime() {
 }
 
 void CalculationThread::checkForWall(double &dx, double &dy, double x1, double y1, double x2, double y2) {
-    assert(x1 <= x2);
-    assert(y1 <= y2);
     if (x1 == x2) {
         if ((main->coord.y >= y1) && (main->coord.y <= y2) && (fabs(main->coord.x - x1) < radiusOfPlayer) && ((x1 - main->coord.x > 0) == (dx > 0)))
             dx = 0;

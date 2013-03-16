@@ -45,6 +45,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
     mouseSensitivity = mouse;
+    activePoint = 2;
 }
 
 void DrawGl::initializeGL() {
@@ -60,6 +61,7 @@ void DrawGl::initializeGL() {
     textures[5] = bindTexture(QPixmap(skinPath + "/sky.jpg"), GL_TEXTURE_2D);
     textures[6] = bindTexture(QPixmap(skinPath + "/model.jpg"), GL_TEXTURE_2D);
     textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg"), GL_TEXTURE_2D);
+    textures[8] = bindTexture(QPixmap(skinPath + "/icon.png"), GL_TEXTURE_2D);
 
 
     I = new Model(skinPath + "/simple.s3d");
@@ -259,10 +261,10 @@ void DrawGl::drawMaze() {
                 drawQuad(x + f, y, x + f, y + k, h, wallHeight);
                 drawQuad(x - f, y + k, x - f, y, h, wallHeight);
             } else if (a->h != 1) {
-                drawQuad(x, y, x + k, y, h - f, f * 2);
-                drawQuad(x, y + k, x, y, h - f, f * 2);
-                drawQuad(x + k, y, x + k, y + k, h - f, f * 2);
-                drawQuad(x + k, y + k, x, y + k, h - f, f * 2);
+                drawQuad(x, y - eps, x + k, y - eps, h - f, f * 2);
+                drawQuad(x - eps, y + k, x - eps, y, h - f, f * 2);
+                drawQuad(x + k + eps, y, x + k + eps, y + k, h - f, f * 2);
+                drawQuad(x + k, y + k + eps, x, y + k + eps, h - f, f * 2);
             }
         }
     glEnd();
@@ -356,10 +358,40 @@ void DrawGl::drawFPS() {
 }
 
 void DrawGl::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == (Qt::Key_Enter xor 1)) {
-        if (a->escapeMode)
-            legacy->legalStop();
+    if (startingGame)
+        return;
 
+    int key = event->key();
+    if (a->escapeMode) {
+        if ((activePoint == 0) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right) ))
+            if (botActive)
+                legacy->stopBot = true;
+            else
+                legacy->startBot();
+
+        if ((activePoint == 2) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right)))
+            legacy->legalStop();
+        if ((activePoint == 1) && ((key == Qt::Key_Plus) || (key == Qt::Key_Right)))
+            mouseSensitivity += 0.1;
+        if ((activePoint == 1) && ((key == Qt::Key_Minus) || (key == Qt::Key_Left)))
+            mouseSensitivity -= 0.1;
+
+        if (mouseSensitivity < 0)
+            mouseSensitivity = 0;
+
+        if (key == Qt::Key_Up)
+            activePoint = (activePoint - 1 + 3) % 3;
+
+        if (key == Qt::Key_Down)
+            activePoint = (activePoint + 1) % 3;
+
+        if (key == Qt::Key_Escape)
+            a->escapeMode = false;
+
+        return;
+    }
+
+    if (event->key() == (Qt::Key_Enter xor 1)) {
         enteringText = !enteringText;
         if (!enteringText)
             processText();
@@ -403,8 +435,10 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (legacy->thread->currentTime < 100)
+    if (legacy->thread->currentTime < 300) {
         QCursor::setPos(width() / 2, height() / 2);
+        return;
+    }
 
     if (botActive || (!this->isFullScreen()))
         return;
@@ -462,6 +496,8 @@ void DrawGl::processText() {
 }
 
 void DrawGl::begin2d() {
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_BLEND);
   glDisable(GL_DEPTH_TEST);
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
@@ -478,6 +514,7 @@ void DrawGl::end2d() {
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glEnable(GL_DEPTH_TEST);
+  glDisable(GL_BLEND);
 }
 
 QPixmap DrawGl::generateCompass(double angle) {
@@ -532,9 +569,6 @@ void DrawGl::drawHeroes() {
 }
 
 void DrawGl::drawCompass() {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-
     deleteTexture(textures[4]);
     textures[4] = bindTexture(generateCompass(a->angle), GL_TEXTURE_2D);
     begin2d();
@@ -550,8 +584,6 @@ void DrawGl::drawCompass() {
         glTexCoord2d(1, 0);
     glEnd();
     end2d();
-
-    glDisable(GL_BLEND);
 }
 
 void DrawGl::drawHUD() {
@@ -575,5 +607,30 @@ void DrawGl::drawHUD() {
 }
 
 void DrawGl::drawMenu() {
-    renderText(this->width() / 2, this->height() / 2, tr("Exit?"), menuFont);
+    if (botActive)
+        renderText(this->width() / 2 - 300, this->height() / 2, tr("Stop"), menuFont);
+    else
+        renderText(this->width() / 2 - 300, this->height() / 2, tr("BOT"), menuFont);
+
+    renderText(this->width() / 2 - 300, this->height() / 2 + 100, tr("Mouse Sensitivity: ") + QString::number(mouseSensitivity) + QString("+-"), menuFont);
+    renderText(this->width() / 2 - 300, this->height() / 2 + 200, tr("Exit?"), menuFont);
+
+    loadTexture(textures[icon]);
+    begin2d();
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() / 2 - 400, this->height() / 2 - activePoint * 100 - 16);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 - 400 + 64, this->height() / 2 - activePoint * 100 - 16);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 - 400 + 64, this->height() / 2 - activePoint * 100 + 48);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 - 400, this->height() / 2 - activePoint * 100 + 48);
+        glTexCoord2d(1, 0);
+    glEnd();
+    end2d();
+}
+
+DrawGl::~DrawGl() {
+    QSettings s(settingsFile, QSettings::IniFormat);
+    s.setValue("mouseSensitivity", QVariant(mouseSensitivity));
 }

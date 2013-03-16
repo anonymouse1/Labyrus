@@ -22,42 +22,57 @@
 <context>
     <name>DrawGl</name>
     <message>
-        <location filename="drawgl.cpp" line="340"/>
+        <location filename="drawgl.cpp" line="342"/>
         <source>Starting after </source>
-        <translation>Старт через</translation>
+        <translation type="unfinished">Старт через </translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="559"/>
+        <location filename="drawgl.cpp" line="586"/>
         <source>From start game: </source>
         <translation>Со старта игры:</translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="560"/>
+        <location filename="drawgl.cpp" line="587"/>
         <source>Alive status: </source>
         <translation>Живой:</translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="561"/>
+        <location filename="drawgl.cpp" line="588"/>
         <source>patrons: </source>
         <translation>Патронов:</translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="562"/>
+        <location filename="drawgl.cpp" line="589"/>
         <source>walls: </source>
         <translation>Стен:</translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="563"/>
+        <location filename="drawgl.cpp" line="590"/>
         <source>destroy: </source>
         <translation>Гранат:</translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="564"/>
+        <location filename="drawgl.cpp" line="591"/>
         <source>Floor number: </source>
         <translation>Этаж №</translation>
     </message>
     <message>
-        <location filename="drawgl.cpp" line="578"/>
+        <location filename="drawgl.cpp" line="606"/>
+        <source>Stop</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <location filename="drawgl.cpp" line="608"/>
+        <source>BOT</source>
+        <translation>Бот</translation>
+    </message>
+    <message>
+        <location filename="drawgl.cpp" line="610"/>
+        <source>Mouse Sensitivity: </source>
+        <translation>Чувствительность мыши: </translation>
+    </message>
+    <message>
+        <location filename="drawgl.cpp" line="611"/>
         <source>Exit?</source>
         <translation>Выйти?</translation>
     </message>
@@ -121,24 +136,24 @@
         <translation type="obsolete">й</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="47"/>
+        <location filename="mainwindow.cpp" line="49"/>
         <source>Z</source>
         <translation>Я</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="55"/>
+        <location filename="mainwindow.cpp" line="57"/>
         <source>Q</source>
         <oldsource>e</oldsource>
         <translation>Й</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="57"/>
+        <location filename="mainwindow.cpp" line="59"/>
         <source>E</source>
         <translation>У</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="71"/>
-        <location filename="mainwindow.cpp" line="137"/>
+        <location filename="mainwindow.cpp" line="73"/>
+        <location filename="mainwindow.cpp" line="139"/>
         <source>D</source>
         <translation>В</translation>
     </message>
@@ -147,8 +162,8 @@
         <translation type="obsolete">ц</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="61"/>
-        <location filename="mainwindow.cpp" line="127"/>
+        <location filename="mainwindow.cpp" line="63"/>
+        <location filename="mainwindow.cpp" line="129"/>
         <source>W</source>
         <oldsource>s</oldsource>
         <translation>Ц</translation>
@@ -158,8 +173,8 @@
         <translation type="obsolete">ф</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="63"/>
-        <location filename="mainwindow.cpp" line="133"/>
+        <location filename="mainwindow.cpp" line="65"/>
+        <location filename="mainwindow.cpp" line="135"/>
         <source>S</source>
         <oldsource>d</oldsource>
         <translation>Ы</translation>

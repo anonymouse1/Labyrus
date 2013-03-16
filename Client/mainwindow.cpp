@@ -38,6 +38,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
 }
 
 MainWindow::~MainWindow() {
+    if (widget->isValid())
+        delete widget;
     qDebug() << "destroying";
 }
 
@@ -90,7 +92,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
             widget->resize(widget->width(), widget->height() + 1);
         #endif
     } else if (key == Qt::Key_Escape) {
-        input->escapeMode = !input->escapeMode;
+        input->escapeMode = true;
     }
 
 
