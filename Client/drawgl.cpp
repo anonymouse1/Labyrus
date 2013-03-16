@@ -66,6 +66,7 @@ void DrawGl::initializeGL() {
     textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg"), GL_TEXTURE_2D);
     textures[8] = bindTexture(QPixmap(skinPath + "/icon.png"), GL_TEXTURE_2D);
     textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png"), GL_TEXTURE_2D);
+    textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground"), GL_TEXTURE_2D);
 
 
     I = new Model(skinPath + "/simple.s3d");
@@ -399,15 +400,16 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
 
         currentText = "";
         return;
-    } else if (enteringText)
+    } else if (enteringText) {
         if (event->key() == Qt::Key_Backspace)
             currentText = currentText.left(currentText.length() - 1);
         else if (event->key() == Qt::Key_Escape) {
             currentText = "";
             enteringText = false;
-        } else
+        } else if (currentText.length() < 30) {
             currentText += event->text();
-    else {
+        }
+    } else {
         legacy->keyPressEvent(event);
     }
 
@@ -617,7 +619,6 @@ void DrawGl::drawHUD() {
         glTexCoord2d(1, 1);
         glVertex2d(-80, this->height() + 200);
         glTexCoord2d(0, 1);
-
     glEnd();
     end2d();
     qglColor(Qt::green);
@@ -630,13 +631,39 @@ void DrawGl::drawHUD() {
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     qglColor(Qt::red);
+
+    QList<QString> list = a->messages->getMessages();
+    begin2d();
+    loadTexture(textures[hudbackground]);
+    glBegin(GL_QUADS);
+        if (enteringText) {
+            glVertex2d(-50 - currentText.length() * 10, 295);
+            glTexCoord2d(0, 0);
+            glVertex2d(50 + currentText.length() * 10, 295);
+            glTexCoord2d(1, 0);
+            glVertex2d(50 + currentText.length() * 10, 315);
+            glTexCoord2d(1, 1);
+            glVertex2d(-50 - currentText.length() * 10, 315);
+            glTexCoord2d(0, 1);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            glVertex2d(-50 - list[i].length() * 10, 295 + (list.size() - i) * 20);
+            glTexCoord2d(0, 0);
+            glVertex2d(50 + list[i].length() * 10, 295 + (list.size() - i) * 20);
+            glTexCoord2d(1, 0);
+            glVertex2d(50 + list[i].length() * 10, 315 + (list.size() - i) * 20);
+            glTexCoord2d(1, 1);
+            glVertex2d(-50 - list[i].length() * 10, 315 + (list.size() - i) * 20);
+            glTexCoord2d(0, 1);
+        }
+    glEnd();
+    end2d();
     if (enteringText)
-        renderText(5, this->height() - 120, "-" + currentText, hudFont);
+        renderText(5, this->height() - 300, "-" + currentText, hudFont);
 
     loadTexture(textures[2]);
-    QList<QString> list = a->messages->getMessages();
     for (int i = 0; i < list.size(); i++)
-        renderText(5, this->height() - 120 - 20 * (list.size() - i), list[i], hudFont);
+        renderText(5, this->height() - 300 - 20 * (list.size() - i), list[i], hudFont);
 }
 
 void DrawGl::drawMenu() {

@@ -24,7 +24,7 @@ class MainWindow;
 #endif
 
 const double wallHeight = 0.1;
-const double eps = 0.000001;
+const double eps = 0.00001;
 const double sizeView = 10;
 
 enum {
@@ -37,7 +37,8 @@ enum {
     model = 6,
     realRoof = 7,
     icon = 8,
-    blackout = 9
+    blackout = 9,
+    hudbackground = 10
 };
 
 class DrawGl : public QGLWidget
@@ -84,7 +85,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[10];
+    GLuint textures[11];
     GLuint superFontList;
     QString currentText;
     bool enteringText;
