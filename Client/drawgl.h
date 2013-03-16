@@ -10,6 +10,7 @@
 #include <QPicture>
 #include <model.h>
 #include <QSettings>
+#include <QDir>
 
 
 class MainWindow;
@@ -82,7 +83,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[8];
+    GLuint textures[9];
     GLuint superFontList;
     QString currentText;
     bool enteringText;

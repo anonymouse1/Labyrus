@@ -1,5 +1,5 @@
 pkgname=labyrus-git
-pkgver=20130315
+pkgver=20130316
 pkgrel=1
 pkgdesk="Qt Game written with OpenGL"
 arch=('i686' 'x86_64')
@@ -14,7 +14,13 @@ build() {
   cd $srcdir
   rm -rf ./*
   msg "Conencting to the GIT server..."
-  git clone $_gitroot
+  if [[ -d $srcdir/$_gitname ]] ; then
+    cd $_gitname
+    git pull origin
+    msg "The local files are updated."
+  else
+    git clone $_gitroot 
+  fi
 
   msg "GIT checkout done"
   msg "Starting make"

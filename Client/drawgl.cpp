@@ -363,11 +363,12 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
 
     int key = event->key();
     if (a->escapeMode) {
-        if ((activePoint == 0) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right) ))
+        if ((activePoint == 0) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right) )) {
             if (botActive)
                 legacy->stopBot = true;
             else
                 legacy->startBot();
+        }
 
         if ((activePoint == 2) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right)))
             legacy->legalStop();
