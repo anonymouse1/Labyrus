@@ -338,7 +338,6 @@ bool MainWindow::superDfs() {
 
 
 void MainWindow::gameStart() {
-    thread->start();
     input->readInformation();
 
     qDebug() << "starting game";
@@ -362,6 +361,7 @@ void MainWindow::startingFinished() {
     qDebug() << "finishStarting";
     widget->startingGame = false;
     widget->startAfter = startLine->currentTime();
+    thread->start();
     delete startLine;
 }
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>315</width>
+    <width>320</width>
     <height>430</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>315</width>
+    <width>320</width>
     <height>430</height>
    </size>
   </property>
@@ -139,7 +139,7 @@
   <widget class="QSpinBox" name="spinBox">
    <property name="geometry">
     <rect>
-     <x>235</x>
+     <x>240</x>
      <y>40</y>
      <width>71</width>
      <height>21</height>

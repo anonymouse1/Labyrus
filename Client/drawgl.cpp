@@ -46,6 +46,9 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     needRefreshCursor = true;
     mouseSensitivity = mouse;
     activePoint = 2;
+
+    QSettings s(settingsFile, QSettings::IniFormat);
+    restoreGeometry(s.value("widgetGeometry").toByteArray());
 }
 
 void DrawGl::initializeGL() {
@@ -62,6 +65,7 @@ void DrawGl::initializeGL() {
     textures[6] = bindTexture(QPixmap(skinPath + "/model.jpg"), GL_TEXTURE_2D);
     textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg"), GL_TEXTURE_2D);
     textures[8] = bindTexture(QPixmap(skinPath + "/icon.png"), GL_TEXTURE_2D);
+    textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png"), GL_TEXTURE_2D);
 
 
     I = new Model(skinPath + "/simple.s3d");
@@ -349,16 +353,12 @@ void DrawGl::onx() {
 }
 
 void DrawGl::drawFPS() {
-    if (rand() % 100 == 0) {
-        qDebug() << "current fps:" << fps;
-        qDebug() << "current opengl error:" << glGetError();
-    }
     oldFps = fps;
     fps = 0;
 }
 
 void DrawGl::keyPressEvent(QKeyEvent *event) {
-    if (startingGame)
+    if (startingGame && (event->key() == Qt::Key_Escape))
         return;
 
     int key = event->key();
@@ -373,9 +373,9 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
         if ((activePoint == 2) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right)))
             legacy->legalStop();
         if ((activePoint == 1) && ((key == Qt::Key_Plus) || (key == Qt::Key_Right)))
-            mouseSensitivity += 0.1;
+            mouseSensitivity += 0.02;
         if ((activePoint == 1) && ((key == Qt::Key_Minus) || (key == Qt::Key_Left)))
-            mouseSensitivity -= 0.1;
+            mouseSensitivity -= 0.02;
 
         if (mouseSensitivity < eps)
             mouseSensitivity = 0;
@@ -436,7 +436,7 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
 }*/
 
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (legacy->thread->currentTime < 300) {
+    if (startingGame) {
         QCursor::setPos(width() / 2, height() / 2);
         return;
     }
@@ -588,7 +588,39 @@ void DrawGl::drawCompass() {
 }
 
 void DrawGl::drawHUD() {
-    qglColor(Qt::blue);
+    begin2d();
+    loadTexture(textures[blackout]);
+    glBegin(GL_QUADS);
+        glVertex2d(-100, -156);
+        glTexCoord2d(0, 0);
+        glVertex2d(156, -156);
+        glTexCoord2d(1, 0);
+        glVertex2d(156, 156);
+        glTexCoord2d(1, 1);
+        glVertex2d(-100, 156);
+        glTexCoord2d(0, 1);
+
+        glVertex2d(this->width() - 64, this->height() - 32);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width(), this->height() - 32);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width(), this->height() + 32);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() - 64, this->height() + 32);
+        glTexCoord2d(0, 1);
+
+        glVertex2d(-80, this->height() - 56);
+        glTexCoord2d(0, 0);
+        glVertex2d(176, this->height() - 56);
+        glTexCoord2d(1, 0);
+        glVertex2d(176, this->height() + 200);
+        glTexCoord2d(1, 1);
+        glVertex2d(-80, this->height() + 200);
+        glTexCoord2d(0, 1);
+
+    glEnd();
+    end2d();
+    qglColor(Qt::green);
     renderText(5, 15, tr("From start game: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
     renderText(5, this->height() - 20, tr("Alive status: ") + QString::number(a->alive), hudFont);
     renderText(5, this->height() - 40, tr("patrons: ") + QString::number(a->patrons), hudFont);
@@ -622,11 +654,11 @@ void DrawGl::drawMenu() {
         glVertex2d(this->width() / 2 - 400, this->height() / 2 - activePoint * 100 - 16);
         glTexCoord2d(0, 0);
         glVertex2d(this->width() / 2 - 400 + 64, this->height() / 2 - activePoint * 100 - 16);
-        glTexCoord2d(0, 1);
+        glTexCoord2d(1, 0);
         glVertex2d(this->width() / 2 - 400 + 64, this->height() / 2 - activePoint * 100 + 48);
         glTexCoord2d(1, 1);
         glVertex2d(this->width() / 2 - 400, this->height() / 2 - activePoint * 100 + 48);
-        glTexCoord2d(1, 0);
+        glTexCoord2d(0, 1);
     glEnd();
     end2d();
 }
@@ -634,4 +666,6 @@ void DrawGl::drawMenu() {
 DrawGl::~DrawGl() {
     QSettings s(settingsFile, QSettings::IniFormat);
     s.setValue("mouseSensitivity", QVariant(mouseSensitivity));
+    if (!isFullScreen())
+        s.setValue("widgetGeometry", QVariant(saveGeometry()));
 }
