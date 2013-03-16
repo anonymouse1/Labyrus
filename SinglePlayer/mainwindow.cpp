@@ -13,14 +13,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(aboutQt()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
-    #ifdef PORTABLE
-        prefix = "./";
-        settingsFile = "../labyrus.ini";
-    #else
-        prefix = "/usr/bin/";
-        settingsFile = QDir::homePath() + "/.labyrus/labyrus.ini";
-    #endif
-
     loadSettings();
 }
 

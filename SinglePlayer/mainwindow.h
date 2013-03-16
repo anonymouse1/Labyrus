@@ -14,14 +14,21 @@ namespace Ui {
     class MainWindow;
 }
 
+#ifdef PORTABLE
+    const QString prefix = "./";
+    const QString settingsFile = "../labyrus.ini";
+#else
+    const QString prefix = "/usr/bin/";
+    const QString settingsFile = QDir::homePath() + "/.labyrus/labyrus.ini";
+#endif
+
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
     
 public:
     explicit MainWindow(QWidget *parent = 0);
-    QString prefix;
-    QString settingsFile;
     ~MainWindow();
 private slots:
     void start();
