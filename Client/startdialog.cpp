@@ -41,7 +41,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
 
 void startDialog::start() {
     w = new MainWindow(app, QHostAddress(ui->lineEdit_2->text()), ui->spinBox->value(), ui->lineEdit->text().toLocal8Bit(), skinPath + ui->comboBox->currentText(), mouseSensitivity, this);
-    connectWindow = new Connection(QString("Connecting to: ") + ui->lineEdit_2->text() + ":" + ui->spinBox->text());
+    connectWindow = new Connection(tr("Connecting to: ") + ui->lineEdit_2->text() + ":" + ui->spinBox->text());
     this->hide();
     connectWindow->show();
 
@@ -102,7 +102,7 @@ void startDialog::loadSettings() {
     ui->spinBox->setValue(s.value("port", QVariant(7777)).toInt());
     ui->fullScreen->setChecked(s.value("fullscreen", QVariant(true)).toBool());
     ui->comboBox->setCurrentIndex(ui->comboBox->findText(s.value("skin", QVariant("default")).toString()));
-    mouseSensitivity = s.value("mouseSensitivity", QVariant(1 / 3.0)).toDouble();
+    mouseSensitivity = s.value("mouseSensitivity", QVariant(0.3)).toDouble();
     setPix(ui->comboBox->currentText());
 }
 
