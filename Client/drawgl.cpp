@@ -377,7 +377,7 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
         if ((activePoint == 1) && ((key == Qt::Key_Minus) || (key == Qt::Key_Left)))
             mouseSensitivity -= 0.1;
 
-        if (mouseSensitivity < 0)
+        if (mouseSensitivity < eps)
             mouseSensitivity = 0;
 
         if (key == Qt::Key_Up)
