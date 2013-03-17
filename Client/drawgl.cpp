@@ -45,7 +45,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
     mouseSensitivity = mouse;
-    activePoint = 2;
+    activePoint = 3;
 
     QSettings s(settingsFile, QSettings::IniFormat);
     restoreGeometry(s.value("widgetGeometry").toByteArray());
@@ -88,6 +88,7 @@ void DrawGl::resizeGL(int w, int h) {
     if (isFullScreen())
         QCursor::setPos(w / 2, h / 2);
 
+    menuFont = QFont("FreeSans", min(30, h / 30), 40, true);
     k = 1.0 / sizeView;
     f = k / 10;
     needRefreshCursor = true;
@@ -364,28 +365,36 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
 
     int key = event->key();
     if (a->escapeMode) {
-        if ((activePoint == 0) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right) )) {
+        if ((activePoint == 0) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
+            a->escapeMode = false;
+        if ((activePoint == 2) && ((key == Qt::Key_Return) || (key == Qt::Key_Right) )) {
             if (botActive)
                 legacy->stopBot = true;
             else
                 legacy->startBot();
         }
 
-        if ((activePoint == 2) && ((key == (Qt::Key_Enter xor 1)) || (key == Qt::Key_Right)))
+        if ((activePoint == 1) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
+            if (isFullScreen())
+                showNormal();
+            else
+                showFullScreen();
+
+        if ((activePoint == 4) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
             legacy->legalStop();
-        if ((activePoint == 1) && ((key == Qt::Key_Plus) || (key == Qt::Key_Right)))
+        if ((activePoint == 3) && ((key == Qt::Key_Plus) || (key == Qt::Key_Right)))
             mouseSensitivity += 0.02;
-        if ((activePoint == 1) && ((key == Qt::Key_Minus) || (key == Qt::Key_Left)))
+        if ((activePoint == 3) && ((key == Qt::Key_Minus) || (key == Qt::Key_Left)))
             mouseSensitivity -= 0.02;
 
         if (mouseSensitivity < eps)
             mouseSensitivity = 0;
 
         if (key == Qt::Key_Up)
-            activePoint = (activePoint - 1 + 3) % 3;
+            activePoint = (activePoint - 1 + 5) % 5;
 
         if (key == Qt::Key_Down)
-            activePoint = (activePoint + 1) % 3;
+            activePoint = (activePoint + 1) % 5;
 
         if (key == Qt::Key_Escape)
             a->escapeMode = false;
@@ -393,7 +402,7 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
         return;
     }
 
-    if (event->key() == (Qt::Key_Enter xor 1)) {
+    if (event->key() == Qt::Key_Return) {
         enteringText = !enteringText;
         if (!enteringText)
             processText();
@@ -667,24 +676,33 @@ void DrawGl::drawHUD() {
 }
 
 void DrawGl::drawMenu() {
-    if (botActive)
-        renderText(this->width() / 2 - 300, this->height() / 2, tr("Stop"), menuFont);
+    renderText(this->width() / 2 - 150, this->height() / 2 - 100, tr("Return"), menuFont);
+    QString fullscreenActive;
+    if (isFullScreen())
+        fullscreenActive = "on";
     else
-        renderText(this->width() / 2 - 300, this->height() / 2, tr("BOT"), menuFont);
+        fullscreenActive = "off";
 
-    renderText(this->width() / 2 - 300, this->height() / 2 + 100, tr("Mouse Sensitivity: ") + QString::number(mouseSensitivity) + QString("+-"), menuFont);
-    renderText(this->width() / 2 - 300, this->height() / 2 + 200, tr("Exit?"), menuFont);
+    renderText(this->width() / 2 - 150, this->height() / 2 - 50, tr("FullScreen: ") + fullscreenActive, menuFont);
+
+    if (botActive)
+        renderText(this->width() / 2 - 150, this->height() / 2, tr("Stop"), menuFont);
+    else
+        renderText(this->width() / 2 - 150, this->height() / 2, tr("BOT"), menuFont);
+
+    renderText(this->width() / 2 - 150, this->height() / 2 + 50, tr("Mouse Sensitivity: ") + QString::number(mouseSensitivity) + QString("+-"), menuFont);
+    renderText(this->width() / 2 - 150, this->height() / 2 + 100, tr("Exit?"), menuFont);
 
     loadTexture(textures[icon]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 400, this->height() / 2 - activePoint * 100 - 16);
+        glVertex2d(this->width() / 2 - 250, this->height() / 2 - activePoint * 50 - 16 + 100);
         glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 - 400 + 64, this->height() / 2 - activePoint * 100 - 16);
+        glVertex2d(this->width() / 2 - 250 + 64, this->height() / 2 - activePoint * 50 - 16 + 100);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 - 400 + 64, this->height() / 2 - activePoint * 100 + 48);
+        glVertex2d(this->width() / 2 - 250 + 64, this->height() / 2 - activePoint * 50 + 48 + 100);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 400, this->height() / 2 - activePoint * 100 + 48);
+        glVertex2d(this->width() / 2 - 250, this->height() / 2 - activePoint * 50 + 48 + 100);
         glTexCoord2d(0, 1);
     glEnd();
     end2d();

@@ -11,6 +11,9 @@
 #include <model.h>
 #include <QSettings>
 #include <QDir>
+#include <algorithm>
+
+using std::min;
 
 
 class MainWindow;
