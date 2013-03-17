@@ -66,7 +66,7 @@ void DrawGl::initializeGL() {
     textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg"), GL_TEXTURE_2D);
     textures[8] = bindTexture(QPixmap(skinPath + "/icon.png"), GL_TEXTURE_2D);
     textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png"), GL_TEXTURE_2D);
-    textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground"), GL_TEXTURE_2D);
+    textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground.png"), GL_TEXTURE_2D);
 
 
     I = new Model(skinPath + "/simple.s3d");
