@@ -22,57 +22,77 @@
 <context>
     <name>DrawGl</name>
     <message>
-        <location filename="Client/drawgl.cpp" line="342"/>
+        <location filename="Client/drawgl.cpp" line="348"/>
         <source>Starting after </source>
         <translation>Старт Через </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="592"/>
+        <location filename="Client/drawgl.cpp" line="634"/>
         <source>From start game: </source>
         <translation>Прошло:</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="593"/>
+        <location filename="Client/drawgl.cpp" line="635"/>
         <source>Alive status: </source>
         <translation>Живой: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="594"/>
+        <location filename="Client/drawgl.cpp" line="636"/>
         <source>patrons: </source>
         <translation>Патронов: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="595"/>
+        <location filename="Client/drawgl.cpp" line="637"/>
         <source>walls: </source>
         <translation>Стен: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="596"/>
+        <location filename="Client/drawgl.cpp" line="638"/>
         <source>destroy: </source>
         <translation>Гранат: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="597"/>
+        <location filename="Client/drawgl.cpp" line="639"/>
         <source>Floor number: </source>
         <translation>Этаж №</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="612"/>
+        <location filename="Client/drawgl.cpp" line="679"/>
+        <source>Return</source>
+        <translation type="unfinished">Вернуться к игре</translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="682"/>
+        <source>on</source>
+        <translation type="unfinished">активен</translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="684"/>
+        <source>off</source>
+        <translation type="unfinished">включить</translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="686"/>
+        <source>FullScreen: </source>
+        <translation type="unfinished">Полноэкранный режим: </translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="689"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="614"/>
+        <location filename="Client/drawgl.cpp" line="691"/>
         <source>BOT</source>
         <translation>Бот</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="616"/>
+        <location filename="Client/drawgl.cpp" line="693"/>
         <source>Mouse Sensitivity: </source>
         <translation>Чувствительность мыши:</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="617"/>
+        <location filename="Client/drawgl.cpp" line="694"/>
         <source>Exit?</source>
         <translation>Выйти?</translation>
     </message>

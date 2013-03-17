@@ -24,7 +24,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     startingGame = false;
 
     hudFont = QFont("Monospace", 15, 20, true);
-    menuFont = QFont("MonoSpace", 30, 40, true);
+    menuFont = QFont("Monospace", 30, 40, true);
 
     timeFPS = new QTimer;
     timeFPS->setInterval(1000);
@@ -679,9 +679,9 @@ void DrawGl::drawMenu() {
     renderText(this->width() / 2 - 150, this->height() / 2 - 100, tr("Return"), menuFont);
     QString fullscreenActive;
     if (isFullScreen())
-        fullscreenActive = "on";
+        fullscreenActive = tr("on");
     else
-        fullscreenActive = "off";
+        fullscreenActive = tr("off");
 
     renderText(this->width() / 2 - 150, this->height() / 2 - 50, tr("FullScreen: ") + fullscreenActive, menuFont);
 
