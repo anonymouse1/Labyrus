@@ -23,8 +23,8 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     ztra = -wallHeight / 2;
     startingGame = false;
 
-    hudFont = QFont("FreeSans", 15, 20, true);
-    menuFont = QFont("FreeSans", 30, 40, true);
+    hudFont = QFont("Monospace", 15, 20, true);
+    menuFont = QFont("MonoSpace", 30, 40, true);
 
     timeFPS = new QTimer;
     timeFPS->setInterval(1000);
@@ -646,33 +646,33 @@ void DrawGl::drawHUD() {
     loadTexture(textures[hudbackground]);
     glBegin(GL_QUADS);
         if (enteringText) {
-            glVertex2d(-50 - currentText.length() * 10, 295);
+            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 - 6);
             glTexCoord2d(0, 0);
-            glVertex2d(50 + currentText.length() * 10, 295);
+            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 - 6);
             glTexCoord2d(1, 0);
-            glVertex2d(50 + currentText.length() * 10, 315);
+            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 + 15);
             glTexCoord2d(1, 1);
-            glVertex2d(-50 - currentText.length() * 10, 315);
+            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 + 15);
             glTexCoord2d(0, 1);
         }
         for (int i = 0; i < list.size(); i++) {
-            glVertex2d(-50 - list[i].length() * 10, 295 + (list.size() - i) * 20);
+            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 6 - 85);
             glTexCoord2d(0, 0);
-            glVertex2d(50 + list[i].length() * 10, 295 + (list.size() - i) * 20);
+            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 6 - 85);
             glTexCoord2d(1, 0);
-            glVertex2d(50 + list[i].length() * 10, 315 + (list.size() - i) * 20);
+            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 15 - 85);
             glTexCoord2d(1, 1);
-            glVertex2d(-50 - list[i].length() * 10, 315 + (list.size() - i) * 20);
+            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 15 - 85);
             glTexCoord2d(0, 1);
         }
     glEnd();
     end2d();
     if (enteringText)
-        renderText(5, this->height() - 300, "-" + currentText, hudFont);
+        renderText(5, this->height() / 2 + 85, "-" + currentText, hudFont);
 
     loadTexture(textures[2]);
     for (int i = 0; i < list.size(); i++)
-        renderText(5, this->height() - 300 - 20 * (list.size() - i), list[i], hudFont);
+        renderText(5, this->height() / 2 + 85 - 20 * (list.size() - i), list[i], hudFont);
 }
 
 void DrawGl::drawMenu() {
