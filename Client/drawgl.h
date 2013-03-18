@@ -41,7 +41,8 @@ enum {
     realRoof = 7,
     icon = 8,
     blackout = 9,
-    hudbackground = 10
+    hudbackground = 10,
+    okular = 11
 };
 
 class DrawGl : public QGLWidget
@@ -78,6 +79,7 @@ private:
     void drawCompass();
     void drawHUD();
     void drawMenu();
+    void drawOkular();
 
     void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
     void drawFloorPoint(double x1, double y1, double h, bool b);
@@ -88,7 +90,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[11];
+    GLuint textures[12];
     GLuint superFontList;
     QString currentText;
     bool enteringText;

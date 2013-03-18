@@ -49,6 +49,7 @@ public:
 
     bool w[100][100][100];
 
+    bool ctrlPressed;
     CalculationThread *thread;
     QApplication *app;
     DrawGl *widget;
@@ -73,7 +74,6 @@ private:
 
     double fabs(double);
 
-    bool ctrlPressed;
     QByteArray login;
     QTimeLine *startLine;
     QTimer *repaintTimer;

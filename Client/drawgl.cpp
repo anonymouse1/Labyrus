@@ -45,7 +45,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
     mouseSensitivity = mouse;
-    activePoint = 3;
+    activePoint = 0;
 
     QSettings s(settingsFile, QSettings::IniFormat);
     restoreGeometry(s.value("widgetGeometry").toByteArray());
@@ -67,7 +67,7 @@ void DrawGl::initializeGL() {
     textures[8] = bindTexture(QPixmap(skinPath + "/icon.png"), GL_TEXTURE_2D);
     textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png"), GL_TEXTURE_2D);
     textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground.png"), GL_TEXTURE_2D);
-
+    textures[11] = bindTexture(QPixmap(skinPath + "/okular.png"), GL_TEXTURE_2D);
 
     I = new Model(skinPath + "/simple.s3d");
 
@@ -123,6 +123,8 @@ void DrawGl::paintGL() {
     drawHUD();
     if (a->escapeMode)
         drawMenu();
+    if (legacy->ctrlPressed)
+        drawOkular();
 }
 
 void DrawGl::drawAxis() {
@@ -676,33 +678,63 @@ void DrawGl::drawHUD() {
 }
 
 void DrawGl::drawMenu() {
-    renderText(this->width() / 2 - 150, this->height() / 2 - 100, tr("Return"), menuFont);
+    begin2d();
+    loadTexture(textures[hudbackground]);
+    glBegin(GL_QUADS);
+    for (int i = 0; i < 2; i++) {
+        glVertex2d(this->width() / 2 - 300, this->height() / 2 - 240);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 + 300, this->height() / 2 - 240);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 + 300, this->height() / 2 + 240);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 - 300, this->height() / 2 + 240);
+        glTexCoord2d(0, 1);
+    }
+    glEnd();
+    loadTexture(textures[icon]);
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() / 2 - 240, this->height() / 2 - activePoint * 50 - 16 + 100);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 - 240 + 64, this->height() / 2 - activePoint * 50 - 16 + 100);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 - 240 + 64, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 - 240, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glTexCoord2d(0, 1);
+    glEnd();
+    end2d();
+
+    renderText(this->width() / 2 - 175, this->height() / 2 - 100, tr("Return"), menuFont);
     QString fullscreenActive;
     if (isFullScreen())
         fullscreenActive = tr("on");
     else
         fullscreenActive = tr("off");
 
-    renderText(this->width() / 2 - 150, this->height() / 2 - 50, tr("FullScreen: ") + fullscreenActive, menuFont);
+    renderText(this->width() / 2 - 175, this->height() / 2 - 50, tr("FullScreen: ") + fullscreenActive, menuFont);
 
     if (botActive)
-        renderText(this->width() / 2 - 150, this->height() / 2, tr("Stop"), menuFont);
+        renderText(this->width() / 2 - 175, this->height() / 2, tr("Stop"), menuFont);
     else
-        renderText(this->width() / 2 - 150, this->height() / 2, tr("BOT"), menuFont);
+        renderText(this->width() / 2 - 175, this->height() / 2, tr("BOT"), menuFont);
 
-    renderText(this->width() / 2 - 150, this->height() / 2 + 50, tr("Mouse Sensitivity: ") + QString::number(mouseSensitivity) + QString("+-"), menuFont);
-    renderText(this->width() / 2 - 150, this->height() / 2 + 100, tr("Exit?"), menuFont);
+    renderText(this->width() / 2 - 175, this->height() / 2 + 50, tr("Mouse Sensitivity: ") + QString::number(mouseSensitivity), menuFont);
+    renderText(this->width() / 2 - 175, this->height() / 2 + 100, tr("Exit?"), menuFont);
+}
 
-    loadTexture(textures[icon]);
+void DrawGl::drawOkular() {
+    int r = min(width() / 2, height() / 2) * 2;
+    loadTexture(textures[okular]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 250, this->height() / 2 - activePoint * 50 - 16 + 100);
+        glVertex2d(this->width() / 2 - r, this->height() / 2 - r);
         glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 - 250 + 64, this->height() / 2 - activePoint * 50 - 16 + 100);
+        glVertex2d(this->width() / 2 + r, this->height() / 2 - r);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 - 250 + 64, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glVertex2d(this->width() / 2 + r, this->height() / 2 + r);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 250, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glVertex2d(this->width() / 2 - r, this->height() / 2 + r);
         glTexCoord2d(0, 1);
     glEnd();
     end2d();

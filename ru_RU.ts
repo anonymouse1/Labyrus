@@ -24,7 +24,7 @@
     <message>
         <location filename="Client/drawgl.cpp" line="348"/>
         <source>Starting after </source>
-        <translation>Старт Через </translation>
+        <translation>Старт через </translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="634"/>
@@ -59,22 +59,22 @@
     <message>
         <location filename="Client/drawgl.cpp" line="679"/>
         <source>Return</source>
-        <translation type="unfinished">Вернуться к игре</translation>
+        <translation>Вернуться к игре</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="682"/>
         <source>on</source>
-        <translation type="unfinished">активен</translation>
+        <translation>активен</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="684"/>
         <source>off</source>
-        <translation type="unfinished">включить</translation>
+        <translation>включить</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="686"/>
         <source>FullScreen: </source>
-        <translation type="unfinished">Полноэкранный режим: </translation>
+        <translation>Полноэкранный режим: </translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="689"/>
