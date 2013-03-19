@@ -727,7 +727,7 @@ void DrawGl::drawMenu() {
 }
 
 void DrawGl::drawOkular() {
-    int r = min(width() / 2, height() / 2) * 2;
+    int r = min(width() / 2, height() / 2) * 4;
     loadTexture(textures[okular]);
     begin2d();
     glBegin(GL_QUADS);

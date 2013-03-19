@@ -29,7 +29,7 @@
     <message>
         <location filename="Client/drawgl.cpp" line="634"/>
         <source>From start game: </source>
-        <translation>Прошло:</translation>
+        <translation>Прошло: </translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="635"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="Client/drawgl.cpp" line="693"/>
         <source>Mouse Sensitivity: </source>
-        <translation>Чувствительность мыши:</translation>
+        <translation>Чувствительность мыши: </translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="694"/>

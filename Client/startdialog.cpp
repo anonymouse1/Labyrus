@@ -37,6 +37,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
         loadSettings();
     }
     ui->commandLinkButton->setFocus();
+    QObject::connect((new QMenuBar(this))->addMenu("File")->addAction("Exit"), SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void startDialog::start() {
@@ -78,7 +79,7 @@ void startDialog::setPix(QString s) {
 void startDialog::paintEvent(QPaintEvent *event) {
     QPainter p(this);
 
-    p.drawPixmap(0, 130, this->width(), 300, *pix);
+    p.drawPixmap(0, 135, this->width(), 300, *pix);
 
     p.end();
     event->accept();

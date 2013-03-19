@@ -8,6 +8,7 @@
 #include <QFileInfoList>
 #include <connection.h>
 #include <QSettings>
+#include <QMenuBar>
 
 
 const int dx[4]={0, 1, 0, -1};
