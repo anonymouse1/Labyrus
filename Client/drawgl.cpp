@@ -88,7 +88,7 @@ void DrawGl::resizeGL(int w, int h) {
     if (isFullScreen())
         QCursor::setPos(w / 2, h / 2);
 
-    menuFont = QFont("FreeSans", min(30, h / 30), 40, true);
+    menuFont = QFont("FreeSans", min(30, min(h, w) / 30), 40, true);
     k = 1.0 / sizeView;
     f = k / 10;
     needRefreshCursor = true;
@@ -119,8 +119,11 @@ void DrawGl::paintGL() {
     drawSkyBox();
     drawMaze();
     drawHeroes();
-    drawCompass();
-    drawHUD();
+    if (!legacy->ctrlPressed) {
+        drawCompass();
+        drawHUD();
+    }
+
     if (a->escapeMode)
         drawMenu();
     if (legacy->ctrlPressed)
@@ -682,13 +685,13 @@ void DrawGl::drawMenu() {
     loadTexture(textures[hudbackground]);
     glBegin(GL_QUADS);
     for (int i = 0; i < 2; i++) {
-        glVertex2d(this->width() / 2 - 300, this->height() / 2 - 240);
+        glVertex2d(this->width() / 2 - max(320, this->width() / 5 * 2), this->height() / 2 - 240);
         glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 + 300, this->height() / 2 - 240);
+        glVertex2d(this->width() / 2 + max(320, this->width() / 5 * 2), this->height() / 2 - 240);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 + 300, this->height() / 2 + 240);
+        glVertex2d(this->width() / 2 + max(320, this->width() / 5 * 2), this->height() / 2 + 240);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 300, this->height() / 2 + 240);
+        glVertex2d(this->width() / 2 - max(320, this->width() / 5 * 2), this->height() / 2 + 240);
         glTexCoord2d(0, 1);
     }
     glEnd();

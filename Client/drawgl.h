@@ -14,7 +14,7 @@
 #include <algorithm>
 
 using std::min;
-
+using std::max;
 
 class MainWindow;
 
