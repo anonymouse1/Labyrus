@@ -17,13 +17,13 @@ void setLanguage(QString s) {
 
 int main(int argc, char *argv[]) {
     if (argc > 1) {
-        if (QString(argv[0]).toUpper() == "RU") {
+        if (QString(argv[1]).toUpper() == "RU") {
             setLanguage("ru_RU");
             return 0;
-        } else if (QString(argv[0]).toUpper() == "EN") {
+        } else if (QString(argv[1]).toUpper() == "EN") {
             setLanguage("en_US");
             return 0;
-        } else if ((QString(argv[0]).toUpper() == "-h") || (QString(argv[0]).toUpper() == "--help")) {
+        } else if ((QString(argv[1]).toUpper() == "-h") || (QString(argv[1]).toUpper() == "--help")) {
             printf("Welcome to labyrus-chooselanguage documentation\n");
             printf("\tUsage:\n");
             printf("\t\tlabyrus-chooselanguage [language] [-h | --help]\n");
@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
         } else {
             printf("\tUnknown arguments.\n");
             printf("\tUse -h or --help for help\n");
+            return 0;
         }
     }
 
@@ -41,7 +42,11 @@ int main(int argc, char *argv[]) {
     printf("-------------------\n");
     printf("Enter your number: ");
     int a;
-    scanf("%d", &a);
+    while (scanf("%d", &a) != 1) {
+        printf("Damaged integer\n");
+        printf("Please try again\n");
+    }
+
     if (a == 0) {
         setLanguage("en_US");
     } else if (a == 1) {
