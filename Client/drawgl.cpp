@@ -379,11 +379,12 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
                 legacy->startBot();
         }
 
-        if ((activePoint == 1) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
+        if ((activePoint == 1) && ((key == Qt::Key_Return) || (key == Qt::Key_Right))) {
             if (isFullScreen())
                 showNormal();
             else
                 showFullScreen();
+        }
 
         if ((activePoint == 4) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
             legacy->legalStop();
