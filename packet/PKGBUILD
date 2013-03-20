@@ -45,7 +45,7 @@ build() {
   cat SinglePlayer.pro | grep -v PORTABLE > SinglePlayer1.pro
   mv SinglePlayer1.pro SinglePlayer.pro
   
-  cd SwitchLanguage
+  cd ../SwitchLanguage
   
   cat SwitchLanguage.pro | grep -v PORTABLE > SwitchLanguage1.pro
   mv SwitchLanguage1.pro SwitchLanguage.pro
