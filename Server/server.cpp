@@ -304,7 +304,7 @@ void Server::generateMap() {
     }
 
     for (int i = 0; i < cur; i++) {
-        if (i % (cur / 10) == 0)
+        if (i % (cur / 10 + 1) == 0)
             if (!silence)
                 qDebug() << i / (cur / 10 + 1) * 10 << "%";
 
