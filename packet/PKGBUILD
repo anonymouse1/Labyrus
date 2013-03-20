@@ -50,13 +50,15 @@ build() {
   cat SwitchLanguage.pro | grep -v PORTABLE > SwitchLanguage1.pro
   mv SwitchLanguage1.pro SwitchLanguage.pro
 
+  cd ..
+
   echo "disabled"
 
   echo "Generating translations"
   lrelease -compress ru_RU.ts
   echo "Generated"
 
-  cd ../Client
+  cd Client
   qmake -makefile
   make
   cd ../Server

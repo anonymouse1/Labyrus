@@ -16,7 +16,7 @@ void setLanguage(QString s) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc > 0)
+    if (argc > 1) {
         if (QString(argv[0]).toUpper() == "RU") {
             setLanguage("ru_RU");
             return 0;
@@ -29,7 +29,11 @@ int main(int argc, char *argv[]) {
             printf("\t\tlabyrus-chooselanguage [language] [-h | --help]\n");
             printf("\t\tFor example: labyrus-chooselanguage ru\n");
             return 0;
+        } else {
+            printf("\tUnknown arguments.\n");
+            printf("\tUse -h or --help for help\n");
         }
+    }
 
     printf("Possible languages:\n");
     printf("0: English\n");
@@ -44,7 +48,7 @@ int main(int argc, char *argv[]) {
         setLanguage("ru_RU");
     } else {
         printf("Unknown language...\n");
-        printf("Language setted to default system\n");
+        printf("Setting to default system\n");
         setLanguage(QLocale::system().name());
     }
     return 0;
