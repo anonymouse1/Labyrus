@@ -306,7 +306,7 @@ void Server::generateMap() {
     for (int i = 0; i < cur; i++) {
         if (i % (cur / 10) == 0)
             if (!silence)
-                qDebug() << i / (cur / 10) * 10 << "%";
+                qDebug() << i / (cur / 10 + 1) * 10 << "%";
 
         for (int k = 0; k < 4; k++)
             walls[m][k] = tmpWalls[i][k];

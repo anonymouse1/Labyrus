@@ -62,7 +62,7 @@ void MainWindow::start() {
 
     qDebug() << server->canReadLine();
     QString res = server->readLine();
-    if (res != "map generated \n")
+    if (res != "map generated\n")
         QMessageBox::about(this, QString("Die"), res);
 
     attributes.clear();
