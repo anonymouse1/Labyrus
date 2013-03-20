@@ -37,7 +37,6 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
         loadSettings();
     }
     ui->commandLinkButton->setFocus();
-    QObject::connect((new QMenuBar(this))->addMenu("File")->addAction("Exit"), SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void startDialog::start() {

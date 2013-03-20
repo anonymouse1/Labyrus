@@ -727,7 +727,7 @@ void DrawGl::drawMenu() {
 }
 
 void DrawGl::drawOkular() {
-    int r = min(width() / 2, height() / 2) * 4;
+    int r = min(width() / 2, height() / 2) * 2;
     loadTexture(textures[okular]);
     begin2d();
     glBegin(GL_QUADS);
@@ -738,6 +738,25 @@ void DrawGl::drawOkular() {
         glVertex2d(this->width() / 2 + r, this->height() / 2 + r);
         glTexCoord2d(1, 1);
         glVertex2d(this->width() / 2 - r, this->height() / 2 + r);
+        glTexCoord2d(0, 1);
+
+        glVertex2d(this->width() / 2 - 10 * r, this->height() / 2 - r);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 - r, this->height() / 2 - r);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 - r, this->height() / 2 + r);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 - 10 * r, this->height() / 2 + r);
+        glTexCoord2d(0, 1);
+
+
+        glVertex2d(this->width() / 2 + r, this->height() / 2 - r);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 + 10 * r, this->height() / 2 - r);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 + 10 * r, this->height() / 2 + r);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 + r, this->height() / 2 + r);
         glTexCoord2d(0, 1);
     glEnd();
     end2d();
