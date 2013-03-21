@@ -30,7 +30,7 @@ Server::Server(qint16 port, bool rad, bool cheat, bool sil, int size, int height
 }
 
 void Server::die(QString s) {
-    qDebug() << s;
+    printf("%s\n", s.toLocal8Bit().constData());
     exit(0);
 }
 
@@ -331,7 +331,8 @@ void Server::generateMap() {
     walls[n * 4 - 1][0] = -100000;
     walls[n * 4 - 1][1] = -100000;
 
-    qDebug() << "map generated";
+    printf("map generated\n");
+    fflush(stdout);
 }
 
 QPoint Server::getFreePoint() {

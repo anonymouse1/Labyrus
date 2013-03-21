@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QDir>
+#include <console.h>
 
 
 namespace Ui {
@@ -36,8 +37,12 @@ private slots:
     void about();
     void saveSettings();
     void loadSettings();
+    void serverSaid();
 private:
     Ui::MainWindow *ui;
+    QProcess *server;
+    Console *console;
+
 };
 
 #endif // MAINWINDOW_H

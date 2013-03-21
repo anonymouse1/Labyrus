@@ -17,13 +17,13 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
+    server->terminate();
     saveSettings();
     delete ui;
 }
 
 void MainWindow::start() {
     QStringList attributes;
-    attributes << "--silence";
     attributes << "-n";
     attributes << ui->fieldSize->text();
     attributes << "--height" << QString::number(ui->heightOfField->value());
@@ -41,11 +41,15 @@ void MainWindow::start() {
         attributes << "1";
         attributes << "--strong";
     }
-    this->hide();
-    QProcess *server = new QProcess;
+//    this->hide();
+    server = new QProcess;
     QProcess *client = new QProcess;
     QEventLoop *loop = new QEventLoop;
     QTimer *timeout = new QTimer;
+    console = new Console;
+    console->setMinimumSize(QSize(500, 300));
+    console->setMaximumSize(QSize(500, 300));
+    console->show();
 
     QObject::connect(timeout, SIGNAL(timeout()), loop, SLOT(quit()));
     timeout->setInterval(7000);
@@ -53,17 +57,20 @@ void MainWindow::start() {
 
 
     QObject::connect(client, SIGNAL(finished(int)), server, SLOT(terminate()));
-    QObject::connect(server, SIGNAL(readyRead()), loop, SLOT(quit()));
+    QObject::connect(server, SIGNAL(readyReadStandardOutput()), loop, SLOT(quit()));
     QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
-    QObject::connect(server, SIGNAL(finished(int)), this, SLOT(close()));
-    server->setReadChannel(QProcess::StandardError);
+    QObject::connect(server, SIGNAL(finished(int)), console, SLOT(deleteLater()));
+    QObject::connect(server, SIGNAL(readyReadStandardError()), this, SLOT(serverSaid()));
+    QObject::connect(console, SIGNAL(destroyed()), server, SLOT(terminate()));
     server->start(prefix + "labyrus-server", attributes);
     loop->exec();
 
-    qDebug() << server->canReadLine();
+    server->setReadChannel(QProcess::StandardOutput);
     QString res = server->readLine();
-    if (res != "map generated\n")
+    if (res != "map generated\n") {
         QMessageBox::about(this, QString("Die"), res);
+        return;
+    }
 
     attributes.clear();
     attributes << "-n" << ui->name->text();
@@ -106,4 +113,10 @@ void MainWindow::loadSettings() {
     ui->strong->setChecked(s.value("strongNumberPlayers", QVariant(false)).toBool());
     ui->numberPlayers->setValue(s.value("numberPlayers", QVariant(1)).toInt());
     ui->spinBox->setValue(s.value("latency", QVariant(25)).toInt());
+}
+
+void MainWindow::serverSaid() {
+    server->setReadChannel(QProcess::StandardError);
+    while (server->canReadLine())
+        console->addString(server->readLine());
 }
