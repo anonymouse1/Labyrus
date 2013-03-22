@@ -5,7 +5,7 @@ Player::Player(int lat, QObject *parent) : QThread(parent) {
     coord.y = 0.5;
     coord.h = 0.5;
     latency = lat;
-    QObject::connect(this, SIGNAL(terminated()), this, SLOT(deleteLater()));
+    QObject::connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
 }
 
 void Player::run() {

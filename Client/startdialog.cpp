@@ -53,6 +53,8 @@ void startDialog::start() {
 
     if (ui->fullScreen->checkState() == Qt::Checked)
         QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showFullScreen()));
+    else
+        QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showNormal()));
 
     QEventLoop *loop = new QEventLoop;
     loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
