@@ -215,7 +215,7 @@ void MainWindow::syncNap(int a, int b) {
     thread->rightPressed = false;
 
 
-    if ((input->h != 1) && (abs(b + input->angle + 90) > 3)) {
+    if ((input->h != 1) && (abs(b + input->yAngle + 90) > 3)) {
         thread->lookingDown = false;
         bool turned = false;
         while (-input->yAngle - 90 < b) {
@@ -256,7 +256,14 @@ void MainWindow::elementarMove(fpoint to) {
         sleep(5);
         if (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) >
                 sqrt(sqr(to.x - prev.x) + sqr(to.y - prev.y) + sqr(to.h - prev.h)))
-            break;
+            if (time + 20 < thread->currentTime)
+                break;
+            else {
+                qDebug() << "try or die";
+                qDebug() << input->coord.x << input->coord.y << input->coord.h << "|" << to.x << to.y << to.h;
+                qDebug() << input->yAngle << input->angle;
+                qDebug() << "-------------------------";
+            }
     }
     thread->upPressed = false;
 }
@@ -284,7 +291,6 @@ bool MainWindow::superDfs() {
         swap(sp[i], sp[rand() % i]);
 
     for (int i = 0; i < 6; i++) {
-        integerCoord = getRealCoord();
         if (sp[i] == 0)
             if (!w[integerCoord.x - 1][integerCoord.y][integerCoord.h] && !isWallLeft(integerCoord)) {
                 integerCoord.x -= 1;
