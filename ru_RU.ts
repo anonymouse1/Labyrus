@@ -22,79 +22,92 @@
 <context>
     <name>DrawGl</name>
     <message>
-        <location filename="Client/drawgl.cpp" line="348"/>
+        <location filename="Client/drawgl.cpp" line="356"/>
         <source>Starting after </source>
         <translation>Старт через </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="634"/>
+        <location filename="Client/drawgl.cpp" line="643"/>
         <source>From start game: </source>
         <translation>Прошло: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="635"/>
         <source>Alive status: </source>
-        <translation>Живой: </translation>
+        <translation type="obsolete">Живой: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="636"/>
+        <location filename="Client/drawgl.cpp" line="645"/>
         <source>patrons: </source>
         <translation>Патронов: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="637"/>
+        <location filename="Client/drawgl.cpp" line="646"/>
         <source>walls: </source>
         <translation>Стен: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="638"/>
+        <location filename="Client/drawgl.cpp" line="647"/>
         <source>destroy: </source>
         <translation>Гранат: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="639"/>
         <source>Floor number: </source>
-        <translation>Этаж №</translation>
+        <translation type="obsolete">Этаж №</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="679"/>
+        <location filename="Client/drawgl.cpp" line="644"/>
+        <source>Alive: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="648"/>
+        <source>Floor â</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="715"/>
         <source>Return</source>
         <translation>Вернуться к игре</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="682"/>
+        <location filename="Client/drawgl.cpp" line="718"/>
         <source>on</source>
         <translation>активен</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="684"/>
+        <location filename="Client/drawgl.cpp" line="720"/>
         <source>off</source>
         <translation>включить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="686"/>
+        <location filename="Client/drawgl.cpp" line="722"/>
         <source>FullScreen: </source>
         <translation>Полноэкранный режим: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="689"/>
+        <location filename="Client/drawgl.cpp" line="725"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="691"/>
+        <location filename="Client/drawgl.cpp" line="727"/>
         <source>BOT</source>
         <translation>Бот</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="693"/>
+        <location filename="Client/drawgl.cpp" line="729"/>
         <source>Mouse Sensitivity: </source>
         <translation>Чувствительность мыши: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="694"/>
+        <location filename="Client/drawgl.cpp" line="730"/>
         <source>Exit?</source>
         <translation>Выйти?</translation>
+    </message>
+    <message>
+        <location filename="Client/drawgl.cpp" line="770"/>
+        <source>BotLast: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -267,7 +280,7 @@
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.cpp" line="81"/>
+        <location filename="SinglePlayer/mainwindow.cpp" line="88"/>
         <source>Labyrus is crossplatform game written with opengl and QT Written by Vladislav Tyulbashev</source>
         <translation>Labyrus - кроссплатформенная игра, написанная с использованием OpenGL и QT. Автор - Владислав Тюльбашевч</translation>
     </message>

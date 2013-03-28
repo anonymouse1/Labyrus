@@ -128,6 +128,9 @@ void DrawGl::paintGL() {
         drawMenu();
     if (legacy->ctrlPressed)
         drawOkular();
+
+    if (botActive)
+        drawBotLast();
 }
 
 void DrawGl::drawAxis() {
@@ -638,11 +641,11 @@ void DrawGl::drawHUD() {
     end2d();
     qglColor(Qt::green);
     renderText(5, 15, tr("From start game: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
-    renderText(5, this->height() - 20, tr("Alive status: ") + QString::number(a->alive), hudFont);
+    renderText(5, this->height() - 20, tr("Alive: ") + QString::number(a->alive), hudFont);
     renderText(5, this->height() - 40, tr("patrons: ") + QString::number(a->patrons), hudFont);
     renderText(5, this->height() - 60, tr("walls: ") + QString::number(a->wall), hudFont);
     renderText(5, this->height() - 80, tr("destroy: ") + QString::number(a->destroy), hudFont);
-    renderText(5, this->height() - 100, tr("Floor number: ") + QString::number(a->getFloor()), hudFont);
+    renderText(5, this->height() - 100, tr("Floor №") + QString::number(a->getFloor()), hudFont);
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     qglColor(Qt::red);
@@ -761,6 +764,23 @@ void DrawGl::drawOkular() {
         glTexCoord2d(0, 1);
     glEnd();
     end2d();
+}
+
+void DrawGl::drawBotLast() {
+    loadTexture(textures[hudbackground]);
+    begin2d();
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() - 100, this->height() / 2 - 20);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() + 100, this->height() / 2 - 20);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() + 100, this->height() / 2 + 20);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() - 100, this->height() / 2 + 20);
+        glTexCoord2d(0, 1);
+    glEnd();
+    end2d();
+    renderText(this->width() - 94, this->height() / 2 + 5, tr("BotLast: ") + QString::number(botLast) + "%  ");
 }
 
 DrawGl::~DrawGl() {

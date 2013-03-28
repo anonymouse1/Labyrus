@@ -66,6 +66,7 @@ public:
     bool botActive;
     int perspective;
     bool needRefreshCursor;
+    double botLast;
     double k;
     double f;
     double mouseSensitivity;
@@ -80,6 +81,7 @@ private:
     void drawHUD();
     void drawMenu();
     void drawOkular();
+    void drawBotLast();
 
     void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
     void drawFloorPoint(double x1, double y1, double h, bool b);

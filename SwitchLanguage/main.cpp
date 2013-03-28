@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
         } else if (QString(argv[1]).toUpper() == "EN") {
             setLanguage("en_US");
             return 0;
-        } else if ((QString(argv[1]).toUpper() == "-h") || (QString(argv[1]).toUpper() == "--help")) {
+        } else if ((QString(argv[1]).toUpper() == "-H") || (QString(argv[1]).toUpper() == "--HELP")) {
             printf("Welcome to labyrus-chooselanguage documentation\n");
             printf("\tUsage:\n");
             printf("\t\tlabyrus-chooselanguage [language] [-h | --help]\n");
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 
     printf("Possible languages:\n");
     printf("0: English\n");
-    printf("1: Русский\n");
+    printf("1: Russian\n");
     printf("-------------------\n");
     printf("Enter your number: ");
     int a;
