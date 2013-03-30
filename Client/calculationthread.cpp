@@ -32,16 +32,13 @@ void CalculationThread::run() {
 
 void CalculationThread::nextTime() {
     currentTime++;
+    double deltaX = 0;
+    double deltaY = 0;
+    double deltaH = 0;
     if (upPressed) {
-        double deltaX = cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
-        double deltaY = sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
-        double deltaH = -sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
-
-        check(deltaX, deltaY, deltaH);
-
-        main->coord.x += deltaX;
-        main->coord.y += deltaY;
-        main->coord.h += deltaH;
+        deltaX += cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
+        deltaY += sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
+        deltaH += -sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
     }
     if (leftPressed)
         main->angle -= 100 * speed;
@@ -50,37 +47,22 @@ void CalculationThread::nextTime() {
         main->angle += 100 * speed;
 
     if (downPressed) {
-        double deltaX = -cos((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
-        double deltaY = -sin((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
-        double deltaH = sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
-
-        check(deltaX, deltaY, deltaH);
-
-        main->coord.x += deltaX;
-        main->coord.y += deltaY;
-        main->coord.h += deltaH;
+        deltaX += -cos((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
+        deltaY += -sin((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
+        deltaH += sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
     }
 
     if (leftStrife) {
-        double deltaX = -cos(-main->angle * M_PI / 180) * speed;
-        double deltaY = -sin(-main->angle * M_PI / 180) * speed;
-        double deltaH = 0;
+        deltaX += -cos(-main->angle * M_PI / 180) * speed;
+        deltaY += -sin(-main->angle * M_PI / 180) * speed;
+        deltaH += 0;
 
-        check(deltaX, deltaY, deltaH);
-
-        main->coord.x = main->coord.x + deltaX;
-        main->coord.y = main->coord.y + deltaY;
     }
 
     if (rightStrife) {
-        double deltaX = -cos((-main->angle + 180) * M_PI / 180) * speed;
-        double deltaY = -sin((-main->angle + 180) * M_PI / 180) * speed;
-        double deltaH = 0;
-
-        check(deltaX, deltaY, deltaH);
-
-        main->coord.x = main->coord.x + deltaX;
-        main->coord.y = main->coord.y + deltaY;
+        deltaX += -cos((-main->angle + 180) * M_PI / 180) * speed;
+        deltaY += -sin((-main->angle + 180) * M_PI / 180) * speed;
+        deltaH += 0;
     }
 
     if (lookingDown)
@@ -88,6 +70,13 @@ void CalculationThread::nextTime() {
 
     if (lookingUp)
         main->yAngle -= 1;
+
+
+    check(deltaX, deltaY, deltaH);
+
+    main->coord.x += deltaX;
+    main->coord.y += deltaY;
+    main->coord.h += deltaH;
 
     main->checkAngles();
 }
