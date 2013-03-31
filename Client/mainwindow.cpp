@@ -256,7 +256,7 @@ void MainWindow::elementarMove(fpoint to) {
         app->processEvents();
         sleep(5);
         if (sqrt(sqr(to.x - input->coord.x) + sqr(to.y - input->coord.y) + sqr(to.h - input->coord.h)) >
-                sqrt(sqr(to.x - prev.x) + sqr(to.y - prev.y) + sqr(to.h - prev.h)))
+                sqrt(sqr(to.x - prev.x) + sqr(to.y - prev.y) + sqr(to.h - prev.h))) {
             if (time + 20 < thread->currentTime)
                 break;
             else {
@@ -265,6 +265,7 @@ void MainWindow::elementarMove(fpoint to) {
                 qDebug() << input->yAngle << input->angle;
                 qDebug() << "-------------------------";
             }
+        }
     }
     thread->upPressed = false;
 }

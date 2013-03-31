@@ -56,18 +56,18 @@ void DrawGl::initializeGL() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[2] = bindTexture(QPixmap(skinPath + "/roof.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[3] = bindTexture(QPixmap(skinPath + "/floor.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[4] = bindTexture(QPixmap(skinPath + "/compass.png", "png"), GL_TEXTURE_2D);
-    textures[5] = bindTexture(QPixmap(skinPath + "/sky.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[6] = bindTexture(QPixmap(skinPath + "/model.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg", "jpeg"), GL_TEXTURE_2D);
-    textures[8] = bindTexture(QPixmap(skinPath + "/icon.png", "png"), GL_TEXTURE_2D);
-    textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png", "png"), GL_TEXTURE_2D);
-    textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground.png", "png"), GL_TEXTURE_2D);
-    textures[11] = bindTexture(QPixmap(skinPath + "/okular.png", "png"), GL_TEXTURE_2D);
+    textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[2] = bindTexture(QPixmap(skinPath + "/roof.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[3] = bindTexture(QPixmap(skinPath + "/floor.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[4] = bindTexture(QPixmap(skinPath + "/compass.png", "PNG"), GL_TEXTURE_2D);
+    textures[5] = bindTexture(QPixmap(skinPath + "/sky.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[6] = bindTexture(QPixmap(skinPath + "/model.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg", "JPEG"), GL_TEXTURE_2D);
+    textures[8] = bindTexture(QPixmap(skinPath + "/icon.png", "PNG"), GL_TEXTURE_2D);
+    textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png", "PNG"), GL_TEXTURE_2D);
+    textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground.png", "PNG"), GL_TEXTURE_2D);
+    textures[11] = bindTexture(QPixmap(skinPath + "/okular.png", "PNG"), GL_TEXTURE_2D);
 
     I = new Model(skinPath + "/simple.s3d");
 

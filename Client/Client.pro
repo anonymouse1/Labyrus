@@ -10,7 +10,9 @@ QT       += network
 
 QT       += opengl
 
-LIBS += -L/usr/lib -lGLU
+LIBS += -L/usr/lib/qt
+
+unix: LIBS += -lGLU
 
 greaterThan(QT_MAJOR_VERSION, 4):
 

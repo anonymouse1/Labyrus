@@ -27,4 +27,4 @@ HEADERS += \
     mainclass.h \
     player.h
 
-DEFINES += LINUX
+unix: DEFINES += LINUX
