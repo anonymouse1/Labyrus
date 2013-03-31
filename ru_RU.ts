@@ -6,17 +6,17 @@
     <message>
         <location filename="Client/connection.ui" line="26"/>
         <source>Connecting</source>
-        <translation>Поключение</translation>
+        <translation>Подключение</translation>
     </message>
     <message>
         <location filename="Client/connection.ui" line="32"/>
         <source>Connecting to</source>
-        <translation>Подключаемся к</translation>
+        <translation>Поключаемся к</translation>
     </message>
     <message>
         <location filename="Client/connection.ui" line="39"/>
         <source>Please wait...</source>
-        <translation>Пожалуста, ждите...</translation>
+        <translation>Пожалуйста, ждите...</translation>
     </message>
 </context>
 <context>
@@ -28,12 +28,13 @@
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="643"/>
-        <source>From start game: </source>
+        <source>Elapsed: </source>
         <translation>Прошло: </translation>
     </message>
     <message>
-        <source>Alive status: </source>
-        <translation type="obsolete">Живой: </translation>
+        <location filename="Client/drawgl.cpp" line="644"/>
+        <source>Alive: </source>
+        <translation>Живой: </translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="645"/>
@@ -51,23 +52,14 @@
         <translation>Гранат: </translation>
     </message>
     <message>
-        <source>Floor number: </source>
-        <translation type="obsolete">Этаж №</translation>
-    </message>
-    <message>
-        <location filename="Client/drawgl.cpp" line="644"/>
-        <source>Alive: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="Client/drawgl.cpp" line="648"/>
         <source>Floor â</source>
-        <translation type="unfinished"></translation>
+        <translation>Этаж №</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="715"/>
         <source>Return</source>
-        <translation>Вернуться к игре</translation>
+        <translation>Продолжить</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="718"/>
@@ -77,7 +69,7 @@
     <message>
         <location filename="Client/drawgl.cpp" line="720"/>
         <source>off</source>
-        <translation>включить</translation>
+        <translation>выключить</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="722"/>
@@ -105,9 +97,9 @@
         <translation>Выйти?</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="770"/>
+        <location filename="Client/drawgl.cpp" line="783"/>
         <source>BotLast: </source>
-        <translation type="unfinished"></translation>
+        <translation>Пройдено: </translation>
     </message>
 </context>
 <context>
@@ -135,12 +127,12 @@
     <message>
         <location filename="Client/startDialog.ui" line="102"/>
         <source>Ip</source>
-        <translation>Ip</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Client/startDialog.ui" line="115"/>
         <source>127.0.0.1</source>
-        <translation>127.0.0.1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="Client/startDialog.ui" line="136"/>
@@ -202,12 +194,12 @@
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="14"/>
         <source>Labyrus</source>
-        <translation>Labyrus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="30"/>
         <source>vlad</source>
-        <translation>Влад</translation>
+        <translation>Влаж</translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="50"/>
@@ -227,7 +219,7 @@
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="182"/>
         <source>Latency</source>
-        <translation>Latency</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="192"/>
@@ -237,17 +229,17 @@
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="199"/>
         <source>Allow remote connections</source>
-        <translation>Разрешать удаленные соединения</translation>
+        <translation>Удаленные подключения</translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="212"/>
         <source>Strong number players</source>
-        <translation>Количество игроков фиксированно</translation>
+        <translation>Число игроков фиксированно</translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="245"/>
         <source>Number players</source>
-        <translation>Количество игроков</translation>
+        <translation>Число игроков</translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="274"/>
@@ -277,12 +269,13 @@
     <message>
         <location filename="SinglePlayer/mainwindow.ui" line="326"/>
         <source>exit</source>
-        <translation>Выход</translation>
+        <translation>Выйти</translation>
     </message>
     <message>
         <location filename="SinglePlayer/mainwindow.cpp" line="88"/>
         <source>Labyrus is crossplatform game written with opengl and QT Written by Vladislav Tyulbashev</source>
-        <translation>Labyrus - кроссплатформенная игра, написанная с использованием OpenGL и QT. Автор - Владислав Тюльбашевч</translation>
+        <translation>Labyrus - кроссплатформенная игра, написанная с использованием OpenGl и Qt русским разработчиком.
+Тюльбашев Владислав vladislav.tyulbashev@yandex.ru</translation>
     </message>
 </context>
 <context>
@@ -290,7 +283,7 @@
     <message>
         <location filename="Client/startdialog.cpp" line="44"/>
         <source>Connecting to: </source>
-        <translation>Поключение к:</translation>
+        <translation>Подключаемся к: </translation>
     </message>
 </context>
 </TS>

@@ -27,7 +27,7 @@ class MainWindow;
 #endif
 
 const double wallHeight = 0.1;
-const double eps = 0.00001;
+const double eps = 1e-5 * 5;
 const double sizeView = 10;
 
 enum {
