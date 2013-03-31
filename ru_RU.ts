@@ -69,7 +69,7 @@
     <message>
         <location filename="Client/drawgl.cpp" line="720"/>
         <source>off</source>
-        <translation>выключить</translation>
+        <translation type="unfinished">включить</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="722"/>
