@@ -31,15 +31,11 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     startAfter = 666;
 
     QObject::connect(timeFPS, SIGNAL(timeout()), this, SLOT(drawFPS()));
-    this->setFocus();
     timeFPS->start();
 
 
     firstMouseMove = true;
     botActive = false;
-    QCursor::setPos(width() / 2, height() / 2);
-    setCursor(QCursor(Qt::BlankCursor));
-    setMouseTracking(true);
     mousePressed = false;
 
     compass = new QPixmap(skinPath + "/compass.png");
@@ -49,6 +45,9 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
 
     QSettings s(settingsFile, QSettings::IniFormat);
     restoreGeometry(s.value("widgetGeometry").toByteArray());
+    QCursor::setPos(width() / 2, height() / 2);
+    setCursor(QCursor(Qt::BlankCursor));
+    setMouseTracking(true);
 }
 
 void DrawGl::initializeGL() {
@@ -459,18 +458,9 @@ void DrawGl::mouseReleaseEvent(QMouseEvent *event) {
     event->accept();
 }
 
-/*void DrawGl::wheelEvent(QWheelEvent *event) {
-    if (event->delta() > 0)
-        a->fgup();
-    else
-        a->fgdown();
-}*/
-
 void DrawGl::mouseMoveEvent(QMouseEvent *event) {
-    if (startingGame) {
-        QCursor::setPos(width() / 2, height() / 2);
+    if (startingGame)
         return;
-    }
 
     if (botActive || (!this->isFullScreen()))
         return;

@@ -88,8 +88,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         #ifdef BEAUTIFULL_BUGS
             widget->resize(widget->width(), widget->height() - 1);
         #else
-            widget->resize(widget->width(), widget->height() - 1);
-            widget->resize(widget->width(), widget->height() + 1);
+            if (widget->isFullScreen())
+                widget->showFullScreen();
+            else {
+                widget->resize(widget->width(), widget->height() - 1);
+                widget->resize(widget->width(), widget->height() + 1);
+            }
         #endif
     } else if (key == Qt::Key_Escape) {
         input->escapeMode = true;
