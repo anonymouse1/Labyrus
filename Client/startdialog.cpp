@@ -105,6 +105,10 @@ void startDialog::loadSettings() {
     ui->fullScreen->setChecked(s.value("fullscreen", QVariant(true)).toBool());
     ui->comboBox->setCurrentIndex(ui->comboBox->findText(s.value("skin", QVariant("default")).toString()));
     mouseSensitivity = s.value("mouseSensitivity", QVariant(0.3)).toDouble();
+    if (mouseSensitivity > 5)
+        mouseSensitivity = 5;
+    else if (mouseSensitivity < 0)
+        mouseSensitivity = 0;
     setPix(ui->comboBox->currentText());
 }
 

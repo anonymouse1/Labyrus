@@ -58,16 +58,17 @@ void DrawGl::initializeGL() {
 
     textures[0] = bindTexture(QPixmap(skinPath + "/defaultWall.jpg"), GL_TEXTURE_2D);
     textures[1] = bindTexture(QPixmap(skinPath + "/shortWall.jpg"), GL_TEXTURE_2D);
-    textures[2] = bindTexture(QPixmap(skinPath + "/roof.jpg"), GL_TEXTURE_2D);
+    textures[2] = bindTexture(QPixmap(skinPath + "/horizontalSlice.jpg"), GL_TEXTURE_2D);
     textures[3] = bindTexture(QPixmap(skinPath + "/floor.jpg"), GL_TEXTURE_2D);
     textures[4] = bindTexture(QPixmap(skinPath + "/compass.png"), GL_TEXTURE_2D);
     textures[5] = bindTexture(QPixmap(skinPath + "/sky.jpg"), GL_TEXTURE_2D);
     textures[6] = bindTexture(QPixmap(skinPath + "/model.jpg"), GL_TEXTURE_2D);
-    textures[7] = bindTexture(QPixmap(skinPath + "/realRoof.jpg"), GL_TEXTURE_2D);
+    textures[7] = bindTexture(QPixmap(skinPath + "/roof.jpg"), GL_TEXTURE_2D);
     textures[8] = bindTexture(QPixmap(skinPath + "/icon.png"), GL_TEXTURE_2D);
     textures[9] = bindTexture(QPixmap(skinPath + "/blackout.png"), GL_TEXTURE_2D);
     textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground.png"), GL_TEXTURE_2D);
     textures[11] = bindTexture(QPixmap(skinPath + "/okular.png"), GL_TEXTURE_2D);
+    textures[12] = bindTexture(QPixmap(skinPath + "/verticalSlice.jpg"), GL_TEXTURE_2D);
 
     I = new Model(skinPath + "/simple.s3d");
 
@@ -220,49 +221,49 @@ void DrawGl::drawRoofPart(double x, double y, double h, int type, bool b) {
     if (type == 1) {
         if (b) {
             glVertex3f(x - f, y + k, h + eps);
-            glTexCoord2d(0, 1);
-            glVertex3f(x - f, y, h + eps);
-            glTexCoord2d(0, 0);
-            glVertex3f(x + f, y, h + eps);
             glTexCoord2d(1, 0);
-            glVertex3f(x + f, y + k, h + eps);
+            glVertex3f(x - f, y, h + eps);
             glTexCoord2d(1, 1);
+            glVertex3f(x + f, y, h + eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x + f, y + k, h + eps);
+            glTexCoord2d(0, 0);
         } else {
-            glVertex3f(x + f, y, h + eps);
-            glTexCoord2d(1, 0);
-            glVertex3f(x - f, y, h + eps);
-            glTexCoord2d(0, 0);
-            glVertex3f(x - f, y + k, h + eps);
+            glVertex3f(x + f, y, h - eps);
             glTexCoord2d(0, 1);
-            glVertex3f(x + f, y + k, h + eps);
+            glVertex3f(x - f, y, h - eps);
             glTexCoord2d(1, 1);
+            glVertex3f(x - f, y + k, h - eps);
+            glTexCoord2d(1, 0);
+            glVertex3f(x + f, y + k, h - eps);
+            glTexCoord2d(0, 0);
         }
     } else if (type == 0) {
         if (b) {
-            glVertex3f(x + k, y + f, h + eps);
+            glVertex3f(x + k, y + f, h + 2 * eps);
             glTexCoord2d(1, 0);
-            glVertex3f(x, y + f, h + eps);
-            glTexCoord2d(0, 0);
-            glVertex3f(x, y - f, h + eps);
-            glTexCoord2d(0, 1);
-            glVertex3f(x + k, y - f, h + eps);
+            glVertex3f(x, y + f, h + 2 * eps);
             glTexCoord2d(1, 1);
+            glVertex3f(x, y - f, h + 2 * eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x + k, y - f, h + 2 * eps);
+            glTexCoord2d(0, 0);
         } else {
-            glVertex3f(x, y - f, h + eps);
-            glTexCoord2d(0, 1);
-            glVertex3f(x, y + f, h + eps);
-            glTexCoord2d(0, 0);
-            glVertex3f(x + k, y + f, h + eps);
+            glVertex3f(x, y + f, h - 2 * eps);
             glTexCoord2d(1, 0);
-            glVertex3f(x + k, y - f, h + eps);
+            glVertex3f(x + k, y + f, h - 2 * eps);
             glTexCoord2d(1, 1);
+            glVertex3f(x + k, y - f, h - 2 * eps);
+            glTexCoord2d(0, 1);
+            glVertex3f(x, y - f, h - 2 * eps);
+            glTexCoord2d(0, 0);
         }
     }
 }
 
 void DrawGl::drawMaze() {
     qglColor(Qt::white);
-    loadTexture(textures[0]);
+    loadTexture(textures[defaultWall]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
@@ -274,7 +275,17 @@ void DrawGl::drawMaze() {
             } else if (a->walls[i][3] == 1) {
                 drawQuad(x + f, y, x + f, y + k, h, wallHeight);
                 drawQuad(x - f, y + k, x - f, y, h, wallHeight);
-            } else if (a->h != 1) {
+            }
+        }
+    glEnd();
+
+    loadTexture(textures[verticalSlice]);
+    glBegin(GL_QUADS);
+        for (int i = 0; i < a->m; i++) {
+            double x = a->walls[i][0] * k;
+            double y = a->walls[i][1] * k;
+            double h = a->walls[i][2] * wallHeight;
+            if ((a->walls[i][3] == 2) && (a->h != 1)) {
                 drawQuad(x, y - eps, x + k, y - eps, h - f, f * 2);
                 drawQuad(x - eps, y + k, x - eps, y, h - f, f * 2);
                 drawQuad(x + k + eps, y, x + k + eps, y + k, h - f, f * 2);
@@ -283,7 +294,7 @@ void DrawGl::drawMaze() {
         }
     glEnd();
 
-    loadTexture(textures[1]);
+    loadTexture(textures[shortWall]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
@@ -299,7 +310,7 @@ void DrawGl::drawMaze() {
         }
     glEnd();
 
-    loadTexture(textures[2]);
+    loadTexture(textures[horizontalSlice]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
@@ -326,7 +337,7 @@ void DrawGl::drawMaze() {
 
     glEnd();
 
-    loadTexture(textures[realRoof]);
+    loadTexture(textures[roof]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++)
             if ((a->walls[i][3] == 2) && (a->h != 1))

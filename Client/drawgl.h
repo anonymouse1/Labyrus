@@ -33,16 +33,17 @@ const double sizeView = 10;
 enum {
     defaultWall = 0,
     shortWall = 1,
-    roof = 2,
+    horizontalSlice = 2,
     Floor = 3,
     compass = 4,
     sky = 5,
     model = 6,
-    realRoof = 7,
+    roof = 7,
     icon = 8,
     blackout = 9,
     hudbackground = 10,
-    okular = 11
+    okular = 11,
+    verticalSlice = 12
 };
 
 class DrawGl : public QGLWidget
