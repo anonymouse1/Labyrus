@@ -88,9 +88,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         #ifdef BEAUTIFULL_BUGS
             widget->resize(widget->width(), widget->height() - 1);
         #else
-            if (widget->isFullScreen())
+            if (widget->isFullScreen()) {
+                widget->resize(widget->width(), widget->height() - 1);
+                widget->resize(widget->width(), widget->height() + 1);
                 widget->showFullScreen();
-            else {
+            } else {
                 widget->resize(widget->width(), widget->height() - 1);
                 widget->resize(widget->width(), widget->height() + 1);
             }
@@ -156,8 +158,14 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         ctrlPressed = false;
         widget->perspective = backupPerspective;
         widget->needRefreshCursor = false;
-        widget->resize(widget->width(), widget->height() - 1);
-        widget->resize(widget->width(), widget->height() + 1);
+        if (widget->isFullScreen()) {
+            widget->resize(widget->width(), widget->height() - 1);
+            widget->resize(widget->width(), widget->height() + 1);
+            widget->showFullScreen();
+        } else {
+            widget->resize(widget->width(), widget->height() - 1);
+            widget->resize(widget->width(), widget->height() + 1);
+        }
     }
 }
 
