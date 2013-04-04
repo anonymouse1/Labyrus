@@ -38,11 +38,12 @@ private slots:
     void saveSettings();
     void loadSettings();
     void serverSaid();
+    void checkForShutDown();
 private:
     Ui::MainWindow *ui;
-    QProcess *server;
+    QProcess *server, *client;
     Console *console;
-
+    QTimer *serverShutDown;
 };
 
 #endif // MAINWINDOW_H

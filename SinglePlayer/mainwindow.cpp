@@ -41,11 +41,13 @@ void MainWindow::start() {
         attributes << "1";
         attributes << "--strong";
     }
-//    this->hide();
+    this->hide();
     server = new QProcess;
-    QProcess *client = new QProcess;
+    client = new QProcess;
     QEventLoop *loop = new QEventLoop;
     QTimer *timeout = new QTimer;
+    serverShutDown = new QTimer;
+    serverShutDown->setInterval(1000);
     console = new Console;
     console->setMinimumSize(QSize(500, 300));
     console->setMaximumSize(QSize(500, 300));
@@ -61,7 +63,7 @@ void MainWindow::start() {
     QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
     QObject::connect(server, SIGNAL(finished(int)), console, SLOT(deleteLater()));
     QObject::connect(server, SIGNAL(readyReadStandardError()), this, SLOT(serverSaid()));
-    QObject::connect(console, SIGNAL(destroyed()), server, SLOT(terminate()));
+    QObject::connect(serverShutDown, SIGNAL(timeout()), this, SLOT(checkForShutDown()));
     server->start(prefix + "labyrus-server", attributes);
     loop->exec();
 
@@ -78,6 +80,7 @@ void MainWindow::start() {
     attributes << "-i" << "127.0.0.1" ;
     attributes << "--start";
     client->start(prefix + "labyrus-client", attributes);
+    serverShutDown->start();
 }
 
 void MainWindow::aboutQt() {
@@ -119,4 +122,13 @@ void MainWindow::serverSaid() {
     server->setReadChannel(QProcess::StandardError);
     while (server->canReadLine())
         console->addString(server->readLine());
+}
+
+void MainWindow::checkForShutDown() {
+    if (!console->isVisible()) {
+        qDebug() << "shutting down server";
+        server->terminate();
+        client->terminate();
+        this->close();
+    }
 }
