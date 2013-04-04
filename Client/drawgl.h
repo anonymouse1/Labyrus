@@ -93,8 +93,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[12];
-    GLuint superFontList;
+    GLuint textures[13];
     QString currentText;
     bool enteringText;
     QString skinPath;
