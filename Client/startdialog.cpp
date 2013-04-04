@@ -27,7 +27,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
     }
     scanSkins();
 
-    ui->comboBox->setCurrentIndex(ui->comboBox->findText("default"));
+    ui->comboBox->setCurrentIndex(max(ui->comboBox->findText("default"), 0));
 
     if (st) {
         QTimer::singleShot(100, this, SLOT(start()));
