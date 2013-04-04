@@ -781,7 +781,7 @@ void DrawGl::drawBotLast() {
         glTexCoord2d(0, 1);
     glEnd();
     end2d();
-    renderText(this->width() - 94, this->height() / 2 + 5, tr("BotLast: ") + QString::number(botLast) + "%");
+    renderText(this->width() - 94, this->height() / 2 + 5, tr("BotLast: ") + QString::number(botLast, 'g', 0) + "%");
 }
 
 DrawGl::~DrawGl() {
