@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
 
-    server = new QProcess;
+    server = new QProcess(this);
     console = new Console;
     serverShutDown = new QTimer;
     serverShutDown->setInterval(1000);
@@ -63,11 +63,20 @@ void MainWindow::start() {
     QObject::connect(server, SIGNAL(readyReadStandardOutput()), loop, SLOT(quit()));
     QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
 
+    QProcess killPreviousServer;
+    #ifdef Q_OS_LINUX
+        killPreviousServer.start("killall", QStringList() << "labyrus-server");
+    #else
+        killPreviousServer.start("taskkill", QStringList() << "/F" << "/um" << "labyrus-server.exe");
+    #endif
+
+    killPreviousServer.waitForFinished();
+
     server->start(prefix + "labyrus-server", attributes);
     loop->exec();
     server->setReadChannel(QProcess::StandardOutput);
     if (QString(server->readLine()) != "map generated\n") {
-
+        QMessageBox::critical(this, tr("Fatal error"), tr("Error while starting server"));
     } else
         console->addString("map generated");
 
