@@ -13,12 +13,20 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(aboutQt()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
+
+    server = new QProcess;
+    console = new Console;
+    serverShutDown = new QTimer;
+    serverShutDown->setInterval(1000);
+
+
     loadSettings();
 }
 
 MainWindow::~MainWindow() {
     server->terminate();
     saveSettings();
+    qDebug() << "dying...";
     delete ui;
 }
 
@@ -42,10 +50,6 @@ void MainWindow::start() {
         attributes << "--strong";
     }
     this->hide();
-    server = new QProcess;
-    serverShutDown = new QTimer;
-    serverShutDown->setInterval(1000);
-    console = new Console;
     console->setMinimumSize(QSize(500, 300));
     console->setMaximumSize(QSize(500, 300));
     console->show();
@@ -78,6 +82,7 @@ void MainWindow::saveSettings() {
     s.setValue("strongNumberPlayers", QVariant(ui->strong->checkState() == Qt::Checked));
     s.setValue("numberPlayers", QVariant(ui->numberPlayers->value()));
     s.setValue("latency", QVariant(ui->spinBox->value()));
+    s.setValue("consoleGeometry", QVariant(console->saveGeometry()));
 }
 
 void MainWindow::loadSettings() {
@@ -91,6 +96,7 @@ void MainWindow::loadSettings() {
     ui->strong->setChecked(s.value("strongNumberPlayers", QVariant(false)).toBool());
     ui->numberPlayers->setValue(s.value("numberPlayers", QVariant(1)).toInt());
     ui->spinBox->setValue(s.value("latency", QVariant(25)).toInt());
+    console->restoreGeometry(s.value("consoleGeometry").toByteArray());
 }
 
 void MainWindow::serverSaid() {
