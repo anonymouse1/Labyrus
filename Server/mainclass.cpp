@@ -69,11 +69,12 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 void MainClass::die(QString s) {
     if (s != "")
         qDebug() << s;
-    #ifdef LINUX
+    #ifdef Q_OS_LINUX
         if (s == "")
             quick_exit(0);
         else
             quick_exit(1);
+    #else
+        exit(1);
     #endif
-    exit(1);
 }

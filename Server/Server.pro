@@ -26,5 +26,3 @@ HEADERS += \
     server.h \
     mainclass.h \
     player.h
-
-unix: DEFINES += LINUX
