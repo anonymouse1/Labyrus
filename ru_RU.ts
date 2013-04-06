@@ -22,82 +22,82 @@
 <context>
     <name>DrawGl</name>
     <message>
-        <location filename="Client/drawgl.cpp" line="356"/>
+        <location filename="Client/drawgl.cpp" line="366"/>
         <source>Starting after </source>
         <translation>Старт через </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="643"/>
+        <location filename="Client/drawgl.cpp" line="644"/>
         <source>Elapsed: </source>
         <translation>Прошло: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="644"/>
+        <location filename="Client/drawgl.cpp" line="645"/>
         <source>Alive: </source>
         <translation>Живой: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="645"/>
+        <location filename="Client/drawgl.cpp" line="646"/>
         <source>patrons: </source>
         <translation>Патронов: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="646"/>
+        <location filename="Client/drawgl.cpp" line="647"/>
         <source>walls: </source>
         <translation>Стен: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="647"/>
+        <location filename="Client/drawgl.cpp" line="648"/>
         <source>destroy: </source>
         <translation>Гранат: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="648"/>
+        <location filename="Client/drawgl.cpp" line="649"/>
         <source>Floor â</source>
         <translation>Этаж №</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="715"/>
+        <location filename="Client/drawgl.cpp" line="716"/>
         <source>Return</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="718"/>
+        <location filename="Client/drawgl.cpp" line="719"/>
         <source>on</source>
         <translation>активен</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="720"/>
+        <location filename="Client/drawgl.cpp" line="721"/>
         <source>off</source>
-        <translation type="unfinished">включить</translation>
+        <translation>выключить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="722"/>
+        <location filename="Client/drawgl.cpp" line="723"/>
         <source>FullScreen: </source>
         <translation>Полноэкранный режим: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="725"/>
+        <location filename="Client/drawgl.cpp" line="726"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="727"/>
+        <location filename="Client/drawgl.cpp" line="728"/>
         <source>BOT</source>
         <translation>Бот</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="729"/>
+        <location filename="Client/drawgl.cpp" line="730"/>
         <source>Mouse Sensitivity: </source>
         <translation>Чувствительность мыши: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="730"/>
+        <location filename="Client/drawgl.cpp" line="731"/>
         <source>Exit?</source>
         <translation>Выйти?</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="783"/>
+        <location filename="Client/drawgl.cpp" line="784"/>
         <source>BotLast: </source>
         <translation>Пройдено: </translation>
     </message>
@@ -169,110 +169,118 @@
     </message>
     <message>
         <location filename="Client/mainwindow.cpp" line="63"/>
-        <location filename="Client/mainwindow.cpp" line="129"/>
+        <location filename="Client/mainwindow.cpp" line="135"/>
         <source>W</source>
         <translation>Ц</translation>
     </message>
     <message>
         <location filename="Client/mainwindow.cpp" line="65"/>
-        <location filename="Client/mainwindow.cpp" line="135"/>
+        <location filename="Client/mainwindow.cpp" line="141"/>
         <source>S</source>
         <translation>Ы</translation>
     </message>
     <message>
         <location filename="Client/mainwindow.cpp" line="71"/>
-        <location filename="Client/mainwindow.cpp" line="137"/>
+        <location filename="Client/mainwindow.cpp" line="143"/>
         <source>A</source>
         <translation>Ф</translation>
     </message>
     <message>
         <location filename="Client/mainwindow.cpp" line="73"/>
-        <location filename="Client/mainwindow.cpp" line="139"/>
+        <location filename="Client/mainwindow.cpp" line="145"/>
         <source>D</source>
         <translation>В</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="14"/>
+        <location filename="ServerGui/mainwindow.ui" line="14"/>
         <source>Labyrus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="30"/>
         <source>vlad</source>
-        <translation>Влаж</translation>
+        <translation type="obsolete">Влаж</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="50"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="obsolete">Имя</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="95"/>
+        <location filename="ServerGui/mainwindow.ui" line="56"/>
         <source>Size field</source>
         <translation>Размер лабиринта</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="137"/>
+        <location filename="ServerGui/mainwindow.ui" line="98"/>
         <source>Height of field</source>
         <translation>Высота лабиринта</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="182"/>
+        <location filename="ServerGui/mainwindow.ui" line="143"/>
         <source>Latency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="192"/>
+        <location filename="ServerGui/mainwindow.ui" line="153"/>
         <source>Cheats</source>
         <translation>Читы</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="199"/>
+        <location filename="ServerGui/mainwindow.ui" line="160"/>
         <source>Allow remote connections</source>
         <translation>Удаленные подключения</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="212"/>
+        <location filename="ServerGui/mainwindow.ui" line="202"/>
         <source>Strong number players</source>
         <translation>Число игроков фиксированно</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="245"/>
+        <location filename="ServerGui/mainwindow.ui" line="241"/>
         <source>Number players</source>
         <translation>Число игроков</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="274"/>
+        <location filename="ServerGui/mainwindow.ui" line="267"/>
         <source>Start</source>
         <translation>Старт</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="291"/>
+        <location filename="ServerGui/mainwindow.ui" line="284"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="297"/>
+        <location filename="ServerGui/mainwindow.ui" line="290"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="316"/>
+        <location filename="ServerGui/mainwindow.ui" line="301"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="321"/>
+        <location filename="ServerGui/mainwindow.ui" line="306"/>
         <source>About Qt</source>
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.ui" line="326"/>
+        <location filename="ServerGui/mainwindow.ui" line="311"/>
         <source>exit</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="SinglePlayer/mainwindow.cpp" line="88"/>
+        <location filename="ServerGui/mainwindow.cpp" line="79"/>
+        <source>Fatal error</source>
+        <translation>Фатальная ошибка</translation>
+    </message>
+    <message>
+        <location filename="ServerGui/mainwindow.cpp" line="79"/>
+        <source>Error while starting server</source>
+        <translation>Сервер не может быть запущен</translation>
+    </message>
+    <message>
+        <location filename="ServerGui/mainwindow.cpp" line="92"/>
         <source>Labyrus is crossplatform game written with opengl and QT Written by Vladislav Tyulbashev</source>
         <translation>Labyrus - кроссплатформенная игра, написанная с использованием OpenGl и Qt русским разработчиком.
 Тюльбашев Владислав vladislav.tyulbashev@yandex.ru</translation>
