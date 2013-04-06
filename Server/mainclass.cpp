@@ -9,7 +9,6 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
     int players = 1;
     qint16 port = 7777;
     bool strong = false;
-    bool silence = false;
     bool cheats = false;
     bool radiation = false;
     for (int i = 0; i < argc; i++)
@@ -21,7 +20,6 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             printf("\t\t-l --latency <int> for setting latency\n");
             printf("\t\t-p --players <int> for setting number of players\n");
             printf("\t\t-s --strong for setting strong number of players\n");
-            printf("\t\t-i --silence for more silence\n");
             printf("\t\t-r --radiation for enable radiation\n");
             printf("\t\t-c --cheats for allow cheats\n");
             printf("\t\t-t --port <int> for setting listening port\n");
@@ -52,9 +50,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             strong = true;
         } else if ((QString(argv[i]) == "-v") || (QString(argv[i]) == "--version")) {
             die("program has no version [alpha]");
-        } else if ((QString(argv[i]) == "-i") || (QString(argv[i]) == "--silence"))
-            silence = true;
-          else if ((QString(argv[i]) == "-r") || (QString(argv[i]) == "--radiation"))
+        } else if ((QString(argv[i]) == "-r") || (QString(argv[i]) == "--radiation"))
             radiation = true;
           else if ((QString(argv[i]) == "-c") || (QString(argv[i]) == "--cheats"))
             cheats = true;
@@ -67,7 +63,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     if (n * n * h > 3000)
         die("The maze is too big");
-    server = new Server(port, radiation, cheats, silence, n, h, latency, players, strong, this);
+    server = new Server(port, radiation, cheats, n, h, latency, players, strong, this);
 }
 
 void MainClass::die(QString s) {

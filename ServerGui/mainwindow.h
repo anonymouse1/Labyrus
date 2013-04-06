@@ -9,7 +9,7 @@
 #include <QSettings>
 #include <QDir>
 #include <console.h>
-
+#include <QEventLoop>
 
 namespace Ui {
     class MainWindow;
@@ -44,6 +44,7 @@ private:
     QProcess *server;
     Console *console;
     QTimer *serverShutDown;
+    QEventLoop *loop;
 };
 
 #endif // MAINWINDOW_H

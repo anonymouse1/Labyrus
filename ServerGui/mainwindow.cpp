@@ -54,13 +54,24 @@ void MainWindow::start() {
     console->setMaximumSize(QSize(500, 300));
     console->show();
 
+    loop = new QEventLoop;
+
 
     QObject::connect(server, SIGNAL(finished(int)), console, SLOT(deleteLater()));
     QObject::connect(server, SIGNAL(readyReadStandardError()), this, SLOT(serverSaid()));
     QObject::connect(serverShutDown, SIGNAL(timeout()), this, SLOT(checkForShutDown()));
-    server->start(prefix + "labyrus-server", attributes);
+    QObject::connect(server, SIGNAL(readyReadStandardOutput()), loop, SLOT(quit()));
+    QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
 
+    server->start(prefix + "labyrus-server", attributes);
+    loop->exec();
     server->setReadChannel(QProcess::StandardOutput);
+    if (QString(server->readLine()) != "map generated\n") {
+
+    } else
+        console->addString("map generated");
+
+
     serverShutDown->start();
 }
 

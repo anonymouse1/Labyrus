@@ -1,13 +1,20 @@
 #include "server.h"
 
-Server::Server(qint16 port, bool rad, bool cheat, bool sil, int size, int height, int lat, int players, bool strong, QObject *parent) :
+Server::Server(qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
         die(errorString());
 
     alreadyPlayers = 0;
-    silence = sil;
+    qDebug() << "port:" << port;
+    qDebug() << "radiation:" << rad;
+    qDebug() << "cheats:" << cheat;
+    qDebug() << "size:" << size;
+    qDebug() << "height:" << height;
+    qDebug() << "latency:" << lat;
+    qDebug() << "Number of players:" << players;
+    qDebug() << "Fixed number of players:" << strong;
 
     latency = lat;
     numPlayers = players;
@@ -241,8 +248,7 @@ bool Server::isConnected() {
 }
 
 void Server::generateMap() {
-    if (!silence)
-        qDebug() << "start generating map";
+    qDebug() << "start generating map";
 
     m = 0;
     for (int j = 0; j < h; j++)
@@ -305,8 +311,7 @@ void Server::generateMap() {
 
     for (int i = 0; i < cur; i++) {
         if (i % (cur / 10 + 1) == 0)
-            if (!silence)
-                qDebug() << i / (cur / 10 + 1) * 10 << "%";
+            qDebug() << i / (cur / 10 + 1) * 10 << "%";
 
         for (int k = 0; k < 4; k++)
             walls[m][k] = tmpWalls[i][k];
