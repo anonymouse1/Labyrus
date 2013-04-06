@@ -771,17 +771,17 @@ void DrawGl::drawBotLast() {
     loadTexture(textures[hudbackground]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() - 100, this->height() / 2 - 20);
+        glVertex2d(this->width() - 110, this->height() / 2 - 20);
         glTexCoord2d(0, 0);
-        glVertex2d(this->width() + 100, this->height() / 2 - 20);
+        glVertex2d(this->width() + 110, this->height() / 2 - 20);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() + 100, this->height() / 2 + 20);
+        glVertex2d(this->width() + 110, this->height() / 2 + 20);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() - 100, this->height() / 2 + 20);
+        glVertex2d(this->width() - 110, this->height() / 2 + 20);
         glTexCoord2d(0, 1);
     glEnd();
     end2d();
-    renderText(this->width() - 94, this->height() / 2 + 5, tr("BotLast: ") + QString::number(botLast, 'g', 0) + "%");
+    renderText(this->width() - 104, this->height() / 2 + 5, tr("BotLast: ") + QString::number(botLast, 'f', 0) + "%");
 }
 
 DrawGl::~DrawGl() {

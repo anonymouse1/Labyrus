@@ -41,7 +41,7 @@ private slots:
     void checkForShutDown();
 private:
     Ui::MainWindow *ui;
-    QProcess *server, *client;
+    QProcess *server;
     Console *console;
     QTimer *serverShutDown;
 };

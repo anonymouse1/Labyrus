@@ -43,9 +43,6 @@ void MainWindow::start() {
     }
     this->hide();
     server = new QProcess;
-    client = new QProcess;
-    QEventLoop *loop = new QEventLoop;
-    QTimer *timeout = new QTimer;
     serverShutDown = new QTimer;
     serverShutDown->setInterval(1000);
     console = new Console;
@@ -53,33 +50,13 @@ void MainWindow::start() {
     console->setMaximumSize(QSize(500, 300));
     console->show();
 
-    QObject::connect(timeout, SIGNAL(timeout()), loop, SLOT(quit()));
-    timeout->setInterval(7000);
-    timeout->start();
 
-
-    QObject::connect(client, SIGNAL(finished(int)), server, SLOT(terminate()));
-    QObject::connect(server, SIGNAL(readyReadStandardOutput()), loop, SLOT(quit()));
-    QObject::connect(server, SIGNAL(finished(int)), loop, SLOT(quit()));
     QObject::connect(server, SIGNAL(finished(int)), console, SLOT(deleteLater()));
     QObject::connect(server, SIGNAL(readyReadStandardError()), this, SLOT(serverSaid()));
     QObject::connect(serverShutDown, SIGNAL(timeout()), this, SLOT(checkForShutDown()));
     server->start(prefix + "labyrus-server", attributes);
-    loop->exec();
 
     server->setReadChannel(QProcess::StandardOutput);
-    QString res = server->readLine();
-    if (res != "map generated\n") {
-        QMessageBox::about(this, QString("Die"), res);
-        return;
-    }
-
-    attributes.clear();
-    attributes << "-n" << ui->name->text();
-    attributes << "-p" << "7777";
-    attributes << "-i" << "127.0.0.1" ;
-    attributes << "--start";
-    client->start(prefix + "labyrus-client", attributes);
     serverShutDown->start();
 }
 
@@ -93,8 +70,7 @@ void MainWindow::about() {
 
 void MainWindow::saveSettings() {
     QSettings s(settingsFile, QSettings::IniFormat);
-    s.setValue("singlePlayerGeometry", QVariant(saveGeometry()));
-    s.setValue("name", QVariant(ui->name->text()));
+    s.setValue("serverGuiGeometry", QVariant(saveGeometry()));
     s.setValue("size", QVariant(ui->fieldSize->value()));
     s.setValue("height", QVariant(ui->heightOfField->value()));
     s.setValue("cheats", QVariant(ui->cheats->checkState() == Qt::Checked));
@@ -106,8 +82,7 @@ void MainWindow::saveSettings() {
 
 void MainWindow::loadSettings() {
     QSettings s(settingsFile, QSettings::IniFormat);
-    restoreGeometry(s.value("singlePlayerGeometry").toByteArray());
-    ui->name->setText(s.value("name", QVariant("vlad")).toString());
+    restoreGeometry(s.value("serverGuiGeometry").toByteArray());
     ui->fieldSize->setValue(s.value("size", QVariant(10)).toInt());
     ui->heightOfField->setValue(s.value("height", QVariant(1)).toInt());
     ui->cheats->setChecked(s.value("cheats", QVariant(false)).toBool());
@@ -128,7 +103,6 @@ void MainWindow::checkForShutDown() {
     if (!console->isVisible()) {
         qDebug() << "shutting down server";
         server->terminate();
-        client->terminate();
         this->close();
     }
 }
