@@ -67,7 +67,7 @@ void MainWindow::start() {
     #ifdef Q_OS_LINUX
         killPreviousServer.start("killall", QStringList() << "labyrus-server");
     #else
-        killPreviousServer.start("taskkill", QStringList() << "/F" << "/um" << "labyrus-server.exe");
+        killPreviousServer.start("taskkill.exe", QStringList() << "/F" << "/IM" << "labyrus-server.exe");
     #endif
 
     killPreviousServer.waitForFinished();
@@ -75,8 +75,9 @@ void MainWindow::start() {
     server->start(prefix + "labyrus-server", attributes);
     loop->exec();
     server->setReadChannel(QProcess::StandardOutput);
-    if (QString(server->readLine()) != "map generated\n") {
-        QMessageBox::critical(this, tr("Fatal error"), tr("Error while starting server"));
+    QString err = server->readLine();
+    if (err.left(13) != "map generated") {
+        QMessageBox::critical(this, tr("Fatal error"), err);
     } else
         console->addString("map generated");
 
