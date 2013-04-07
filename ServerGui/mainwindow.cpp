@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     server->terminate();
+    server->waitForFinished();
     saveSettings();
-    qDebug() << "dying...";
     delete ui;
 }
 
