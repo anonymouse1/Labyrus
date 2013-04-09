@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
         } else if ((QString(argv[1]).toUpper() == "-H") || (QString(argv[1]).toUpper() == "--HELP")) {
             printf("Welcome to labyrus-chooselanguage documentation\n");
             printf("\tUsage:\n");
-            printf("\t\tlabyrus-chooselanguage [language] [-h | --help]\n");
-            printf("\t\tFor example: labyrus-chooselanguage ru\n");
+            printf("\t\tlabyrus-switchlanguage [language] [-h | --help]\n");
+            printf("\t\tFor example: labyrus-switchlanguage ru\n");
             return 0;
         } else {
             printf("\tUnknown arguments.\n");
