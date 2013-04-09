@@ -55,7 +55,7 @@ void Player::disconnect() {
     qDebug() << this->name << "disconnected";
     emit say("S\n" + name + " disconnected\n");
     server->names.remove(name);
-    this->terminate();
+    exit(0);
 }
 
 void Player::sendHeroTime() {

@@ -58,6 +58,7 @@ void Server::incomingConnection(qintptr handle) {
 void Server::processConnection(Player *player) {
 //    QTcpSocket *socket = server->nextPendingConnection();
     qDebug() << QThread::currentThread();
+    QObject::connect(player, SIGNAL(finished()), player, SLOT(deleteLater()));
     QTcpSocket *socket = player->socket;
 
     if (!socket->canReadLine())
