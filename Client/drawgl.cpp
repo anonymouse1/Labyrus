@@ -582,12 +582,13 @@ void DrawGl::drawHeroes() {
     qglColor(Qt::black);
     loadTexture(textures[model]);
     for (int i = 0; i < a->otherHeroes; i++)
-        if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1) {
-            qglColor(QColor(0, a->otherAlive[i] * 200, 0));
+        if ((a->heroes[i].x != -1) || (a->heroes[i].y) != -1)
+            if (a->heroes[i].rast(a->coord) > 0.2) {
+                qglColor(QColor(0, a->otherAlive[i] * 200, 0));
 
-            renderText(a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k + 3 * f, a->heroNames[i], hudFont);
-            I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k);
-        }
+                renderText(a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k + 3 * f, a->heroNames[i], hudFont);
+                I->draw(1 / sizeView / 10, a->heroes[i].x * k, a->heroes[i].y * k, a->heroes[i].h * k);
+            }
 }
 
 void DrawGl::drawCompass() {

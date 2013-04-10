@@ -19,6 +19,8 @@ struct fpoint {
     double x;
     double y;
     double h;
+
+    const inline double rast(const fpoint &a) { return sqrt((x - a.x) * (x - a.x) + (y - a.y) * (y - a.y) + (h - a.h) * (h - a.h)); }
 };
 
 struct gpoint {
