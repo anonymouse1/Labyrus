@@ -97,7 +97,6 @@ void NetworkClass::readInformation() {
             radiation = true;
         } else if (s == "p\n") {
             messages->addMessage("Ping time: " + QString::number(pingTime->elapsed()) + "ms");
-            qDebug() << pingTime->elapsed();
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
@@ -200,4 +199,8 @@ void NetworkClass::refreshCoords() {
 
 void NetworkClass::runCommand(QString s) {
     go(s);
+}
+
+bool NetworkClass::isAutonomous() {
+    return mainSocket->state() != QTcpSocket::ConnectedState;
 }

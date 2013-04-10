@@ -8,12 +8,13 @@ QList<QString> MessagesStack::getMessages() {
 }
 
 void MessagesStack::addMessage(QString s) {
-    qDebug() << "New message" << s;
     if (list.size() == 10)
         list.removeFirst();
 
     if (s[s.length() - 1] == '\n')
         s.remove(s.length() - 1, 1);
+
+    qDebug() << "New message" << s;
 
     list.append(s);
     if (list.size() != 10) {

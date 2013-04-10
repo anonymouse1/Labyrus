@@ -57,6 +57,7 @@ public:
     void checkAngles();
     int getFloor();
     void go(QString s, bool flush = false, bool addEndLine = true);
+    bool isAutonomous();
 private:
     QMutex processingInformation;
     QTcpSocket *mainSocket;
