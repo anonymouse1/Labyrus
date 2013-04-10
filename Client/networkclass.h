@@ -20,7 +20,7 @@ struct fpoint {
     double y;
     double h;
 
-    const inline double rast(const fpoint &a) { return sqrt((x - a.x) * (x - a.x) + (y - a.y) * (y - a.y) + (h - a.h) * (h - a.h)); }
+    inline double rast(const fpoint &a) { return sqrt((x - a.x) * (x - a.x) + (y - a.y) * (y - a.y) + (h - a.h) * (h - a.h)); }
 };
 
 struct gpoint {
@@ -41,10 +41,6 @@ public:
     fpoint heroes[100];
     QString heroNames[100];
     int otherAlive[100];
-    int patrons;
-    int wall;
-    int destroy;
-    bool alive;
     bool cheats;
     bool radiation;
     int myDescriptor;

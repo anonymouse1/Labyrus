@@ -643,10 +643,10 @@ void DrawGl::drawHUD() {
     end2d();
     qglColor(Qt::green);
     renderText(5, 15, tr("Elapsed: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
-    renderText(5, this->height() - 20, tr("Alive: ") + QString::number(a->alive), hudFont);
-    renderText(5, this->height() - 40, tr("patrons: ") + QString::number(a->patrons), hudFont);
-    renderText(5, this->height() - 60, tr("walls: ") + QString::number(a->wall), hudFont);
-    renderText(5, this->height() - 80, tr("destroy: ") + QString::number(a->destroy), hudFont);
+//    renderText(5, this->height() - 20, tr("Alive: ") + QString::number(a->alive), hudFont);
+//    renderText(5, this->height() - 40, tr("patrons: ") + QString::number(a->patrons), hudFont);
+//    renderText(5, this->height() - 60, tr("walls: ") + QString::number(a->wall), hudFont);
+//    renderText(5, this->height() - 80, tr("destroy: ") + QString::number(a->destroy), hudFont);
     renderText(5, this->height() - 100, tr("Floor №") + QString::number(a->getFloor()), hudFont);
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 

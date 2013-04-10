@@ -90,12 +90,6 @@ void Server::processConnection(Player *player) {
     socket->write((QString::number(latency) + "\n").toLocal8Bit());
 
     player->socket = socket;
-    player->patrons = 3;
-    player->walls = 1;
-    player->alive = true;
-    player->destiny = 0;
-    player->destroy = 3;
-
     qDebug() << player->name << "connected";
     qDebug() << "as" << socket->socketDescriptor();
     alreadyPlayers++;

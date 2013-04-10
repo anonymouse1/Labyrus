@@ -23,12 +23,6 @@ public:
 
     QString name;
     fpoint coord;
-    bool alive;
-    int patrons;
-    int walls;
-    int destiny;
-    int destroy;
-
     QTcpSocket *socket;
     int socketDescriptor;
     Server *server;
