@@ -26,7 +26,6 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(input, SIGNAL(gameStart()), this, SLOT(gameStart()));
     QObject::connect(input, SIGNAL(connectionFailed()), this, SLOT(connectionFailed()));
     QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
-    QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
     QObject::connect(checkOrDie, SIGNAL(timeout()), this, SLOT(checkForDie()));
     QObject::connect(widget, SIGNAL(runCommand(QString)), input, SLOT(runCommand(QString)));
 
@@ -373,6 +372,7 @@ void MainWindow::connectionFailed() {
 
 void MainWindow::connectedSuccess() {
     qDebug() << "success";
+    QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
     emit successConnection();
 }
 
