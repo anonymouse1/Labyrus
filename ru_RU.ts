@@ -52,20 +52,9 @@
         <translation>Прошло: </translation>
     </message>
     <message>
-        <source>Alive: </source>
-        <translation type="obsolete">Живой: </translation>
-    </message>
-    <message>
-        <source>patrons: </source>
-        <translation type="obsolete">Патронов: </translation>
-    </message>
-    <message>
-        <source>walls: </source>
-        <translation type="obsolete">Стен: </translation>
-    </message>
-    <message>
-        <source>destroy: </source>
-        <translation type="obsolete">Гранат: </translation>
+        <location filename="Client/drawgl.cpp" line="359"/>
+        <source>Welcome!!!</source>
+        <translation>Добро пожаловать!!!</translation>
     </message>
     <message>
         <location filename="Client/drawgl.cpp" line="657"/>
@@ -122,10 +111,6 @@
         <source>Bot: </source>
         <translation>Бот: </translation>
     </message>
-    <message>
-        <source>BotLast: </source>
-        <translation type="obsolete">Пройдено: </translation>
-    </message>
 </context>
 <context>
     <name>Form</name>
@@ -157,7 +142,7 @@
     <message>
         <location filename="Client/startDialog.ui" line="115"/>
         <source>127.0.0.1</source>
-        <translation type="unfinished"></translation>
+        <translation>127.0.0.1</translation>
     </message>
     <message>
         <location filename="Client/startDialog.ui" line="136"/>
@@ -219,15 +204,7 @@
     <message>
         <location filename="ServerGui/mainwindow.ui" line="14"/>
         <source>Labyrus</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>vlad</source>
-        <translation type="obsolete">Влаж</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Имя</translation>
+        <translation>Лабирус</translation>
     </message>
     <message>
         <location filename="ServerGui/mainwindow.ui" line="56"/>
@@ -242,7 +219,7 @@
     <message>
         <location filename="ServerGui/mainwindow.ui" line="143"/>
         <source>Latency</source>
-        <translation type="unfinished"></translation>
+        <translation>Latency</translation>
     </message>
     <message>
         <location filename="ServerGui/mainwindow.ui" line="153"/>
@@ -303,10 +280,6 @@
         <location filename="ServerGui/mainwindow.cpp" line="83"/>
         <source>Fatal error</source>
         <translation>Фатальная ошибка</translation>
-    </message>
-    <message>
-        <source>Error while starting server</source>
-        <translation type="obsolete">Сервер не может быть запущен</translation>
     </message>
     <message>
         <location filename="ServerGui/mainwindow.cpp" line="96"/>

@@ -356,7 +356,7 @@ void DrawGl::drawMaze() {
     qglColor(Qt::blue);
 
     glLineWidth(1);
-    drawText(f + eps, f + eps, wallHeight / 2, false, true, QString::fromLocal8Bit("Добро Пыжаловать!!!"));
+    drawText(f + eps, f + eps, wallHeight / 2, false, true, tr("Welcome!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
 
     loadTexture(textures[model]);
