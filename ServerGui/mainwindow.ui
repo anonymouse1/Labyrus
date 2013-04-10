@@ -155,6 +155,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QCheckBox" name="radiation">
+      <property name="text">
+       <string>Radiation</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QCheckBox" name="allowConnections">
       <property name="text">
        <string>Allow remote connections</string>

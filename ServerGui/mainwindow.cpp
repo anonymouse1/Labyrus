@@ -39,6 +39,9 @@ void MainWindow::start() {
     if (ui->cheats->checkState() == Qt::Checked)
         attributes << "--cheats";
 
+    if (ui->radiation->checkState() == Qt::Checked)
+        attributes << "--radiation";
+
     if (ui->allowConnections->checkState() == Qt::Checked) {
         attributes << "-p";
         attributes << ui->numberPlayers->text();
@@ -99,6 +102,7 @@ void MainWindow::saveSettings() {
     s.setValue("size", QVariant(ui->fieldSize->value()));
     s.setValue("height", QVariant(ui->heightOfField->value()));
     s.setValue("cheats", QVariant(ui->cheats->checkState() == Qt::Checked));
+    s.setValue("radiation", QVariant(ui->radiation->checkState() == Qt::Checked));
     s.setValue("allowRemoteConnections", QVariant(ui->allowConnections->checkState() == Qt::Checked));
     s.setValue("strongNumberPlayers", QVariant(ui->strong->checkState() == Qt::Checked));
     s.setValue("numberPlayers", QVariant(ui->numberPlayers->value()));
@@ -117,6 +121,7 @@ void MainWindow::loadSettings() {
     ui->strong->setChecked(s.value("strongNumberPlayers", QVariant(false)).toBool());
     ui->numberPlayers->setValue(s.value("numberPlayers", QVariant(1)).toInt());
     ui->spinBox->setValue(s.value("latency", QVariant(25)).toInt());
+    ui->radiation->setChecked(s.value("radiation", QVariant(false)).toBool());
     console->restoreGeometry(s.value("consoleGeometry").toByteArray());
 }
 
