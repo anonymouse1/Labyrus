@@ -140,22 +140,17 @@
         <translation>Ip</translation>
     </message>
     <message>
-        <location filename="Client/startDialog.ui" line="115"/>
-        <source>127.0.0.1</source>
-        <translation>127.0.0.1</translation>
-    </message>
-    <message>
-        <location filename="Client/startDialog.ui" line="136"/>
+        <location filename="Client/startDialog.ui" line="139"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="Client/startDialog.ui" line="170"/>
+        <location filename="Client/startDialog.ui" line="173"/>
         <source>Skin</source>
         <translation>Скин</translation>
     </message>
     <message>
-        <location filename="Client/startDialog.ui" line="200"/>
+        <location filename="Client/startDialog.ui" line="203"/>
         <source>FullScreen</source>
         <translation>Полноэкранный режим</translation>
     </message>
