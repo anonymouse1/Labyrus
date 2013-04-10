@@ -12,6 +12,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     yRot = 0;
     zRot = 0;
     perspective = 45;
+    progress = 0;
 
     animZRot = 0;
     fps = 0;
@@ -498,23 +499,28 @@ void DrawGl::drawText(double x, double y, double z, bool xForwarding, bool yForw
 void DrawGl::processText() {
     if (currentText == "")
         return;
-    emit runCommand("I\n" + currentText);
+    QString message = currentText;
     currentText = currentText.toUpper();
     if (currentText == "EXIT") {
         legacy->legalStop();
     } else if (currentText == "BOT") {
-        legacy->startBot();
+        if (botActive)
+            a->messages->addMessage("Bot already started");
+        else
+            legacy->startBot();
     } else if (currentText == "STOP") {
-        legacy->stopBot = true;
+        if (botActive)
+            legacy->stopBot = true;
+        else
+            a->messages->addMessage("Bot not started");
     } else if (currentText == "PING") {
         emit runCommand("p\n");
         a->pingTime = new QTime;
         a->pingTime->start();
     } else if (currentText == "HELP") {
         a->messages->addMessage("Possible commands: help bot stop ping exit...");
-    }
-
-    qDebug() << currentText << "processed";
+    } else
+        emit runCommand("I\n" + message);
 }
 
 void DrawGl::begin2d() {
@@ -615,11 +621,11 @@ void DrawGl::drawHUD() {
     glBegin(GL_QUADS);
         glVertex2d(-100, -156);
         glTexCoord2d(0, 0);
-        glVertex2d(156, -156);
+        glVertex2d(200, -156);
         glTexCoord2d(1, 0);
-        glVertex2d(156, 156);
+        glVertex2d(200, 80);
         glTexCoord2d(1, 1);
-        glVertex2d(-100, 156);
+        glVertex2d(-100, 80);
         glTexCoord2d(0, 1);
 
         glVertex2d(this->width() - 64, this->height() - 32);
@@ -643,11 +649,9 @@ void DrawGl::drawHUD() {
     end2d();
     qglColor(Qt::green);
     renderText(5, 15, tr("Elapsed: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
-//    renderText(5, this->height() - 20, tr("Alive: ") + QString::number(a->alive), hudFont);
-//    renderText(5, this->height() - 40, tr("patrons: ") + QString::number(a->patrons), hudFont);
-//    renderText(5, this->height() - 60, tr("walls: ") + QString::number(a->wall), hudFont);
-//    renderText(5, this->height() - 80, tr("destroy: ") + QString::number(a->destroy), hudFont);
-    renderText(5, this->height() - 100, tr("Floor №") + QString::number(a->getFloor()), hudFont);
+    progress += legacy->updateProgress();
+    renderText(5, this->height() - 20, tr("Progress: ") + QString::number(int(double(progress) / a->n / a->n / a->h * 100)) + "%", hudFont);
+    renderText(5, this->height() - 40, tr("Floor №") + QString::number(a->getFloor()), hudFont);
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     qglColor(Qt::red);
@@ -772,17 +776,17 @@ void DrawGl::drawBotLast() {
     loadTexture(textures[hudbackground]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() - 110, this->height() / 2 - 20);
+        glVertex2d(this->width() - 70, this->height() / 2 - 20);
         glTexCoord2d(0, 0);
         glVertex2d(this->width() + 110, this->height() / 2 - 20);
         glTexCoord2d(1, 0);
         glVertex2d(this->width() + 110, this->height() / 2 + 20);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() - 110, this->height() / 2 + 20);
+        glVertex2d(this->width() - 70, this->height() / 2 + 20);
         glTexCoord2d(0, 1);
     glEnd();
     end2d();
-    renderText(this->width() - 104, this->height() / 2 + 5, tr("BotLast: ") + QString::number(botLast, 'f', 0) + "%");
+    renderText(this->width() - 60, this->height() / 2 + 5, tr("Bot: ") + QString::number(botLast, 'f', 0) + "%");
 }
 
 DrawGl::~DrawGl() {

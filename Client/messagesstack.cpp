@@ -8,6 +8,7 @@ QList<QString> MessagesStack::getMessages() {
 }
 
 void MessagesStack::addMessage(QString s) {
+    qDebug() << "New message" << s;
     if (list.size() == 10)
         list.removeFirst();
 

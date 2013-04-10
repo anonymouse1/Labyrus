@@ -96,7 +96,7 @@ void NetworkClass::readInformation() {
         } else if (s == "rad\n") {
             radiation = true;
         } else if (s == "p\n") {
-            messages->addMessage("Ping time: " + QString::number(pingTime->elapsed() + 1));
+            messages->addMessage("Ping time: " + QString::number(pingTime->elapsed()) + "ms");
             qDebug() << pingTime->elapsed();
         } else {
             qDebug() << "unknown information" << s;

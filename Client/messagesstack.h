@@ -5,6 +5,7 @@
 #include <QString>
 #include <QList>
 #include <QTimer>
+#include <QDebug>
 
 class MessagesStack : public QObject
 {

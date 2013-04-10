@@ -45,7 +45,7 @@ public:
 
     void startBot();
     bool stopBot;
-
+    bool updateProgress();
 
     bool w[100][100][100];
 
@@ -73,6 +73,8 @@ private:
     void standartMove(fpoint from, fpoint to);
 
     double fabs(double);
+
+    bool progress[100][100][100];
 
     QByteArray login;
     QTimeLine *startLine;

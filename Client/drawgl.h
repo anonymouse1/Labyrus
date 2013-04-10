@@ -100,6 +100,7 @@ private:
     QPixmap generateCompass(double angle);
     QPixmap *compass;
     Model *I;
+    int progress;
 
     bool firstMouseMove;
     int lastClickX;

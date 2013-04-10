@@ -35,6 +35,11 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     repaintTimer->start();
     input->start();
     thread = new CalculationThread(widget, input);
+
+    for (int i = 0; i < 100; i++)
+        for (int j = 0; j < 100; j++)
+            for (int k = 0; k < 100; k++)
+                progress[i][j][k] = false;
 }
 
 MainWindow::~MainWindow() {
@@ -101,31 +106,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         input->escapeMode = true;
     }
 
-
-
-    /*if ((key == Qt::Key_Space) && (alive) && (patrons)) {
-        taskKill();
-    } else if ((key == Qt::Key_B) && (alive) && (wall)) {
-        if (nap == 2)
-            createWall(coord.x(), coord.y(), 0);
-        else if (nap == 3)
-            createWall(coord.x() + 1, coord.y(), 1);
-        else if (nap == 0)
-            createWall(coord.x(), coord.y() + 1, 0);
-        else
-            createWall(coord.x(), coord.y(), 1);
-    } else if ((key == Qt::Key_E) && (alive) && (destroy)) {
-        command->go("r");
-        if (nap == 2)
-            eraseWall(coord.x(), coord.y(), 0);
-        else if (nap == 3)
-            eraseWall(coord.x() + 1, coord.y(), 1);
-        else if (nap == 0)
-            eraseWall(coord.x(), coord.y() + 1, 0);
-        else
-            eraseWall(coord.x(), coord.y(), 1);
-    }*/
-
     event->accept();
 }
 
@@ -169,20 +149,12 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
-/*void MainWindow::createWall(int x, int y, int flag) {
-    command->go("b\n" + QString::number(x) + "\n" + QString::number(y) + "\n" + QString::number(flag));
-}
-
-void MainWindow::eraseWall(int x, int y, int flag) {
-    qDebug() << "try to erase wall";
-    for (int i = 0; i < m; i++)
-        if ((walls[i][0] == x) && (walls[i][1] == y) && (walls[i][2] == flag))
-            command->go("e\n" + QString::number(i));
-}*/
-
 void MainWindow::startBot() {
+    if (widget->botActive)
+        return;
+
     widget->botLast = 0;
-    input->messages->addMessage("BOT started");
+    input->messages->addMessage("Bot started");
     widget->botActive = true;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
@@ -193,7 +165,7 @@ void MainWindow::startBot() {
     superDfs();
     widget->botActive = false;
     stopBot = false;
-    input->messages->addMessage("BOT finished");
+    input->messages->addMessage("Bot finished");
 }
 
 void MainWindow::syncNap(int a, int b) {
@@ -387,27 +359,6 @@ void MainWindow::startingFinished() {
     delete startLine;
 }
 
-/*void MainWindow::taskKill() {
-    QPoint c = coord;
-    patrons--;
-    nap = backward();
-    for (int i = 0; (i < 20) && (noWall(nap)); i++)
-        for (int j = 0; j < otherHeroes; j++) {
-            qDebug() << heroes[j] << coord;
-            if (coord == heroes[j]) {
-                command->go("p");
-                command->go(QString::number(descriptors[j]));
-                otherAlive[j] = false;
-                qDebug() << "killing" << descriptors[j];
-                break;
-            }
-        }
-
-    nap = backward();
-    coord = c;
-    widget->animX = 0;
-    widget->animY = 0;
-}*/
 double MainWindow::fabs(double a) {
     if (a < 0)
         return -a;
@@ -478,7 +429,6 @@ void MainWindow::sleep(int ms) {
 }
 
 gpoint MainWindow::getRealCoord() {
-    qDebug() << "detecting coords..." << input->coord.x << input->coord.y << input->coord.h;
     gpoint result;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
@@ -488,7 +438,6 @@ gpoint MainWindow::getRealCoord() {
                 result.y = i;
             }
     result.h =  input->getFloor();
-    qDebug() << "result: " << result.x << result.y << result.h;
     return result;
 }
 
@@ -536,4 +485,14 @@ fpoint MainWindow::genFPoint(double x, double y, double h) {
 
 double MainWindow::sqr(double a) {
     return a * a;
+}
+
+bool MainWindow::updateProgress() {
+    gpoint c = getRealCoord();
+    if (progress[c.x][c.y][c.h])
+        return false;
+    else {
+        progress[c.x][c.y][c.h] = true;
+        return true;
+    }
 }
