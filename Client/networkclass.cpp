@@ -142,6 +142,7 @@ void NetworkClass::go(QString s, bool flush, bool addEndLine) {
 }
 
 void NetworkClass::connectionEstablished() {
+    QObject::connect(mainSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     qDebug() << "connection established";
     go("Hello maze\n" + login, true);
     qDebug() << mainSocket->state();
@@ -203,4 +204,9 @@ void NetworkClass::runCommand(QString s) {
 
 bool NetworkClass::isAutonomous() {
     return mainSocket->state() != QTcpSocket::ConnectedState;
+}
+
+void NetworkClass::disconnected() {
+    messages->addMessage(tr("You are disconnected from server"));
+    messages->addMessage(tr("Autonomous mode"));
 }

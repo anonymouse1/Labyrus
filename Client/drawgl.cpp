@@ -505,24 +505,24 @@ void DrawGl::processText() {
         legacy->legalStop();
     } else if (currentText == "BOT") {
         if (botActive)
-            a->messages->addMessage("Bot already started");
+            a->messages->addMessage(tr("Bot already started"));
         else
             legacy->startBot();
     } else if (currentText == "STOP") {
         if (botActive)
             legacy->stopBot = true;
         else
-            a->messages->addMessage("Bot is inactive");
+            a->messages->addMessage(tr("Bot is inactive"));
     } else if (currentText == "PING") {
         if (a->isAutonomous())
-            a->messages->addMessage("You are in autonomous mode");
+            a->messages->addMessage(tr("You are in autonomous mode"));
         else {
             emit runCommand("p\n");
             a->pingTime = new QTime;
             a->pingTime->start();
         }
     } else if (currentText == "HELP") {
-        a->messages->addMessage("Possible commands: help bot stop ping exit...");
+        a->messages->addMessage(tr("Possible commands: help bot stop ping exit..."));
     } else
         emit runCommand("I\n" + message);
 }

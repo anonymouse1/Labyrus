@@ -85,6 +85,7 @@ private slots:
     void failConnection();
     void ping();
     void refreshCoords();
+    void disconnected();
 
 signals:
     void successConnection();
