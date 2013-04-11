@@ -17,8 +17,8 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             printf("\tWelcome to Labyrus Server manual\n");
             printf("\tFor all questions please contact vladislav.tyulbashev@yandex.ru\n");
             printf("\t\t-n --size <int> for settin size of maze (-n 20)\n");
-            printf("\t\t-w --height <int> for setting height of maze\n");
-            printf("\t\t-d --nowin for disabling win possiblity\n");
+            printf("\t\t-d --height <int> for setting height of maze\n");
+            printf("\t\t-w --nowin for disabling win possiblity\n");
             printf("\t\t-l --latency <int> for setting latency\n");
             printf("\t\t-p --players <int> for setting number of players\n");
             printf("\t\t-s --strong for setting strong number of players\n");
@@ -33,7 +33,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             n = QString(argv[++i]).toInt(&a);
             if (!a)
                 die("invalid number");
-        } else if ((QString(argv[i]) == "-w") || (QString(argv[i]) == "--height")) {
+        } else if ((QString(argv[i]) == "-d") || (QString(argv[i]) == "--height")) {
             bool a;
             h = QString(argv[++i]).toInt(&a);
             if (!a)
@@ -61,7 +61,8 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
             port = QString(argv[++i]).toInt(&a);
             if (!a)
                 die("invalid number");
-        }
+        } else if ((QString(argv[i]) == "-w") || (QString(argv[i]) == "--nowin"))
+            win = false;
 
     if (n * n * h > 3000)
         die("The maze is too big");
