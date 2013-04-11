@@ -354,6 +354,7 @@ void MainWindow::startTimerChanged(qreal a) {
 void MainWindow::startingFinished() {
     qDebug() << "finishStarting";
     widget->startingGame = false;
+    widget->started = true;
     widget->startAfter = startLine->currentTime();
     thread->start();
     delete startLine;

@@ -38,6 +38,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     firstMouseMove = true;
     botActive = false;
     mousePressed = false;
+    started = false;
 
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
@@ -117,6 +118,12 @@ void DrawGl::paintGL() {
 
 //    drawAxis();
     enableLight();
+
+    if (!started && !startingGame) {
+        drawPreview();
+        return;
+    }
+
     drawSkyBox();
     drawMaze();
     drawHeroes();
@@ -825,4 +832,23 @@ void DrawGl::drawWinners() {
 
     for (int i = 0; i < a->winners.size(); i++)
         renderText(this->width() / 2 - 70, 15 + 20 * i, QString::number(i) + ": " + a->winners[i], hudFont);
+}
+
+void DrawGl::drawPreview() {
+    loadTexture(textures[defaultWall]);
+    begin2d();
+    glBegin(GL_QUADS);
+        glVertex2d(0, 0);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width(), 0);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width(), this->height());
+        glTexCoord2d(1, 1);
+        glVertex2d(0, this->height());
+        glTexCoord2d(0, 1);
+    glEnd();
+    end2d();
+
+    qglColor(QColor("green"));
+    renderText(this->width() / 2 - 200, this->height() / 2, tr("Waiting for others players..."), hudFont);
 }
