@@ -78,6 +78,7 @@ private:
     QPoint arsenal[100];
 private slots:
     void forAllClients(QString);
+    void timeToDie();
 protected:
     void incomingConnection(qintptr handle);
 

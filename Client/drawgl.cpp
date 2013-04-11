@@ -807,20 +807,20 @@ DrawGl::~DrawGl() {
 
 void DrawGl::drawWinners() {
     qglColor(QColor("brown"));
-    loadTexture(textures[hudbackground]);
+    loadTexture(textures[blackout]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 100, this->height() - 20 * a->winners.size() - 20);
+        glVertex2d(this->width() / 2 - 100, this->height() - 30 * a->winners.size() - 20);
         glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 + 100, this->height() - 20 * a->winners.size() - 20);
+        glVertex2d(this->width() / 2 + 100, this->height() - 30 * a->winners.size() - 20);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 + 100, this->height() + 20 * a->winners.size() + 20);
+        glVertex2d(this->width() / 2 + 100, this->height() + 30 * a->winners.size() + 20);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 100, this->height() + 20 * a->winners.size() + 20);
+        glVertex2d(this->width() / 2 - 100, this->height() + 30 * a->winners.size() + 20);
         glTexCoord2d(0, 1);
     glEnd();
     end2d();
 
     for (int i = 0; i < a->winners.size(); i++)
-        renderText(this->width() / 2 - 70, 3 + 20 * a->winners.size(), QString::number(i) + ": " + a->winners[i], hudFont);
+        renderText(this->width() / 2 - 70, 15 + 20 * i, QString::number(i) + ": " + a->winners[i], hudFont);
 }

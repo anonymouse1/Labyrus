@@ -490,7 +490,7 @@ double MainWindow::sqr(double a) {
 
 bool MainWindow::updateProgress() {
     if ((input->coord.x < 0 || input->coord.x > input->n || input->coord.y < 0 ||
-         input->coord.y > input->n || input->coord.h < 0 || input->coord.h > input->h) && (!finished) && (!input->allowWin)) {
+         input->coord.y > input->n || input->coord.h < 0 || input->coord.h > input->h) && (!finished) && (input->allowWin)) {
             win();
             return false;
         }

@@ -147,15 +147,8 @@ void Server::runCommand(QString command, Player *player) {
         forAllClients(win);
         forAllClients("S\n" + player->name + " finished (" + QString::number(winners.size()) + " place)");
 
-        if (winners.size() == alreadyPlayers) {
-//            forAllClientsPrint("f");
-            while (r.size()) {
-                r.begin().value()->flush();
-                r.begin().value()->disconnect();
-            }
-
-            exit(0);
-        }
+        if (winners.size() == alreadyPlayers)
+            QTimer::singleShot(2000, this, SLOT(timeToDie()));
     }
 
     if (player->socket->canReadLine())
@@ -413,4 +406,12 @@ QByteArray *Server::generateHeroMessage() {
                        i.value()->name + "\n");
 
     return result;
+}
+
+void Server::timeToDie() {
+    //            forAllClientsPrint("f");
+//    while (r.size())
+     //   r.begin().value()->disconnect();
+
+    exit(0);
 }

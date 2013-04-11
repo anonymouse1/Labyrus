@@ -53,8 +53,9 @@ void Player::disconnect() {
     server->alreadyPlayers--;
     server->r.remove(socketDescriptor);
     qDebug() << this->name << "disconnected";
-    emit say("S\n" + name + " disconnected\n");
     server->names.remove(name);
+    delete socket;
+    emit say("S\n" + name + " disconnected\n");
     exit(0);
 }
 
