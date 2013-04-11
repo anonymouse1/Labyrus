@@ -17,6 +17,8 @@
 #include <QTimer>
 #include <QDateTime>
 #include <algorithm>
+#include <QEventLoop>
+#include <QStringList>
 
 using std::swap;
 
@@ -27,7 +29,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent = 0);
+    explicit Server(bool win, qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent = 0);
     void processConnection(Player *player);
     void sendFieldToPlayer(Player *player, QByteArray *data = NULL);
     void sendHeroesToPlayer(Player *player, QByteArray *data = NULL);
@@ -53,6 +55,7 @@ private:
     QPoint getFreePoint();
     QByteArray *generateFieldMessage();
     QByteArray *generateHeroMessage();
+    QStringList winners;
 
     bool isConnected();
     void generateMap();
@@ -67,6 +70,7 @@ private:
     int n;
     int h;
     int m;
+    bool allowWin;
     int walls[10000][4]; // 3:    0 - сверху; 1 - слева
     QPoint hospital;
 

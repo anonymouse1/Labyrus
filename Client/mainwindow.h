@@ -50,6 +50,7 @@ public:
     bool w[100][100][100];
 
     bool ctrlPressed;
+    bool finished;
     CalculationThread *thread;
     QApplication *app;
     DrawGl *widget;
@@ -59,6 +60,7 @@ public:
 private:
     void processInformation();
     double scanInt();
+    void win();
 
     bool isWallUp(gpoint c);
     bool isWallDown(gpoint c);

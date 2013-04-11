@@ -12,6 +12,7 @@ NetworkClass::NetworkClass(QHostAddress ip, quint16 port, QString myName, QThrea
     fullRefresh = true;
     messages = new MessagesStack;
     escapeMode = false;
+    allowWin = true;
 }
 
 void NetworkClass::run() {
@@ -97,6 +98,17 @@ void NetworkClass::readInformation() {
             radiation = true;
         } else if (s == "p\n") {
             messages->addMessage("Ping time: " + QString::number(pingTime->elapsed()) + "ms");
+        } else if (s == "w\n") {
+            winners.clear();
+            int n;
+            n = scanInt();
+            for (int i = 0; i < n; i++) {
+                winners.push_back(mainSocket->readLine());
+                winners[i] = winners[i].left(winners[i].size() - 1);
+            }
+            qDebug() << winners;
+        } else if (s == "nowin\n") {
+            allowWin = false;
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";

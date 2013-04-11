@@ -30,6 +30,7 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(widget, SIGNAL(runCommand(QString)), input, SLOT(runCommand(QString)));
 
     ctrlPressed = false;
+    finished = false;
     widget->a = input;
     repaintTimer->start();
     input->start();
@@ -488,6 +489,12 @@ double MainWindow::sqr(double a) {
 }
 
 bool MainWindow::updateProgress() {
+    if ((input->coord.x < 0 || input->coord.x > input->n || input->coord.y < 0 ||
+         input->coord.y > input->n || input->coord.h < 0 || input->coord.h > input->h) && (!finished) && (!input->allowWin)) {
+            win();
+            return false;
+        }
+
     gpoint c = getRealCoord();
     if (progress[c.x][c.y][c.h])
         return false;
@@ -495,4 +502,10 @@ bool MainWindow::updateProgress() {
         progress[c.x][c.y][c.h] = true;
         return true;
     }
+}
+
+void MainWindow::win() {
+    thread->move = false;
+    finished = true;
+    input->go("w");
 }

@@ -14,6 +14,7 @@
 #include <QHostAddress>
 #include <messagesstack.h>
 #include <math.h>
+#include <QStringList>
 
 struct fpoint {
     double x;
@@ -51,6 +52,8 @@ public:
     MessagesStack *messages;
     QTime *pingTime;
     bool escapeMode;
+    QStringList winners;
+    bool allowWin;
 
     int latency;
 

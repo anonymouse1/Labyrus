@@ -27,6 +27,7 @@ public:
     int socketDescriptor;
     Server *server;
     QMutex sendingInformation;
+    void flush();
 private:
     QTimer *refresh;
     QTimer *sendHeroesTime;

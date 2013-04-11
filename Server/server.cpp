@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent) :
+Server::Server(bool win, qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -8,6 +8,7 @@ Server::Server(qint16 port, bool rad, bool cheat, int size, int height, int lat,
 
     alreadyPlayers = 0;
     qDebug() << "port:" << port;
+    qDebug() << "win support:" << win;
     qDebug() << "radiation:" << rad;
     qDebug() << "cheats:" << cheat;
     qDebug() << "size:" << size;
@@ -21,6 +22,7 @@ Server::Server(qint16 port, bool rad, bool cheat, int size, int height, int lat,
     strongNumPlayers = strong;
     cheats = cheat;
     radiation = rad;
+    allowWin = win;
     if (radiation) {
         radiationTimer = new QTimer;
         radiationTimer->setInterval(4000);
@@ -107,6 +109,11 @@ void Server::processConnection(Player *player) {
             emit forAllClientsPrint("S\nThere is some radiation near");
             radiationTimer->start();
         }
+
+        if (!allowWin) {
+            emit forAllClientsPrint("nowin");
+            emit forAllClientsPrint("S\nWin support is DISABLED");
+        }
     }
 
     sendFieldToPlayer(player);
@@ -128,6 +135,27 @@ void Server::runCommand(QString command, Player *player) {
         player->setValid();
     } else if (command[0] == 'p') {
         player->socket->write("p\n");
+    } else if (command[0] == 'w') {
+        winners.push_back(player->name);
+        qDebug() << winners;
+        QByteArray win;
+        win += "w\n";
+        win += QString::number(winners.size());
+        for (int i = 0; i < winners.size(); i++)
+            win += "\n" + winners[i];
+
+        forAllClients(win);
+        forAllClients("S\n" + player->name + " finished (" + QString::number(winners.size()) + " place)");
+
+        if (winners.size() == alreadyPlayers) {
+//            forAllClientsPrint("f");
+            while (r.size()) {
+                r.begin().value()->flush();
+                r.begin().value()->disconnect();
+            }
+
+            exit(0);
+        }
     }
 
     if (player->socket->canReadLine())

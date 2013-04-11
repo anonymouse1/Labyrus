@@ -28,6 +28,8 @@ public:
     bool lookingDown;
     bool shiftPressed;
 
+    bool move;
+
     int currentTime;
     QTime fromStartOfGame;
 private:

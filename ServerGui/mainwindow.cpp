@@ -42,6 +42,9 @@ void MainWindow::start() {
     if (ui->radiation->checkState() == Qt::Checked)
         attributes << "--radiation";
 
+    if (!(ui->win->checkState() == Qt::Checked))
+        attributes << "--nowin";
+
     if (ui->allowConnections->checkState() == Qt::Checked) {
         attributes << "-p";
         attributes << ui->numberPlayers->text();
@@ -108,6 +111,7 @@ void MainWindow::saveSettings() {
     s.setValue("numberPlayers", QVariant(ui->numberPlayers->value()));
     s.setValue("latency", QVariant(ui->spinBox->value()));
     s.setValue("consoleGeometry", QVariant(console->saveGeometry()));
+    s.setValue("win", QVariant(ui->win->checked() == Qt::Checked));
 }
 
 void MainWindow::loadSettings() {
@@ -122,6 +126,7 @@ void MainWindow::loadSettings() {
     ui->numberPlayers->setValue(s.value("numberPlayers", QVariant(1)).toInt());
     ui->spinBox->setValue(s.value("latency", QVariant(25)).toInt());
     ui->radiation->setChecked(s.value("radiation", QVariant(false)).toBool());
+    ui->win->setChecked(s.value("win"), QVariant(true).toBool());
     console->restoreGeometry(s.value("consoleGeometry").toByteArray());
 }
 

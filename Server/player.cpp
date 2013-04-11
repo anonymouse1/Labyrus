@@ -77,3 +77,7 @@ void Player::radiation() {
 void Player::setValid() {
     checkValid->start();
 }
+
+void Player::flush() {
+    socket->flush();
+}

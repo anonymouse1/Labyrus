@@ -14,6 +14,7 @@ CalculationThread::CalculationThread(DrawGl *wid, NetworkClass *m) : QThread() {
     lookingUp = false;
     shiftPressed = false;
     currentTime = 0;
+    move = true;
 }
 
 void CalculationThread::run() {
@@ -35,7 +36,7 @@ void CalculationThread::nextTime() {
     double deltaX = 0;
     double deltaY = 0;
     double deltaH = 0;
-    if (upPressed) {
+    if (upPressed && move) {
         deltaX += cos((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
         deltaY += sin((-main->angle + 90) * M_PI / 180) * speed * (shiftPressed + 1) * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
         deltaH += -sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
@@ -46,20 +47,20 @@ void CalculationThread::nextTime() {
     if (rightPressed)
         main->angle += 100 * speed;
 
-    if (downPressed) {
+    if (downPressed && move) {
         deltaX += -cos((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
         deltaY += -sin((-main->angle + 90) * M_PI / 180) * speed * max(cos((main->yAngle + 90) * M_PI / 180), main->h == 1);
         deltaH += sin((main->yAngle + 90) * M_PI / 180) * speed * (shiftPressed + 1);
     }
 
-    if (leftStrife) {
+    if (leftStrife && move) {
         deltaX += -cos(-main->angle * M_PI / 180) * speed;
         deltaY += -sin(-main->angle * M_PI / 180) * speed;
         deltaH += 0;
 
     }
 
-    if (rightStrife) {
+    if (rightStrife && move) {
         deltaX += -cos((-main->angle + 180) * M_PI / 180) * speed;
         deltaY += -sin((-main->angle + 180) * M_PI / 180) * speed;
         deltaH += 0;

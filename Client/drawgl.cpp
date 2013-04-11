@@ -127,11 +127,16 @@ void DrawGl::paintGL() {
 
     if (a->escapeMode)
         drawMenu();
+
+    if (a->winners.size() != 0)
+        drawWinners();
+
     if (legacy->ctrlPressed)
         drawOkular();
 
     if (botActive)
         drawBotLast();
+
 }
 
 void DrawGl::drawAxis() {
@@ -798,4 +803,24 @@ DrawGl::~DrawGl() {
     s.setValue("mouseSensitivity", QVariant(mouseSensitivity));
     if (!isFullScreen())
         s.setValue("widgetGeometry", QVariant(saveGeometry()));
+}
+
+void DrawGl::drawWinners() {
+    qglColor(QColor("brown"));
+    loadTexture(textures[hudbackground]);
+    begin2d();
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() / 2 - 100, this->height() - 20 * a->winners.size() - 20);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 + 100, this->height() - 20 * a->winners.size() - 20);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 + 100, this->height() + 20 * a->winners.size() + 20);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 - 100, this->height() + 20 * a->winners.size() + 20);
+        glTexCoord2d(0, 1);
+    glEnd();
+    end2d();
+
+    for (int i = 0; i < a->winners.size(); i++)
+        renderText(this->width() / 2 - 70, 3 + 20 * a->winners.size(), QString::number(i) + ": " + a->winners[i], hudFont);
 }

@@ -11,12 +11,14 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
     bool strong = false;
     bool cheats = false;
     bool radiation = false;
+    bool win = true;
     for (int i = 0; i < argc; i++)
         if ((QString(argv[i]) == "--help") || (QString(argv[i]) == "-h")) {
             printf("\tWelcome to Labyrus Server manual\n");
             printf("\tFor all questions please contact vladislav.tyulbashev@yandex.ru\n");
             printf("\t\t-n --size <int> for settin size of maze (-n 20)\n");
             printf("\t\t-w --height <int> for setting height of maze\n");
+            printf("\t\t-d --nowin for disabling win possiblity\n");
             printf("\t\t-l --latency <int> for setting latency\n");
             printf("\t\t-p --players <int> for setting number of players\n");
             printf("\t\t-s --strong for setting strong number of players\n");
@@ -63,7 +65,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     if (n * n * h > 3000)
         die("The maze is too big");
-    server = new Server(port, radiation, cheats, n, h, latency, players, strong, this);
+    server = new Server(win, port, radiation, cheats, n, h, latency, players, strong, this);
 }
 
 void MainClass::die(QString s) {
