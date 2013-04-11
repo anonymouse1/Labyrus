@@ -410,8 +410,5 @@ QByteArray *Server::generateHeroMessage() {
 
 void Server::timeToDie() {
     //            forAllClientsPrint("f");
-//    while (r.size())
-     //   r.begin().value()->disconnect();
-
     exit(0);
 }
