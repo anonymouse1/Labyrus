@@ -102,8 +102,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
                 widget->resize(widget->width(), widget->height() + 1);
             }
         #endif
-    } else if (key == Qt::Key_Escape) {
-        input->escapeMode = true;
     }
 
     event->accept();
@@ -150,8 +148,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void MainWindow::startBot() {
-    if (widget->botActive)
-        return;
+    if (finished)
+        input->messages->addMessage(tr("Game already finished"));
+    else if (widget->botActive)
+        input->messages->addMessage(tr("Bot already started"));
 
     widget->botLast = 0;
     input->messages->addMessage(tr("Bot started"));

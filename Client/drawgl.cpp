@@ -121,6 +121,8 @@ void DrawGl::paintGL() {
 
     if (!started && !startingGame) {
         drawPreview();
+        if (a->escapeMode)
+            drawMenu();
         return;
     }
 
@@ -391,14 +393,11 @@ void DrawGl::drawFPS() {
 }
 
 void DrawGl::keyPressEvent(QKeyEvent *event) {
-    if (startingGame && (event->key() == Qt::Key_Escape))
-        return;
-
     int key = event->key();
     if (a->escapeMode) {
         if ((activePoint == 0) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
             a->escapeMode = false;
-        if ((activePoint == 2) && ((key == Qt::Key_Return) || (key == Qt::Key_Right) )) {
+        if ((activePoint == 2) && ((key == Qt::Key_Return) || (key == Qt::Key_Right) ) && started) {
             if (botActive)
                 legacy->stopBot = true;
             else
@@ -432,27 +431,31 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
             a->escapeMode = false;
 
         return;
-    }
+    } else if (key == Qt::Key_Escape)
+        a->escapeMode = true;
 
-    if (event->key() == Qt::Key_Return) {
-        enteringText = !enteringText;
-        if (!enteringText)
-            processText();
+    if (started) {
+        if (event->key() == Qt::Key_Return) {
+            enteringText = !enteringText;
+            if (!enteringText)
+                processText();
 
-        currentText = "";
-        return;
-    } else if (enteringText) {
-        if (event->key() == Qt::Key_Backspace)
-            currentText = currentText.left(currentText.length() - 1);
-        else if (event->key() == Qt::Key_Escape) {
             currentText = "";
-            enteringText = false;
-        } else if (currentText.length() < 30) {
-            currentText += event->text();
+            return;
+        } else if (enteringText) {
+            if (event->key() == Qt::Key_Backspace)
+                currentText = currentText.left(currentText.length() - 1);
+            else if (event->key() == Qt::Key_Escape) {
+                currentText = "";
+                enteringText = false;
+            } else if (currentText.length() < 30) {
+                currentText += event->text();
+            }
+        } else {
+            legacy->keyPressEvent(event);
         }
-    } else {
-        legacy->keyPressEvent(event);
     }
+
 
     event->accept();
 }
@@ -516,12 +519,7 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         legacy->legalStop();
     } else if (currentText == "BOT") {
-        if (legacy->finished)
-            a->messages->addMessage(tr("Game already finished"));
-        else if (botActive)
-            a->messages->addMessage(tr("Bot already started"));
-        else
-            legacy->startBot();
+        legacy->startBot();
     } else if (currentText == "STOP") {
         if (botActive)
             legacy->stopBot = true;
@@ -831,7 +829,7 @@ void DrawGl::drawWinners() {
     end2d();
 
     for (int i = 0; i < a->winners.size(); i++)
-        renderText(this->width() / 2 - 70, 15 + 20 * i, QString::number(i) + ": " + a->winners[i], hudFont);
+        renderText(this->width() / 2 - 70, 15 + 20 * i, QString::number(i + 1) + ": " + a->winners[i], hudFont);
 }
 
 void DrawGl::drawPreview() {
@@ -839,13 +837,13 @@ void DrawGl::drawPreview() {
     begin2d();
     glBegin(GL_QUADS);
         glVertex2d(0, 0);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width(), 0);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width(), this->height());
+        glVertex2d(this->width(), 0);
         glTexCoord2d(1, 1);
-        glVertex2d(0, this->height());
+        glVertex2d(this->width(), this->height());
         glTexCoord2d(0, 1);
+        glVertex2d(0, this->height());
+        glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
