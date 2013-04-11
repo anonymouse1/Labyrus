@@ -20,7 +20,7 @@
 #include <QEventLoop>
 #include <QStringList>
 
-#ifdef QT4
+#ifndef QT5
     #define qintptr int
 #endif
 
