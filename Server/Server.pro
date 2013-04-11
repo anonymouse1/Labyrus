@@ -10,6 +10,9 @@ QT       -= gui
 
 QT       += network
 
+greaterThan(QT_MAJOR_VERSION, 4): DEFINES += QT4
+
+
 TARGET = Server
 CONFIG   += console
 CONFIG   -= app_bundle

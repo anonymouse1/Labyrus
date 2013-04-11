@@ -14,8 +14,6 @@ LIBS += -L/usr/lib/qt
 
 unix: LIBS += -lGLU
 
-greaterThan(QT_MAJOR_VERSION, 4):
-
 TARGET = Client
 TEMPLATE = app
 
