@@ -97,7 +97,7 @@ void NetworkClass::readInformation() {
         } else if (s == "rad\n") {
             radiation = true;
         } else if (s == "p\n") {
-            messages->addMessage("Ping time: " + QString::number(pingTime->elapsed()) + "ms");
+            messages->addMessage(tr("Ping time: ") + QString::number(pingTime->elapsed()) + tr("ms"));
         } else if (s == "w\n") {
             winners.clear();
             int n;

@@ -509,7 +509,9 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         legacy->legalStop();
     } else if (currentText == "BOT") {
-        if (botActive)
+        if (legacy->finished)
+            a->messages->addMessage(tr("Game already finished"));
+        else if (botActive)
             a->messages->addMessage(tr("Bot already started"));
         else
             legacy->startBot();
@@ -727,7 +729,7 @@ void DrawGl::drawMenu() {
     glEnd();
     end2d();
 
-    renderText(this->width() / 2 - 175, this->height() / 2 - 100, tr("Return"), menuFont);
+    renderText(this->width() / 2 - 175, this->height() / 2 - 100, tr("Resume"), menuFont);
     QString fullscreenActive;
     if (isFullScreen())
         fullscreenActive = tr("on");

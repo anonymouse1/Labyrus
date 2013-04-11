@@ -55,7 +55,8 @@ void Player::disconnect() {
     qDebug() << this->name << "disconnected";
     server->names.remove(name);
     QObject::disconnect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()));
-    delete socket;
+    QObject::disconnect(this, SIGNAL(say(QString)), server, SLOT(forAllClients(QString)));
+    socket->deleteLater();
     emit say("S\n" + name + " disconnected\n");
     exit(0);
 }

@@ -154,7 +154,7 @@ void MainWindow::startBot() {
         return;
 
     widget->botLast = 0;
-    input->messages->addMessage("Bot started");
+    input->messages->addMessage(tr("Bot started"));
     widget->botActive = true;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
@@ -165,7 +165,7 @@ void MainWindow::startBot() {
     superDfs();
     widget->botActive = false;
     stopBot = false;
-    input->messages->addMessage("Bot finished");
+    input->messages->addMessage(tr("Bot finished"));
 }
 
 void MainWindow::syncNap(int a, int b) {
@@ -507,5 +507,6 @@ bool MainWindow::updateProgress() {
 void MainWindow::win() {
     thread->move = false;
     finished = true;
+    stopBot = true;
     input->go("w");
 }
