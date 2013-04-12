@@ -794,13 +794,13 @@ void DrawGl::drawWinners() {
     loadTexture(textures[winners]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 100, this->height() - 30 * a->winners.size() - 20);
+        glVertex2d(this->width() / 2 - 100, this->height() - 20 * a->winners.size());
         glTexCoord2d(0, 1);
-        glVertex2d(this->width() / 2 + 100, this->height() - 30 * a->winners.size() - 20);
+        glVertex2d(this->width() / 2 + 100, this->height() - 20 * a->winners.size());
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 + 100, this->height() + 30 * a->winners.size() + 20);
+        glVertex2d(this->width() / 2 + 100, this->height() + 20 * a->winners.size());
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 - 100, this->height() + 30 * a->winners.size() + 20);
+        glVertex2d(this->width() / 2 - 100, this->height() + 20 * a->winners.size());
         glTexCoord2d(0, 0);
     glEnd();
     end2d();
