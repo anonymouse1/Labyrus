@@ -70,6 +70,7 @@ void DrawGl::initializeGL() {
     textures[10] = bindTexture(QPixmap(skinPath + "/hudbackground.png"), GL_TEXTURE_2D);
     textures[11] = bindTexture(QPixmap(skinPath + "/okular.png"), GL_TEXTURE_2D);
     textures[12] = bindTexture(QPixmap(skinPath + "/verticalSlice.jpg"), GL_TEXTURE_2D);
+    textures[13] = bindTexture(QPixmap(skinPath + "/winners.png"), GL_TEXTURE_2D);
 
     I = new Model(skinPath + "/simple.s3d");
 
@@ -121,8 +122,10 @@ void DrawGl::paintGL() {
 
     if (!started && !startingGame) {
         drawPreview();
+        drawChat();
         if (a->escapeMode)
             drawMenu();
+
         return;
     }
 
@@ -132,6 +135,7 @@ void DrawGl::paintGL() {
     if (!legacy->ctrlPressed) {
         drawCompass();
         drawHUD();
+        drawChat();
     }
 
     if (a->escapeMode)
@@ -394,6 +398,15 @@ void DrawGl::drawFPS() {
 
 void DrawGl::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
+
+    if ((key == Qt::Key_Z) || (event->text().toUpper() == tr("Z"))) {
+        if (!isFullScreen())
+            showFullScreen();
+        else
+            showNormal();
+    }
+
+
     if (a->escapeMode) {
         if ((activePoint == 0) && ((key == Qt::Key_Return) || (key == Qt::Key_Right)))
             a->escapeMode = false;
@@ -434,28 +447,24 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
     } else if (key == Qt::Key_Escape)
         a->escapeMode = true;
 
-    if (started) {
-        if (event->key() == Qt::Key_Return) {
-            enteringText = !enteringText;
-            if (!enteringText)
-                processText();
+    if (event->key() == Qt::Key_Return) {
+        enteringText = !enteringText;
+        if (!enteringText)
+            processText();
 
+        currentText = "";
+        return;
+    } else if (enteringText) {
+        if (event->key() == Qt::Key_Backspace)
+            currentText = currentText.left(currentText.length() - 1);
+        else if (event->key() == Qt::Key_Escape) {
             currentText = "";
-            return;
-        } else if (enteringText) {
-            if (event->key() == Qt::Key_Backspace)
-                currentText = currentText.left(currentText.length() - 1);
-            else if (event->key() == Qt::Key_Escape) {
-                currentText = "";
-                enteringText = false;
-            } else if (currentText.length() < 30) {
-                currentText += event->text();
-            }
-        } else {
-            legacy->keyPressEvent(event);
+            enteringText = false;
+        } else if (currentText.length() < 30) {
+            currentText += event->text();
         }
-    }
-
+    } else if (started)
+        legacy->keyPressEvent(event);
 
     event->accept();
 }
@@ -672,38 +681,6 @@ void DrawGl::drawHUD() {
 
     qglColor(Qt::red);
 
-    QList<QString> list = a->messages->getMessages();
-    begin2d();
-    loadTexture(textures[hudbackground]);
-    glBegin(GL_QUADS);
-        if (enteringText) {
-            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 - 6);
-            glTexCoord2d(0, 0);
-            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 - 6);
-            glTexCoord2d(1, 0);
-            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 + 15);
-            glTexCoord2d(1, 1);
-            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 + 15);
-            glTexCoord2d(0, 1);
-        }
-        for (int i = 0; i < list.size(); i++) {
-            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 6 - 85);
-            glTexCoord2d(0, 0);
-            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 6 - 85);
-            glTexCoord2d(1, 0);
-            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 15 - 85);
-            glTexCoord2d(1, 1);
-            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 15 - 85);
-            glTexCoord2d(0, 1);
-        }
-    glEnd();
-    end2d();
-    if (enteringText)
-        renderText(5, this->height() / 2 + 85, "-" + currentText, hudFont);
-
-    loadTexture(textures[2]);
-    for (int i = 0; i < list.size(); i++)
-        renderText(5, this->height() / 2 + 85 - 20 * (list.size() - i), list[i], hudFont);
 }
 
 void DrawGl::drawMenu() {
@@ -813,18 +790,18 @@ DrawGl::~DrawGl() {
 }
 
 void DrawGl::drawWinners() {
-    qglColor(QColor("brown"));
-    loadTexture(textures[blackout]);
+    qglColor(QColor("red"));
+    loadTexture(textures[winners]);
     begin2d();
     glBegin(GL_QUADS);
         glVertex2d(this->width() / 2 - 100, this->height() - 30 * a->winners.size() - 20);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 + 100, this->height() - 30 * a->winners.size() - 20);
-        glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 + 100, this->height() + 30 * a->winners.size() + 20);
-        glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 100, this->height() + 30 * a->winners.size() + 20);
         glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 + 100, this->height() - 30 * a->winners.size() - 20);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 + 100, this->height() + 30 * a->winners.size() + 20);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 - 100, this->height() + 30 * a->winners.size() + 20);
+        glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
@@ -848,5 +825,41 @@ void DrawGl::drawPreview() {
     end2d();
 
     qglColor(QColor("green"));
-    renderText(this->width() / 2 - 200, this->height() / 2, tr("Waiting for others players..."), hudFont);
+    renderText(this->width() / 2 - 200, 20, tr("Waiting for others players..."), hudFont);
+}
+
+void DrawGl::drawChat() {
+    qglColor(Qt::red);
+    QList<QString> list = a->messages->getMessages();
+    begin2d();
+    loadTexture(textures[hudbackground]);
+    glBegin(GL_QUADS);
+        for (int i = 0; i < list.size(); i++) {
+            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 5 - 85);
+            glTexCoord2d(0, 0);
+            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 5 - 85);
+            glTexCoord2d(1, 0);
+            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 14 - 85);
+            glTexCoord2d(1, 1);
+            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 14 - 85);
+            glTexCoord2d(0, 1);
+        }
+        if (enteringText) {
+            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 - 5);
+            glTexCoord2d(0, 0);
+            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 - 5);
+            glTexCoord2d(1, 0);
+            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 + 14);
+            glTexCoord2d(1, 1);
+            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 + 14);
+            glTexCoord2d(0, 1);
+        }
+
+    glEnd();
+    end2d();
+    if (enteringText)
+        renderText(5, this->height() / 2 + 85, "-" + currentText, hudFont);
+
+    for (int i = 0; i < list.size(); i++)
+        renderText(5, this->height() / 2 + 85 - 20 * (list.size() - i), list[i], hudFont);
 }

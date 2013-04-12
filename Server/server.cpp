@@ -151,8 +151,10 @@ void Server::runCommand(QString command, Player *player) {
         forAllClients(win);
         forAllClients("S\n" + player->name + " finished (" + QString::number(winners.size()) + " place)");
 
-        if (winners.size() == alreadyPlayers)
-            QTimer::singleShot(2000, this, SLOT(timeToDie()));
+        if (winners.size() == alreadyPlayers) {
+            forAllClients("Game finished\nServer would shutdown after 60 seconds");
+            QTimer::singleShot(60000, this, SLOT(timeToDie()));
+        }
     }
 
     if (player->socket->canReadLine())

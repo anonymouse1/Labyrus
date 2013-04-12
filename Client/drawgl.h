@@ -43,7 +43,8 @@ enum {
     blackout = 9,
     hudbackground = 10,
     okular = 11,
-    verticalSlice = 12
+    verticalSlice = 12,
+    winners = 13
 };
 
 class DrawGl : public QGLWidget
@@ -86,6 +87,7 @@ private:
     void drawBotLast();
     void drawWinners();
     void drawPreview();
+    void drawChat();
 
     void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
     void drawFloorPoint(double x1, double y1, double h, bool b);
@@ -96,7 +98,7 @@ private:
 
     QTimer *t, *timeFPS;
     int fps;
-    GLuint textures[13];
+    GLuint textures[14];
     QString currentText;
     bool enteringText;
     QString skinPath;

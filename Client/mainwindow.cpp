@@ -51,12 +51,6 @@ MainWindow::~MainWindow() {
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
     QString text = event->text().toUpper();
-    if ((key == Qt::Key_Z) || (text == tr("Z"))) {
-        if (!widget->isFullScreen())
-            widget->showFullScreen();
-        else
-            widget->showNormal();
-    }
 
     if (input->cheats) {
         if ((key == Qt::Key_Q) || (text == tr("Q")))
