@@ -98,11 +98,12 @@ void Server::processConnection(Player *player) {
 
     if ((alreadyPlayers >= numPlayers) || (gameStart)) {
         qDebug() << "starting game";
-        gameStart = true;
         if (gameStart)
-            socket->write("gameStart");
-        else
+            socket->write("gameStart\n");
+        else {
+            gameStart = true;
             emit forAllClientsPrint("gameStart");
+        }
 
         if (cheats) {
             emit forAllClientsPrint("cheats");
