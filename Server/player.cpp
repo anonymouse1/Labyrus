@@ -23,7 +23,7 @@ void Player::run() {
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
     QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)), Qt::DirectConnection);
-    QObject::connect(checkValid, SIGNAL(timeout()), this, SLOT(disconnect()));
+    QObject::connect(checkValid, SIGNAL(timeout()), this, SLOT(lagger()));
 
     if (server->radiation)
         QObject::connect(server->radiationTimer, SIGNAL(timeout()), this, SLOT(radiation()));
@@ -83,4 +83,9 @@ void Player::setValid() {
 
 void Player::flush() {
     socket->flush();
+}
+
+void Player::lagger() {
+    emit say("S\n" + name + " is lagger");
+    disconnect();
 }
