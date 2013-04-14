@@ -137,6 +137,8 @@ void Server::runCommand(QString command, Player *player) {
         player->coord.y = s.left(s.length() - 1).toDouble();
         s = player->socket->readLine();
         player->coord.h = s.left(s.length() - 1).toDouble();
+        s = player->socket->readLine();
+        player->progress = s.left(s.length() - 1).toInt();
     } else if (command[0] == 'I') {
         forAllClientsPrint("S\n" + player->name + ": " + QString::fromLocal8Bit(player->socket->readLine()));
     } else if (command[0] == 'v') {
@@ -418,6 +420,7 @@ QByteArray *Server::generateHeroMessage() {
                        QString::number(i.value()->coord.x) + "\n" +
                        QString::number(i.value()->coord.y) + "\n" +
                        QString::number(i.value()->coord.h) + "\n" +
+                       QString::number(i.value()->progress) + "\n" +
                        i.value()->name + "\n");
 
     return result;

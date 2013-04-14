@@ -14,7 +14,11 @@
 #include <QHostAddress>
 #include <messagesstack.h>
 #include <math.h>
+#include <algorithm>
 #include <QStringList>
+#include <QPair>
+
+using std::sort;
 
 struct fpoint {
     double x;
@@ -46,6 +50,7 @@ public:
     bool radiation;
     int myDescriptor;
     int descriptors[100];
+    int progress;
     double angle;
     double yAngle;
     QString login;
@@ -53,6 +58,7 @@ public:
     QTime *pingTime;
     bool escapeMode;
     QStringList winners;
+    QPair<int, QString> players[100];
     bool allowWin;
 
     int latency;

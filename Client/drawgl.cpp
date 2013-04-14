@@ -141,8 +141,7 @@ void DrawGl::paintGL() {
     if (a->escapeMode)
         drawMenu();
 
-    if (a->winners.size() != 0)
-        drawWinners();
+    drawWinners();
 
     if (legacy->ctrlPressed)
         drawOkular();
@@ -675,6 +674,7 @@ void DrawGl::drawHUD() {
     qglColor(Qt::green);
     renderText(5, 15, tr("Elapsed: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
     progress += legacy->updateProgress();
+    a->progress = double(progress) / a->n / a->n / a->h * 100;
     renderText(5, this->height() - 20, tr("Progress: ") + QString::number(int(double(progress) / a->n / a->n / a->h * 100)) + "%", hudFont);
     renderText(5, this->height() - 40, tr("Floor №") + QString::number(a->getFloor()), hudFont);
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
@@ -794,19 +794,27 @@ void DrawGl::drawWinners() {
     loadTexture(textures[winners]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 100, this->height() - 20 * a->winners.size());
+        glVertex2d(this->width() / 2 - 100, this->height() - 20 * a->otherHeroes);
         glTexCoord2d(0, 1);
-        glVertex2d(this->width() / 2 + 100, this->height() - 20 * a->winners.size());
+        glVertex2d(this->width() / 2 + 100, this->height() - 20 * a->otherHeroes);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 + 100, this->height() + 20 * a->winners.size());
+        glVertex2d(this->width() / 2 + 100, this->height() + 20 * a->otherHeroes);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 - 100, this->height() + 20 * a->winners.size());
+        glVertex2d(this->width() / 2 - 100, this->height() + 20 * a->otherHeroes);
         glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
     for (int i = 0; i < a->winners.size(); i++)
-        renderText(this->width() / 2 - 70, 15 + 20 * i, QString::number(i + 1) + ": " + a->winners[i], hudFont);
+        renderText(this->width() / 2 - 70, 15 + 20 * i, QString::number(i + 1) + ": " + a->winners[i] + "(finished)", hudFont);
+
+    int current = a->winners.size();
+    for (int i = a->otherHeroes - 1; i >= 0; i--)
+        if (!a->winners.contains(a->players[i].second)) {
+            renderText(this->width() / 2 - 70, 15 + 20 * current, QString::number(current + 1) + ": " + a->players[i].second + "(" +
+                       QString::number(a->players[i].first) + "%)", hudFont);
+            current++;
+        }
 }
 
 void DrawGl::drawPreview() {

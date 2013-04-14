@@ -23,6 +23,7 @@ public:
 
     QString name;
     fpoint coord;
+    int progress;
     QTcpSocket *socket;
     int socketDescriptor;
     Server *server;

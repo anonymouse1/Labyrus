@@ -132,6 +132,7 @@ void NetworkClass::readHeroes() {
         c.x = scanInt();
         c.y = scanInt();
         c.h = scanInt();
+        int progress = scanInt();
         if (tmp == myDescriptor) {
             if (fullRefresh) {
                 coord = c;
@@ -147,7 +148,10 @@ void NetworkClass::readHeroes() {
 
         heroNames[i] = QString::fromLocal8Bit(mainSocket->readLine());
         heroNames[i] = heroNames[i].left(heroNames[i].length() - 1);
+        players[i].first = progress;
+        players[i].second = heroNames[i];
     }
+    sort(players, players + otherHeroes);
 }
 
 void NetworkClass::go(QString s, bool flush, bool addEndLine) {
@@ -214,7 +218,7 @@ int NetworkClass::getFloor() {
 }
 
 void NetworkClass::refreshCoords() {
-    go("n\n" + QString::number(coord.x) + "\n" + QString::number(coord.y) + "\n" + QString::number(coord.h) + "\n");
+    go("n\n" + QString::number(coord.x) + "\n" + QString::number(coord.y) + "\n" + QString::number(coord.h) + "\n" + QString::number(progress) + "\n");
 }
 
 void NetworkClass::runCommand(QString s) {
