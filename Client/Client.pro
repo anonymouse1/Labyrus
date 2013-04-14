@@ -33,7 +33,6 @@ HEADERS  += mainwindow.h \
     drawgl.h \
     connection.h \
     networkclass.h \
-    fieldinformation.h \
     calculationthread.h \
     messagesstack.h \
     model.h
