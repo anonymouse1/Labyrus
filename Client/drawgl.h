@@ -74,6 +74,7 @@ public:
     double f;
     double mouseSensitivity;
     void initializeGL();
+    int progress;
 
 private:
     void drawAxis();
@@ -105,7 +106,6 @@ private:
     QPixmap generateCompass(double angle);
     QPixmap *compass;
     Model *I;
-    int progress;
 
     bool firstMouseMove;
     int lastClickX;

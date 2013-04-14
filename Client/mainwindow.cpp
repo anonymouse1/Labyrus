@@ -515,6 +515,7 @@ void MainWindow::restart() {
     widget->started = false;
     input->winners.clear();
     widget->perspective = 45;
+    widget->progress = 0;
     input->radiation = true;
     for (int i = 0; i < 100; i++)
         for (int j = 0; j < 100; j++)

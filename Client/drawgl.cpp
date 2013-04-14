@@ -141,14 +141,14 @@ void DrawGl::paintGL() {
     if (a->escapeMode)
         drawMenu();
 
-    drawWinners();
-
     if (legacy->ctrlPressed)
         drawOkular();
 
     if (botActive)
         drawBotLast();
 
+    if (legacy->ctrlPressed)
+        drawWinners();
 }
 
 void DrawGl::drawAxis() {
