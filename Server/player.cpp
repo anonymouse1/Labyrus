@@ -51,6 +51,8 @@ void Player::readyRead() {
 
 void Player::disconnect() {
     server->alreadyPlayers--;
+    if (server->alreadyPlayers == 0)
+        server->gameStart = false;
     server->r.remove(socketDescriptor);
     qDebug() << this->name << "disconnected";
     server->names.remove(name);

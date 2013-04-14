@@ -43,6 +43,7 @@ public:
     QSet<QString> names;
     QTimer *radiationTimer;
     bool radiation;
+    bool gameStart;
 
 private:
     void die(QString);
@@ -69,7 +70,6 @@ private:
 
     int latency, numPlayers;
     bool strongNumPlayers;
-    bool gameStart;
     bool cheats;
     int n;
     int h;

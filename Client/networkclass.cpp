@@ -114,6 +114,8 @@ void NetworkClass::readInformation() {
             coord.h = 0.5;
             coord.x = 0.5;
             coord.y = 0.5;
+            yAngle = -80;
+            angle = 45;
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
