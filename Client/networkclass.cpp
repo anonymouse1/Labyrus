@@ -109,6 +109,11 @@ void NetworkClass::readInformation() {
             qDebug() << winners;
         } else if (s == "nowin\n") {
             allowWin = false;
+        } else if (s == "restart\n") {
+            qDebug() << "restarting...";
+            coord.h = 0.5;
+            coord.x = 0.5;
+            coord.y = 0.5;
         } else {
             qDebug() << "unknown information" << s;
             qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";

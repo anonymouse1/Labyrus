@@ -61,6 +61,7 @@ private:
     void processInformation();
     double scanInt();
     void win();
+    void restart();
 
     bool isWallUp(gpoint c);
     bool isWallDown(gpoint c);

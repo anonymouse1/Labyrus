@@ -29,7 +29,10 @@ Server::Server(bool win, qint16 port, bool rad, bool cheat, int size, int height
     }
     n = size;
     h = height;
+    QTime generatingMap;
+    generatingMap.start();
     generateMap();
+    qDebug() << generatingMap.elapsed() << "ms";
     QList<QHostAddress> l = QNetworkInterface::allAddresses();
     for (int i = 0; i < l.size(); i++)
         if (l[i].toIPv4Address() && l[i] != QHostAddress::LocalHost)
@@ -153,8 +156,13 @@ void Server::runCommand(QString command, Player *player) {
         forAllClients("S\n" + player->name + " finished (" + QString::number(winners.size()) + " place)");
 
         if (winners.size() == alreadyPlayers) {
-            forAllClients("S\nGame finished\nS\nServer would shutdown after 5 minutes");
-            QTimer::singleShot(300000, this, SLOT(timeToDie()));
+            forAllClients("restart");
+            forAllClients("S\nGame finished\nS\nPlease wait...");
+            generateMap();
+            emit sendFields();
+            forAllClients("S\nMap generated");
+            emit forAllClientsPrint("gameStart");
+            winners.clear();
         }
     }
 

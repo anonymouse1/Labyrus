@@ -10,7 +10,7 @@ QT       -= gui
 
 QT       += network
 
-greaterThan(QT_MAJOR_VERSION, 5): DEFINES += QT5
+greaterThan(QT_MAJOR_VERSION, 5):
 
 
 TARGET = Server

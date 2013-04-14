@@ -20,10 +20,6 @@
 #include <QEventLoop>
 #include <QStringList>
 
-#ifndef QT5
-    #define qintptr int
-#endif
-
 using std::swap;
 
 const int dx[4] = {0, 1, 0, -1};

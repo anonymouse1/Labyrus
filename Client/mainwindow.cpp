@@ -485,10 +485,13 @@ double MainWindow::sqr(double a) {
 
 bool MainWindow::updateProgress() {
     if ((input->coord.x < 0 || input->coord.x > input->n || input->coord.y < 0 ||
-         input->coord.y > input->n || input->coord.h < 0 || input->coord.h > input->h) && (!finished) && (input->allowWin)) {
-            win();
-            return false;
-        }
+         input->coord.y > input->n || input->coord.h < 0 || input->coord.h > input->h) && (input->allowWin)) {
+            if (!finished) {
+                win();
+                return false;
+            }
+    } else if (finished)
+        restart();
 
     gpoint c = getRealCoord();
     if (progress[c.x][c.y][c.h])
@@ -504,4 +507,13 @@ void MainWindow::win() {
     finished = true;
     stopBot = true;
     input->go("w");
+}
+
+void MainWindow::restart() {
+    thread->move = true;
+    finished = false;
+    for (int i = 0; i < 100; i++)
+        for (int j = 0; j < 100; j++)
+            for (int k = 0; k < 100; k++)
+                progress[i][j][k] = false;
 }
