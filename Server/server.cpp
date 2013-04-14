@@ -64,6 +64,7 @@ void Server::processConnection(Player *player) {
 //    QTcpSocket *socket = server->nextPendingConnection();
     qDebug() << QThread::currentThread();
     QObject::connect(player, SIGNAL(finished()), player, SLOT(deleteLater()));
+    QObject::connect(player, SIGNAL(finished()), this, SLOT(sendWinners()));
     QTcpSocket *socket = player->socket;
 
     if (!socket->canReadLine())
@@ -148,13 +149,7 @@ void Server::runCommand(QString command, Player *player) {
     } else if (command[0] == 'w') {
         winners.push_back(player->name);
         qDebug() << winners;
-        QByteArray win;
-        win += "w\n";
-        win += QString::number(winners.size());
-        for (int i = 0; i < winners.size(); i++)
-            win += "\n" + winners[i];
-
-        forAllClients(win);
+        sendWinners();
         forAllClients("S\n" + player->name + " finished (" + QString::number(winners.size()) + " place)");
 
         if (winners.size() == alreadyPlayers) {
@@ -429,4 +424,14 @@ QByteArray *Server::generateHeroMessage() {
 void Server::timeToDie() {
     //            forAllClientsPrint("f");
     exit(0);
+}
+
+void Server::sendWinners() {
+    QByteArray win;
+    win += "w\n";
+    win += QString::number(winners.size());
+    for (int i = 0; i < winners.size(); i++)
+        win += "\n" + winners[i];
+
+    forAllClients(win);
 }
