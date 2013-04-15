@@ -36,7 +36,6 @@ private:
     int latency;
 private slots:
     void sendHeroTime();
-    void printString(QString);
     void radiation();
     void lagger();
 public slots:
@@ -44,6 +43,7 @@ public slots:
     void readyRead();
     void disconnect();
     void setValid();
+    void printString(QString);
 signals:
     void say(QString);
 protected:

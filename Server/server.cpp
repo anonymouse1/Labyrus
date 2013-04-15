@@ -169,21 +169,17 @@ void Server::runCommand(QString command, Player *player) {
 
 void Server::sendFieldToPlayer(Player *player, QByteArray *data) {
     qDebug() << "sending field to player" << player->name << QTime::currentTime();
-    player->sendingInformation.lock();
     if (data == NULL)
         data = generateFieldMessage();
 
-    player->socket->write(*data);
-    player->sendingInformation.unlock();
+    player->printString(*data);
 }
 
 void Server::sendHeroesToPlayer(Player *player, QByteArray *data) {
-    player->sendingInformation.lock();
     if (data == NULL)
         data = generateHeroMessage();
 
-    player->socket->write(*data);
-    player->sendingInformation.unlock();
+    player->printString(*data);
 }
 
 bool Server::isWallDown(int x, int y, int k) {

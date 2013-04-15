@@ -69,14 +69,15 @@ void Player::sendHeroTime() {
 
 void Player::printString(QString s) {
     sendingInformation.lock();
-    socket->write((s + "\n").toLocal8Bit());
+    if (!socket->isValid() || !socket->isWritable())
+        disconnect();
+    else
+        socket->write((s + "\n").toLocal8Bit());
     sendingInformation.unlock();
 }
 
 void Player::radiation() {
-    sendingInformation.lock();
-    socket->write(QString("rad\n").toLocal8Bit());
-    sendingInformation.unlock();
+    printString("rad");
 }
 
 void Player::setValid() {

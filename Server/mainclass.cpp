@@ -3,8 +3,8 @@
 
 MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
 {
-    int n = 10;
-    int h = 1;
+    int n = 4;
+    int h = 4;
     int latency = 50;
     int players = 1;
     qint16 port = 7777;
