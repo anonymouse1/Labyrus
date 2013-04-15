@@ -73,8 +73,8 @@ public:
     double k;
     double f;
     double mouseSensitivity;
-    void initializeGL();
     int progress;
+    void updatePerspective();
 
 private:
     void drawAxis();
@@ -120,6 +120,7 @@ private:
     void begin2d();
     void end2d();
 protected:
+    void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
 

@@ -84,6 +84,8 @@ void DrawGl::initializeGL() {
 
     glFrontFace(GL_CCW);
     glPointSize(10);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 }
 
 void DrawGl::resizeGL(int w, int h) {
@@ -541,25 +543,22 @@ void DrawGl::processText() {
 }
 
 void DrawGl::begin2d() {
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-  glDisable(GL_DEPTH_TEST);
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  gluOrtho2D(0, this->width(), 0, this->height());
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, this->width(), 0, this->height());
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
 }
 
 void DrawGl::end2d() {
-  glPopMatrix();
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode(GL_MODELVIEW);
-  glEnable(GL_DEPTH_TEST);
-  glDisable(GL_BLEND);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_DEPTH_TEST);
 }
 
 QPixmap DrawGl::generateCompass(double angle) {
@@ -902,4 +901,8 @@ void DrawGl::drawStarting() {
     end2d();
 
     renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - int(startAfter - 1000)) / 1000) + tr(" seconds"), hudFont);
+}
+
+void DrawGl::updatePerspective() {
+    this->resizeGL(this->width(), this->height());
 }

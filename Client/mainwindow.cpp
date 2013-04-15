@@ -87,14 +87,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         #ifdef BEAUTIFULL_BUGS
             widget->resize(widget->width(), widget->height() - 1);
         #else
-            if (widget->isFullScreen()) {
-                widget->resize(widget->width(), widget->height() - 1);
-                widget->resize(widget->width(), widget->height() + 1);
-                widget->showFullScreen();
-            } else {
-                widget->resize(widget->width(), widget->height() - 1);
-                widget->resize(widget->width(), widget->height() + 1);
-            }
+            widget->updatePerspective();
         #endif
     }
 
