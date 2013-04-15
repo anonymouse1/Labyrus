@@ -98,7 +98,7 @@ void Server::processConnection(Player *player) {
     player->socket = socket;
     qDebug() << player->name << "connected";
     qDebug() << "as" << socket->socketDescriptor();
-    alreadyPlayers++;
+    alreadyPlayers = r.size();
 
     if ((alreadyPlayers >= numPlayers) || (gameStart)) {
         qDebug() << "starting game";

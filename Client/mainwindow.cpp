@@ -350,7 +350,9 @@ void MainWindow::startingFinished() {
     widget->startingGame = false;
     widget->started = true;
     widget->startAfter = startLine->currentTime();
-    thread->start();
+    if (!thread->isRunning())
+        thread->start();
+    thread->move = true;
     delete startLine;
 }
 
@@ -510,7 +512,6 @@ void MainWindow::win() {
 }
 
 void MainWindow::restart() {
-    thread->move = true;
     finished = false;
     widget->started = false;
     input->winners.clear();

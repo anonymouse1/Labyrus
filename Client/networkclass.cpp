@@ -126,6 +126,7 @@ void NetworkClass::readInformation() {
 
 void NetworkClass::readHeroes() {
     otherHeroes = scanInt();
+    assert(otherHeroes > 0);
     for (int i = 0; i < otherHeroes; i++) {
         int tmp = scanInt();
         fpoint c;
@@ -151,7 +152,8 @@ void NetworkClass::readHeroes() {
         players[i].first = progress;
         players[i].second = heroNames[i];
     }
-    sort(players, players + otherHeroes);
+    if (otherHeroes != 1)
+        sort(players, players + otherHeroes);
 }
 
 void NetworkClass::go(QString s, bool flush, bool addEndLine) {

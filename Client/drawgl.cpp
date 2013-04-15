@@ -305,7 +305,7 @@ void DrawGl::drawMaze() {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
             double h = a->walls[i][2] * wallHeight;
-            if ((a->walls[i][3] == 2) && (a->h != 1)) {
+            if ((a->walls[i][3] == 2) && ((a->h != 1) || (a->walls[i][2] == 0))) {
                 drawQuad(x, y - eps, x + k, y - eps, h - f, f * 2);
                 drawQuad(x - eps, y + k, x - eps, y, h - f, f * 2);
                 drawQuad(x + k + eps, y, x + k + eps, y + k, h - f, f * 2);
@@ -360,7 +360,7 @@ void DrawGl::drawMaze() {
     loadTexture(textures[roof]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++)
-            if ((a->walls[i][3] == 2) && (a->h != 1))
+            if ((a->walls[i][3] == 2) && ((a->h != 1) || (a->walls[i][2] == 0)))
                 drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2], false);
 
     glEnd();
@@ -368,7 +368,7 @@ void DrawGl::drawMaze() {
     loadTexture(textures[Floor]);
     glBegin(GL_QUADS);
         for (int i = 0; i < a->m; i++)
-            if ((a->walls[i][3] == 2) && (a->h != 1))
+            if ((a->walls[i][3] == 2) && ((a->h != 1) || (a->walls[i][2] == 0)))
                 drawFloorPoint(a->walls[i][0], a->walls[i][1], a->walls[i][2], true);
     glEnd();
 
@@ -384,7 +384,7 @@ void DrawGl::drawMaze() {
         if (a->coord.h > 1)
             I->draw(1 / sizeView / 10, a->coord.x * k, a->coord.y * k, wallHeight / 3);
     if (startingGame)
-        renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - startAfter) / 1000) + QString(" seconds"), hudFont);
+        renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - startAfter) / 1000) + tr(" seconds"), hudFont);
 }
 
 void DrawGl::onx() {
@@ -530,7 +530,10 @@ void DrawGl::processText() {
     if (currentText == "EXIT") {
         legacy->legalStop();
     } else if (currentText == "BOT") {
-        legacy->startBot();
+        if (started)
+            legacy->startBot();
+        else
+            a->messages->addMessage(tr("Game not started"));
     } else if (currentText == "STOP") {
         if (botActive)
             legacy->stopBot = true;

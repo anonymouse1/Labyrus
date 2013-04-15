@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <QStringList>
 #include <QPair>
+#include <assert.h>
 
 using std::sort;
 
