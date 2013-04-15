@@ -832,9 +832,20 @@ void DrawGl::drawPreview() {
         glVertex2d(0, this->height());
         glTexCoord2d(0, 0);
     glEnd();
+    loadTexture(textures[winners]);
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() / 2 - 240, this->height() - 100);
+        glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 + 240, this->height() - 100);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 + 240, this->height() + 10);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 - 240, this->height() + 10);
+        glTexCoord2d(0, 0);
+    glEnd();
     end2d();
 
-    qglColor(QColor("green"));
+    qglColor(QColor(0, 250, 0));
     renderText(this->width() / 2 - 200, 20, tr("Waiting for others players..."), hudFont);
 }
 
