@@ -97,7 +97,7 @@ private:
 
     void drawText(double x, double y, double z, bool xForwarding, bool yForwarding, QString s);
 
-    QTimer *t, *timeFPS;
+    QTimer *t, *timeFPS, *cursorSetTimer;
     int fps;
     GLuint textures[14];
     QString currentText;
@@ -136,6 +136,8 @@ public slots:
     void onx();
     void drawFPS();
     void processText();
+private slots:
+    void cursorSet();
 };
 
 #endif // DRAWGL_H

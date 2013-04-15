@@ -48,7 +48,10 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     QSettings s(settingsFile, QSettings::IniFormat);
     restoreGeometry(s.value("widgetGeometry").toByteArray());
     QCursor::setPos(width() / 2, height() / 2);
-    setCursor(QCursor(Qt::BlankCursor));
+    cursorSetTimer = new QTimer;
+    cursorSetTimer->setInterval(200);
+    cursorSetTimer->start();
+    QObject::connect(cursorSetTimer, SIGNAL(timeout()), this, SLOT(cursorSet()));
     setMouseTracking(true);
 }
 
@@ -883,4 +886,11 @@ void DrawGl::drawChat() {
 
     for (int i = 0; i < list.size(); i++)
         renderText(5, this->height() / 2 + 85 - 20 * (list.size() - i), list[i], hudFont);
+}
+
+void DrawGl::cursorSet() {
+    if (isFullScreen())
+        setCursor(Qt::BlankCursor);
+    else
+        setCursor(Qt::ArrowCursor);
 }
