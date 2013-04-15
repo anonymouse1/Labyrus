@@ -21,8 +21,8 @@ void Player::run() {
     checkValid->start();
 
     QObject::connect(refresh, SIGNAL(timeout()), this, SLOT(refreshTime()), Qt::DirectConnection);
-    QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()), Qt::DirectConnection);
-    QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)), Qt::DirectConnection);
+    QObject::connect(server, SIGNAL(sendFields()), this, SLOT(refreshTime()));
+    QObject::connect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)));
     QObject::connect(checkValid, SIGNAL(timeout()), this, SLOT(lagger()));
 
     if (server->radiation)

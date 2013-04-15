@@ -424,6 +424,12 @@ void Server::timeToDie() {
 
 void Server::sendWinners() {
     QByteArray win;
+    for (int i = 0; i < winners.size(); i++)
+        if (!names.contains(winners[i])) {
+            winners.removeAt(i);
+            i--;
+        }
+
     win += "w\n";
     win += QString::number(winners.size());
     for (int i = 0; i < winners.size(); i++)
