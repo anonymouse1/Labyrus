@@ -69,7 +69,7 @@ void Player::sendHeroTime() {
 
 void Player::printString(QString s) {
     sendingInformation.lock();
-    if (!socket->isValid() || !socket->isWritable())
+    if (socket->state() != QTcpSocket::ConnectedState)
         disconnect();
     else
         socket->write((s + "\n").toLocal8Bit());
