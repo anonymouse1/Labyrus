@@ -672,7 +672,10 @@ void DrawGl::drawHUD() {
     glEnd();
     end2d();
     qglColor(Qt::green);
-    renderText(5, 15, tr("Elapsed: ") + QString::number(legacy->thread->fromStartOfGame.elapsed() / 1000) + QString("s"), hudFont);
+    int time = legacy->thread->fromStartOfGame.elapsed() / 1000;
+    if (!started)
+        time = 0;
+    renderText(5, 15, tr("Elapsed: ") + QString::number(time) + QString("s"), hudFont);
     progress += legacy->updateProgress();
     a->progress = double(progress) / a->n / a->n / a->h * 100;
     renderText(5, this->height() - 20, tr("Progress: ") + QString::number(int(double(progress) / a->n / a->n / a->h * 100)) + "%", hudFont);
@@ -680,7 +683,6 @@ void DrawGl::drawHUD() {
     renderText(this->width() - 60, 10, QString("FPS: ") + QString::number(oldFps));
 
     qglColor(Qt::red);
-
 }
 
 void DrawGl::drawMenu() {
