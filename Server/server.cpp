@@ -155,11 +155,10 @@ void Server::runCommand(QString command, Player *player) {
         if (winners.size() == alreadyPlayers) {
             forAllClients("restart");
             forAllClients("S\nGame finished\nS\nPlease wait...");
-            generateMap();
-            emit sendFields();
-            forAllClients("S\nMap generated");
-            emit forAllClientsPrint("gameStart");
-            winners.clear();
+            if (n * n * h < 400)
+                QTimer::singleShot(4000, this, SLOT(restart()));
+            else
+                restart();
         }
     }
 
@@ -436,4 +435,12 @@ void Server::sendWinners() {
         win += "\n" + winners[i];
 
     forAllClients(win);
+}
+
+void Server::restart() {
+    generateMap();
+    emit sendFields();
+    forAllClients("S\nMap generated");
+    forAllClients("gameStart");
+    winners.clear();
 }

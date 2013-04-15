@@ -22,107 +22,107 @@
 <context>
     <name>DrawGl</name>
     <message>
-        <location filename="Client/drawgl.cpp" line="387"/>
+        <location filename="Client/drawgl.cpp" line="904"/>
         <source>Starting after </source>
         <translation>Старт через </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="541"/>
+        <location filename="Client/drawgl.cpp" line="528"/>
         <source>Bot is inactive</source>
         <translation>Бот неактивен</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="544"/>
+        <location filename="Client/drawgl.cpp" line="531"/>
         <source>You are in autonomous mode</source>
         <translation>Вы в автономном режиме</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="551"/>
+        <location filename="Client/drawgl.cpp" line="538"/>
         <source>Possible commands: help bot stop ping exit...</source>
         <translation>Возможные команды: help bot stop ping exit...</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="684"/>
+        <location filename="Client/drawgl.cpp" line="671"/>
         <source>Elapsed: </source>
         <translation>Прошло: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="379"/>
+        <location filename="Client/drawgl.cpp" line="368"/>
         <source>Welcome!!!</source>
         <translation>Добро пожаловать!!!</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="387"/>
+        <location filename="Client/drawgl.cpp" line="904"/>
         <source> seconds</source>
         <translation>с</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="404"/>
+        <location filename="Client/drawgl.cpp" line="391"/>
         <source>Z</source>
         <translation>Я</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="536"/>
+        <location filename="Client/drawgl.cpp" line="523"/>
         <source>Game not started</source>
         <translation>Игра еще не началась</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="687"/>
+        <location filename="Client/drawgl.cpp" line="674"/>
         <source>Progress: </source>
         <translation>Прогресс:</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="688"/>
+        <location filename="Client/drawgl.cpp" line="675"/>
         <source>Floor â</source>
         <translation>Этаж №</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="722"/>
+        <location filename="Client/drawgl.cpp" line="709"/>
         <source>Resume</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="725"/>
+        <location filename="Client/drawgl.cpp" line="712"/>
         <source>on</source>
         <translation>активен</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="727"/>
+        <location filename="Client/drawgl.cpp" line="714"/>
         <source>off</source>
         <translation>включить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="729"/>
+        <location filename="Client/drawgl.cpp" line="716"/>
         <source>FullScreen: </source>
         <translation>Полноэкранный режим: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="732"/>
+        <location filename="Client/drawgl.cpp" line="719"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="734"/>
+        <location filename="Client/drawgl.cpp" line="721"/>
         <source>BOT</source>
         <translation>Бот</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="736"/>
+        <location filename="Client/drawgl.cpp" line="723"/>
         <source>Mouse Sensitivity: </source>
         <translation>Чувствительность мыши: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="737"/>
+        <location filename="Client/drawgl.cpp" line="724"/>
         <source>Exit?</source>
         <translation>Выйти?</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="790"/>
+        <location filename="Client/drawgl.cpp" line="777"/>
         <source>Bot: </source>
         <translation>Бот: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="855"/>
+        <location filename="Client/drawgl.cpp" line="842"/>
         <source>Waiting for others players...</source>
         <translation>Ожидание других игроков...</translation>
     </message>
@@ -321,22 +321,37 @@
 <context>
     <name>NetworkClass</name>
     <message>
+        <location filename="Client/networkclass.cpp" line="96"/>
+        <source>Game finished</source>
+        <translation>Игра завершена</translation>
+    </message>
+    <message>
+        <location filename="Client/networkclass.cpp" line="98"/>
+        <source>Please wait...</source>
+        <translation>Пожалуйста ждите...</translation>
+    </message>
+    <message>
         <location filename="Client/networkclass.cpp" line="100"/>
+        <source>Map generated</source>
+        <translation>Лабиринт сгенерирован</translation>
+    </message>
+    <message>
+        <location filename="Client/networkclass.cpp" line="108"/>
         <source>Ping time: </source>
         <translation>Пинг: </translation>
     </message>
     <message>
-        <location filename="Client/networkclass.cpp" line="100"/>
+        <location filename="Client/networkclass.cpp" line="108"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="Client/networkclass.cpp" line="235"/>
+        <location filename="Client/networkclass.cpp" line="243"/>
         <source>You are disconnected from server</source>
         <translation>Вы отключены от сервера</translation>
     </message>
     <message>
-        <location filename="Client/networkclass.cpp" line="236"/>
+        <location filename="Client/networkclass.cpp" line="244"/>
         <source>Autonomous mode</source>
         <translation>Автономный режим</translation>
     </message>

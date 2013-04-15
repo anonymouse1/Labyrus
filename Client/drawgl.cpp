@@ -135,6 +135,7 @@ void DrawGl::paintGL() {
     drawSkyBox();
     drawMaze();
     drawHeroes();
+
     if (!legacy->ctrlPressed) {
         drawCompass();
         drawHUD();
@@ -144,13 +145,16 @@ void DrawGl::paintGL() {
     if (a->escapeMode)
         drawMenu();
 
+    if (startingGame)
+        drawStarting();
+
     if (legacy->ctrlPressed)
         drawOkular();
 
     if (botActive)
         drawBotLast();
 
-    if (!legacy->ctrlPressed)
+    if (!legacy->ctrlPressed && started)
         drawWinners();
 }
 
@@ -180,41 +184,26 @@ void DrawGl::drawAxis() {
 }
 
 void DrawGl::enableLight() {
-        float dir[3] = {0, 0, -1};
-//    GLfloat pos[4] = {(float)(a->coord.x()), (float)(a->coord.y()), -wallHeight / 2, 1.0f};
-        GLfloat pos[4] = {0.5, 0.5, 0.01, 1.0f};
-        GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-        GLfloat mat_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-        GLfloat ambientLight[] = {0.1f, 0.1f, 0.1f, 0.8f};
+    float dir[3] = {0, 0, -1};
+    GLfloat pos[4] = {0.5, 0.5, 0.01, 1.0f};
+    GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat mat_specular[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat ambientLight[] = {0.1f, 0.1f, 0.1f, 0.8f};
 
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, pos);
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
+    glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, color);
+    glEnable(GL_LIGHT0);
 
-        glLightfv(GL_LIGHT0, GL_POSITION, pos);
-        glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir);
-        glLightfv(GL_LIGHT0, GL_AMBIENT_AND_DIFFUSE, color);
-        glEnable(GL_LIGHT0);
-
-
-
-        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_specular);
-        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_specular);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 }
 
 void DrawGl::drawSkyBox() {
     loadTexture(textures[5]);
     glBegin(GL_QUADS);
-   /*     for (int i = 0; i < a->n; i++)
-            for (int j = 0; j < a->n; j++) {
-                glVertex3f((i + 1) / sizeView, j / sizeView, wallHeight);
-                glTexCoord2d(1, 1);
-                glVertex3f(i / sizeView, j / sizeView, wallHeight);
-                glTexCoord2d(0, 1);
-                glVertex3f(i / sizeView, (j + 1) / sizeView, wallHeight);
-                glTexCoord2d(0, 0);
-                glVertex3f((i + 1) / sizeView, (j + 1) / sizeView, wallHeight);
-                glTexCoord2d(1, 0);
-            }*/
         glVertex3f(50, -50, 10);
         glTexCoord2d(1, 1);
         glVertex3f(-50, -50, 10);
@@ -383,8 +372,6 @@ void DrawGl::drawMaze() {
     if (a->h == 1)
         if (a->coord.h > 1)
             I->draw(1 / sizeView / 10, a->coord.x * k, a->coord.y * k, wallHeight / 3);
-    if (startingGame)
-        renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - startAfter) / 1000) + tr(" seconds"), hudFont);
 }
 
 void DrawGl::onx() {
@@ -896,4 +883,23 @@ void DrawGl::cursorSet() {
         setCursor(Qt::BlankCursor);
     else
         setCursor(Qt::ArrowCursor);
+}
+
+void DrawGl::drawStarting() {
+    qglColor(QColor(0, 250, 0));
+    begin2d();
+    loadTexture(textures[blackout]);
+    glBegin(GL_QUADS);
+        glVertex2d(this->width() / 2 - 170, this->height() / 2 - 30);
+        glTexCoord2d(0, 0);
+        glVertex2d(this->width() / 2 + 230, this->height() / 2 - 30);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 + 230, this->height() / 2 + 30);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 - 170, this->height() / 2 + 30);
+        glTexCoord2d(1, 0);
+    glEnd();
+    end2d();
+
+    renderText(this->width() / 2 - 100, this->height() / 2, tr("Starting after ") + QString::number((3000 - int(startAfter - 1000)) / 1000) + tr(" seconds"), hudFont);
 }

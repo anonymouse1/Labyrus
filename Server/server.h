@@ -84,6 +84,7 @@ private slots:
     void forAllClients(QString);
     void sendWinners();
     void timeToDie();
+    void restart();
 protected:
     void incomingConnection(qintptr handle);
 

@@ -91,7 +91,15 @@ void NetworkClass::readInformation() {
         } else if (s == "hero\n") {
             readHeroes();
         } else if (s == "S\n") {
-            messages->addMessage(QString::fromLocal8Bit(mainSocket->readLine()));
+            QString message = QString::fromLocal8Bit(mainSocket->readLine());
+            if (message == "Game finished\n")
+                messages->addMessage(tr("Game finished"));
+            else if (message == "Please wait...\n")
+                messages->addMessage(tr("Please wait..."));
+            else if (message == "Map generated\n")
+                messages->addMessage(tr("Map generated"));
+            else
+                messages->addMessage(message);
         } else if (s == "cheats\n") {
             cheats = true;
         } else if (s == "rad\n") {
