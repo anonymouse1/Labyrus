@@ -39,6 +39,7 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     botActive = false;
     mousePressed = false;
     started = false;
+    firstStart = true;
 
     compass = new QPixmap(skinPath + "/compass.png");
     needRefreshCursor = true;
@@ -133,9 +134,9 @@ void DrawGl::paintGL() {
         return;
     }
 
-    drawSkyBox();
     drawMaze();
     drawHeroes();
+    drawSkyBox();
 
     if (!legacy->ctrlPressed) {
         drawCompass();
@@ -275,6 +276,7 @@ void DrawGl::drawMaze() {
     qglColor(Qt::white);
     loadTexture(textures[defaultWall]);
     glBegin(GL_QUADS);
+        flushBug();
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
@@ -287,6 +289,7 @@ void DrawGl::drawMaze() {
                 drawQuad(x - f, y + k, x - f, y, h, wallHeight);
             }
         }
+        flushBug();
     glEnd();
 
     loadTexture(textures[verticalSlice]);
@@ -635,31 +638,31 @@ void DrawGl::drawHUD() {
     loadTexture(textures[blackout]);
     glBegin(GL_QUADS);
         glVertex2d(-100, -156);
-        glTexCoord2d(0, 0);
-        glVertex2d(200, -156);
         glTexCoord2d(1, 0);
-        glVertex2d(200, 80);
+        glVertex2d(200, -156);
         glTexCoord2d(1, 1);
-        glVertex2d(-100, 80);
+        glVertex2d(200, 80);
         glTexCoord2d(0, 1);
+        glVertex2d(-100, 80);
+        glTexCoord2d(0, 0);
 
         glVertex2d(this->width() - 64, this->height() - 32);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width(), this->height() - 32);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width(), this->height() + 32);
+        glVertex2d(this->width(), this->height() - 32);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() - 64, this->height() + 32);
+        glVertex2d(this->width(), this->height() + 32);
         glTexCoord2d(0, 1);
+        glVertex2d(this->width() - 64, this->height() + 32);
+        glTexCoord2d(0, 0);
 
         glVertex2d(-80, this->height() - 56);
-        glTexCoord2d(0, 0);
-        glVertex2d(196, this->height() - 56);
         glTexCoord2d(1, 0);
-        glVertex2d(196, this->height() + 200);
+        glVertex2d(196, this->height() - 56);
         glTexCoord2d(1, 1);
-        glVertex2d(-80, this->height() + 200);
+        glVertex2d(196, this->height() + 200);
         glTexCoord2d(0, 1);
+        glVertex2d(-80, this->height() + 200);
+        glTexCoord2d(0, 0);
     glEnd();
     end2d();
     qglColor(Qt::green);
@@ -682,25 +685,25 @@ void DrawGl::drawMenu() {
     glBegin(GL_QUADS);
     for (int i = 0; i < 2; i++) {
         glVertex2d(this->width() / 2 - max(320, this->width() / 5 * 2), this->height() / 2 - 240);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 + max(320, this->width() / 5 * 2), this->height() / 2 - 240);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 + max(320, this->width() / 5 * 2), this->height() / 2 + 240);
+        glVertex2d(this->width() / 2 + max(320, this->width() / 5 * 2), this->height() / 2 - 240);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - max(320, this->width() / 5 * 2), this->height() / 2 + 240);
+        glVertex2d(this->width() / 2 + max(320, this->width() / 5 * 2), this->height() / 2 + 240);
         glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 - max(320, this->width() / 5 * 2), this->height() / 2 + 240);
+        glTexCoord2d(0, 0);
     }
     glEnd();
     loadTexture(textures[icon]);
     glBegin(GL_QUADS);
         glVertex2d(this->width() / 2 - 240, this->height() / 2 - activePoint * 50 - 16 + 100);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 - 240 + 64, this->height() / 2 - activePoint * 50 - 16 + 100);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 - 240 + 64, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glVertex2d(this->width() / 2 - 240 + 64, this->height() / 2 - activePoint * 50 - 16 + 100);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 240, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glVertex2d(this->width() / 2 - 240 + 64, this->height() / 2 - activePoint * 50 + 48 + 100);
         glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 - 240, this->height() / 2 - activePoint * 50 + 48 + 100);
+        glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
@@ -763,13 +766,13 @@ void DrawGl::drawBotLast() {
     begin2d();
     glBegin(GL_QUADS);
         glVertex2d(this->width() - 70, this->height() / 2 - 20);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width() + 110, this->height() / 2 - 20);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() + 110, this->height() / 2 + 20);
+        glVertex2d(this->width() + 110, this->height() / 2 - 20);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() - 70, this->height() / 2 + 20);
+        glVertex2d(this->width() + 110, this->height() / 2 + 20);
         glTexCoord2d(0, 1);
+        glVertex2d(this->width() - 70, this->height() / 2 + 20);
+        glTexCoord2d(0, 0);
     glEnd();
     end2d();
     renderText(this->width() - 60, this->height() / 2 + 5, tr("Bot: ") + QString::number(botLast, 'f', 0) + "%");
@@ -787,24 +790,24 @@ void DrawGl::drawWinners() {
     loadTexture(textures[winners]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 145, this->height() - 20 * a->otherHeroes);
-        glTexCoord2d(0, 1);
-        glVertex2d(this->width() / 2 + 155, this->height() - 20 * a->otherHeroes);
-        glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 + 155, this->height() + 20 * a->otherHeroes);
+        glVertex2d(this->width() / 2 - 240, this->height() - 20 * a->otherHeroes);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 - 145, this->height() + 20 * a->otherHeroes);
+        glVertex2d(this->width() / 2 + 340, this->height() - 20 * a->otherHeroes);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 + 340, this->height() + 20 * a->otherHeroes);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 - 240, this->height() + 20 * a->otherHeroes);
         glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
     for (int i = 0; i < a->winners.size(); i++)
-        renderText(this->width() / 2 - 115, 15 + 20 * i, QString::number(i + 1) + ": " + a->winners[i] + "(finished)", hudFont);
+        renderText(this->width() / 2 - 90, 16 + 20 * i, QString::number(i + 1) + ": " + a->winners[i] + "(finished)", hudFont);
 
     int current = a->winners.size();
     for (int i = a->otherHeroes - 1; i >= 0; i--)
         if (!a->winners.contains(a->players[i].second)) {
-            renderText(this->width() / 2 - 115, 15 + 20 * current, QString::number(current + 1) + ": " + a->players[i].second + "(" +
+            renderText(this->width() / 2 - 90, 16 + 20 * current, QString::number(current + 1) + ": " + a->players[i].second + "(" +
                        QString::number(a->players[i].first) + "%)", hudFont);
             current++;
         }
@@ -825,18 +828,21 @@ void DrawGl::drawPreview() {
     glEnd();
     loadTexture(textures[winners]);
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 240, this->height() - 100);
+        glVertex2d(this->width() / 2 - 290, this->height() - 50);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 + 240, this->height() - 100);
+        glVertex2d(this->width() / 2 + 290, this->height() - 50);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 + 240, this->height() + 10);
+        glVertex2d(this->width() / 2 + 290, this->height() + 10);
         glTexCoord2d(0, 1);
-        glVertex2d(this->width() / 2 - 240, this->height() + 10);
+        glVertex2d(this->width() / 2 - 290, this->height() + 10);
         glTexCoord2d(0, 0);
     glEnd();
     end2d();
     qglColor(QColor(0, 250, 0));
-    renderText(this->width() / 2 - 200, 20, tr("Waiting for others players..."), hudFont);
+    if (firstStart)
+        renderText(this->width() / 2 - 170, 20, tr("Waiting for others players..."), hudFont);
+    else
+        renderText(this->width() / 2 - 160, 20, tr("Generation of map..."), hudFont);
 }
 
 void DrawGl::drawChat() {
@@ -888,13 +894,13 @@ void DrawGl::drawStarting() {
     loadTexture(textures[blackout]);
     glBegin(GL_QUADS);
         glVertex2d(this->width() / 2 - 170, this->height() / 2 - 30);
-        glTexCoord2d(0, 0);
-        glVertex2d(this->width() / 2 + 230, this->height() / 2 - 30);
-        glTexCoord2d(0, 1);
-        glVertex2d(this->width() / 2 + 230, this->height() / 2 + 30);
-        glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 - 170, this->height() / 2 + 30);
         glTexCoord2d(1, 0);
+        glVertex2d(this->width() / 2 + 230, this->height() / 2 - 30);
+        glTexCoord2d(1, 1);
+        glVertex2d(this->width() / 2 + 230, this->height() / 2 + 30);
+        glTexCoord2d(0, 1);
+        glVertex2d(this->width() / 2 - 170, this->height() / 2 + 30);
+        glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
@@ -903,4 +909,11 @@ void DrawGl::drawStarting() {
 
 void DrawGl::updatePerspective() {
     this->resizeGL(this->width(), this->height());
+}
+
+void DrawGl::flushBug() {
+    /*for (int i = 0; i < 4; i++) {
+        glVertex3f(0, 0, 0);
+        glTexCoord2d(0, 0);
+    }*/
 }

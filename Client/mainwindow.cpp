@@ -500,6 +500,7 @@ void MainWindow::win() {
 void MainWindow::restart() {
     finished = false;
     widget->started = false;
+    widget->firstStart = false;
     input->winners.clear();
     widget->perspective = 45;
     widget->progress = 0;
