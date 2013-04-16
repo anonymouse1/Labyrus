@@ -1,6 +1,6 @@
 #include "server.h"
 
-Server::Server(bool win, qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent) :
+Server::Server(bool debug, qint16 port, bool rad, int size, int height, int lat, int players, bool strong, QObject *parent) :
     QTcpServer(parent)
 {
     if (!listen(QHostAddress::Any, port))
@@ -8,9 +8,8 @@ Server::Server(bool win, qint16 port, bool rad, bool cheat, int size, int height
 
     alreadyPlayers = 0;
     qDebug() << "port:" << port;
-    qDebug() << "win support:" << win;
+    qDebug() << "win support:" << !debug;
     qDebug() << "radiation:" << rad;
-    qDebug() << "cheats:" << cheat;
     qDebug() << "size:" << size;
     qDebug() << "height:" << height;
     qDebug() << "latency:" << lat;
@@ -20,9 +19,7 @@ Server::Server(bool win, qint16 port, bool rad, bool cheat, int size, int height
     latency = lat;
     numPlayers = players;
     strongNumPlayers = strong;
-    cheats = cheat;
-    radiation = rad;
-    allowWin = win;
+    allowWin = debug;
     if (radiation) {
         radiationTimer = new QTimer;
         radiationTimer->setInterval(4000);
@@ -109,19 +106,16 @@ void Server::processConnection(Player *player) {
             emit forAllClientsPrint("gameStart");
         }
 
-        if (cheats) {
+        if (!allowWin) {
             emit forAllClientsPrint("cheats");
-            emit forAllClientsPrint("S\nCheats allowed");
+            emit forAllClientsPrint("S\nCheats allowed[debug mode]");
+            emit forAllClientsPrint("nowin");
+            emit forAllClientsPrint("S\nWin support is DISABLED[debug mode]");
         }
 
         if (radiation) {
             emit forAllClientsPrint("S\nThere is some radiation near");
             radiationTimer->start();
-        }
-
-        if (!allowWin) {
-            emit forAllClientsPrint("nowin");
-            emit forAllClientsPrint("S\nWin support is DISABLED");
         }
     }
 

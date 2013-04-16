@@ -33,7 +33,7 @@ class Server : public QTcpServer
 {
     Q_OBJECT
 public:
-    explicit Server(bool win, qint16 port, bool rad, bool cheat, int size, int height, int lat, int players, bool strong, QObject *parent = 0);
+    explicit Server(bool debug, qint16 port, bool rad, int size, int height, int lat, int players, bool strong, QObject *parent = 0);
     void processConnection(Player *player);
     void sendFieldToPlayer(Player *player, QByteArray *data = NULL);
     void sendHeroesToPlayer(Player *player, QByteArray *data = NULL);
@@ -70,7 +70,6 @@ private:
 
     int latency, numPlayers;
     bool strongNumPlayers;
-    bool cheats;
     int n;
     int h;
     int m;
