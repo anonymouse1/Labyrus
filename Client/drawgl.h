@@ -92,7 +92,7 @@ private:
     void drawChat();
     void drawStarting();
 
-    void flushBug();
+    void healFirstWall();
 
     void drawQuad(double x1, double y1, double x2, double y2, double h, double height);
     void drawFloorPoint(double x1, double y1, double h, bool b);

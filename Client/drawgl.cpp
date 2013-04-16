@@ -135,6 +135,7 @@ void DrawGl::paintGL() {
     }
 
     drawMaze();
+    healFirstWall();
     drawHeroes();
     drawSkyBox();
 
@@ -276,7 +277,6 @@ void DrawGl::drawMaze() {
     qglColor(Qt::white);
     loadTexture(textures[defaultWall]);
     glBegin(GL_QUADS);
-        flushBug();
         for (int i = 0; i < a->m; i++) {
             double x = a->walls[i][0] * k;
             double y = a->walls[i][1] * k;
@@ -289,7 +289,6 @@ void DrawGl::drawMaze() {
                 drawQuad(x - f, y + k, x - f, y, h, wallHeight);
             }
         }
-        flushBug();
     glEnd();
 
     loadTexture(textures[verticalSlice]);
@@ -369,7 +368,7 @@ void DrawGl::drawMaze() {
     qglColor(Qt::blue);
 
     glLineWidth(1);
-    drawText(f + eps, f + eps, wallHeight / 2, false, true, tr("Welcome!!!"));
+    drawText(f + 2 * eps, f + 2 * eps, wallHeight / 2, false, true, tr("Welcome!!!"));
 //    drawText(k - 2 * f, 2 * f, wallHeight / 2, true, false, QString("Welcome to SuperMaze on x"));
 
     loadTexture(textures[model]);
@@ -911,9 +910,9 @@ void DrawGl::updatePerspective() {
     this->resizeGL(this->width(), this->height());
 }
 
-void DrawGl::flushBug() {
-    /*for (int i = 0; i < 4; i++) {
-        glVertex3f(0, 0, 0);
-        glTexCoord2d(0, 0);
-    }*/
+void DrawGl::healFirstWall() {
+    loadTexture(textures[defaultWall]);
+    glBegin(GL_QUADS);
+        drawQuad(1 / 100.0 + eps,  1 / 100.0 + eps, 1 / 100.0 + eps, 1 / 10.0 + eps, 0, wallHeight);
+    glEnd();
 }
