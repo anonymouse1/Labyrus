@@ -107,7 +107,7 @@ void DrawGl::paintGL() {
         a->radiation = false;
         if (perspective < 150)
             perspective++;
-           this->resizeGL(this->width(), this->height());
+        updatePerspective();
     }
     fps++;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -130,7 +130,6 @@ void DrawGl::paintGL() {
         drawChat();
         if (a->escapeMode)
             drawMenu();
-
         return;
     }
 
@@ -390,7 +389,7 @@ void DrawGl::drawFPS() {
 void DrawGl::keyPressEvent(QKeyEvent *event) {
     int key = event->key();
 
-    if ((key == Qt::Key_Z) || (event->text().toUpper() == tr("Z"))) {
+    if (((key == Qt::Key_Z) || (event->text().toUpper() == tr("Z"))) && (!enteringText)) {
         if (!isFullScreen())
             showFullScreen();
         else
@@ -547,10 +546,10 @@ void DrawGl::begin2d() {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D(0, this->width(), 0, this->height());
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
+    gluOrtho2D(1, this->width(), 1, this->height());
 }
 
 void DrawGl::end2d() {
@@ -812,8 +811,8 @@ void DrawGl::drawWinners() {
 }
 
 void DrawGl::drawPreview() {
-    loadTexture(textures[defaultWall]);
     begin2d();
+    loadTexture(textures[defaultWall]);
     glBegin(GL_QUADS);
         glVertex2d(0, 0);
         glTexCoord2d(1, 0);
@@ -836,7 +835,6 @@ void DrawGl::drawPreview() {
         glTexCoord2d(0, 0);
     glEnd();
     end2d();
-
     qglColor(QColor(0, 250, 0));
     renderText(this->width() / 2 - 200, 20, tr("Waiting for others players..."), hudFont);
 }
@@ -849,23 +847,23 @@ void DrawGl::drawChat() {
     glBegin(GL_QUADS);
         for (int i = 0; i < list.size(); i++) {
             glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 5 - 85);
-            glTexCoord2d(0, 0);
-            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 5 - 85);
-            glTexCoord2d(1, 0);
-            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 14 - 85);
-            glTexCoord2d(1, 1);
-            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 14 - 85);
             glTexCoord2d(0, 1);
+            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 - 5 - 85);
+            glTexCoord2d(1, 1);
+            glVertex2d(50 + list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 14 - 85);
+            glTexCoord2d(1, 0);
+            glVertex2d(-50 - list[i].length() * 13, this->height() / 2 + (list.size() - i) * 20 + 14 - 85);
+            glTexCoord2d(0, 0);
         }
         if (enteringText) {
             glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 - 5);
-            glTexCoord2d(0, 0);
-            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 - 5);
-            glTexCoord2d(1, 0);
-            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 + 14);
-            glTexCoord2d(1, 1);
-            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 + 14);
             glTexCoord2d(0, 1);
+            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 - 5);
+            glTexCoord2d(1, 1);
+            glVertex2d(50 + currentText.length() * 13, this->height() / 2 - 85 + 14);
+            glTexCoord2d(1, 0);
+            glVertex2d(-50 - currentText.length() * 13, this->height() / 2 - 85 + 14);
+            glTexCoord2d(0, 0);
         }
 
     glEnd();

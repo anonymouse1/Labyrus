@@ -123,14 +123,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
         ctrlPressed = false;
         widget->perspective = backupPerspective;
         widget->needRefreshCursor = false;
-        if (widget->isFullScreen()) {
-            widget->resize(widget->width(), widget->height() - 1);
-            widget->resize(widget->width(), widget->height() + 1);
-            widget->showFullScreen();
-        } else {
-            widget->resize(widget->width(), widget->height() - 1);
-            widget->resize(widget->width(), widget->height() + 1);
-        }
+        widget->updatePerspective();
     }
 }
 

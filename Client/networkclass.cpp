@@ -134,7 +134,10 @@ void NetworkClass::readInformation() {
 
 void NetworkClass::readHeroes() {
     otherHeroes = scanInt();
-    assert(otherHeroes > 0);
+    if (otherHeroes < 1) {
+        qDebug() << "damaged packet";
+        return;
+    }
     for (int i = 0; i < otherHeroes; i++) {
         int tmp = scanInt();
         fpoint c;

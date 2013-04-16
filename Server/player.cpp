@@ -9,14 +9,14 @@ Player::Player(int lat, QObject *parent) : QThread(parent) {
 }
 
 void Player::run() {
-    socket = new QTcpSocket;
+    socket = new QTcpSocket(this);
     socket->setSocketDescriptor(socketDescriptor);
 
-    refresh = new QTimer;
+    refresh = new QTimer(this);
     refresh->setInterval(300000);
     refresh->start();
 
-    checkValid = new QTimer;
+    checkValid = new QTimer(this);
     checkValid->setInterval(5000);
     checkValid->start();
 
@@ -28,7 +28,7 @@ void Player::run() {
     if (server->radiation)
         QObject::connect(server->radiationTimer, SIGNAL(timeout()), this, SLOT(radiation()));
 
-    sendHeroesTime = new QTimer;
+    sendHeroesTime = new QTimer(this);
     sendHeroesTime->setInterval(latency);
     server->processConnection(this);
 
