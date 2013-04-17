@@ -36,14 +36,11 @@ void MainWindow::start() {
     attributes << ui->fieldSize->text();
     attributes << "--height" << QString::number(ui->heightOfField->value());
     attributes << "--latency" << ui->spinBox->text();
-    if (ui->cheats->checkState() == Qt::Checked)
-        attributes << "--cheats";
+    if (ui->debug->checkState() == Qt::Checked)
+        attributes << "--debug";
 
     if (ui->radiation->checkState() == Qt::Checked)
         attributes << "--radiation";
-
-    if (!(ui->win->checkState() == Qt::Checked))
-        attributes << "--nowin";
 
     if (ui->allowConnections->checkState() == Qt::Checked) {
         attributes << "-p";
@@ -104,14 +101,13 @@ void MainWindow::saveSettings() {
     s.setValue("serverGuiGeometry", QVariant(saveGeometry()));
     s.setValue("size", QVariant(ui->fieldSize->value()));
     s.setValue("height", QVariant(ui->heightOfField->value()));
-    s.setValue("cheats", QVariant(ui->cheats->checkState() == Qt::Checked));
+    s.setValue("debug", QVariant(ui->debug->checkState() == Qt::Checked));
     s.setValue("radiation", QVariant(ui->radiation->checkState() == Qt::Checked));
     s.setValue("allowRemoteConnections", QVariant(ui->allowConnections->checkState() == Qt::Checked));
     s.setValue("strongNumberPlayers", QVariant(ui->strong->checkState() == Qt::Checked));
     s.setValue("numberPlayers", QVariant(ui->numberPlayers->value()));
     s.setValue("latency", QVariant(ui->spinBox->value()));
     s.setValue("consoleGeometry", QVariant(console->saveGeometry()));
-    s.setValue("win", QVariant(ui->win->checkState() == Qt::Checked));
 }
 
 void MainWindow::loadSettings() {
@@ -119,14 +115,13 @@ void MainWindow::loadSettings() {
     restoreGeometry(s.value("serverGuiGeometry").toByteArray());
     ui->fieldSize->setValue(s.value("size", QVariant(10)).toInt());
     ui->heightOfField->setValue(s.value("height", QVariant(1)).toInt());
-    ui->cheats->setChecked(s.value("cheats", QVariant(false)).toBool());
+    ui->debug->setChecked(s.value("debug", QVariant(false)).toBool());
     ui->allowConnections->setChecked(s.value("allowRemoteConnections", QVariant(false)).toBool());
     ui->widget->setVisible(ui->allowConnections->checkState() == Qt::Checked);
     ui->strong->setChecked(s.value("strongNumberPlayers", QVariant(false)).toBool());
     ui->numberPlayers->setValue(s.value("numberPlayers", QVariant(1)).toInt());
     ui->spinBox->setValue(s.value("latency", QVariant(25)).toInt());
     ui->radiation->setChecked(s.value("radiation", QVariant(false)).toBool());
-    ui->win->setChecked(s.value("win", QVariant(true)).toBool());
     console->restoreGeometry(s.value("consoleGeometry").toByteArray());
 }
 

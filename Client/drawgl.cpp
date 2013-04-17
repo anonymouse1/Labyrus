@@ -789,24 +789,24 @@ void DrawGl::drawWinners() {
     loadTexture(textures[winners]);
     begin2d();
     glBegin(GL_QUADS);
-        glVertex2d(this->width() / 2 - 240, this->height() - 20 * a->otherHeroes);
+        glVertex2d(this->width() / 2 - 239, this->height() - 20 * a->otherHeroes);
         glTexCoord2d(1, 0);
-        glVertex2d(this->width() / 2 + 340, this->height() - 20 * a->otherHeroes);
+        glVertex2d(this->width() / 2 + 341, this->height() - 20 * a->otherHeroes);
         glTexCoord2d(1, 1);
-        glVertex2d(this->width() / 2 + 340, this->height() + 20 * a->otherHeroes);
+        glVertex2d(this->width() / 2 + 341, this->height() + 20 * a->otherHeroes);
         glTexCoord2d(0, 1);
-        glVertex2d(this->width() / 2 - 240, this->height() + 20 * a->otherHeroes);
+        glVertex2d(this->width() / 2 - 239, this->height() + 20 * a->otherHeroes);
         glTexCoord2d(0, 0);
     glEnd();
     end2d();
 
     for (int i = 0; i < a->winners.size(); i++)
-        renderText(this->width() / 2 - 90, 16 + 20 * i, QString::number(i + 1) + ": " + a->winners[i] + "(finished)", hudFont);
+        renderText(this->width() / 2 - 87, 16 + 20 * i, QString::number(i + 1) + ": " + a->winners[i] + "(finished)", hudFont);
 
     int current = a->winners.size();
     for (int i = a->otherHeroes - 1; i >= 0; i--)
         if (!a->winners.contains(a->players[i].second)) {
-            renderText(this->width() / 2 - 90, 16 + 20 * current, QString::number(current + 1) + ": " + a->players[i].second + "(" +
+            renderText(this->width() / 2 - 87, 16 + 20 * current, QString::number(current + 1) + ": " + a->players[i].second + "(" +
                        QString::number(a->players[i].first) + "%)", hudFont);
             current++;
         }

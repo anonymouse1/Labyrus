@@ -55,11 +55,6 @@ void startDialog::start() {
         QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showFullScreen()));
     else
         QObject::connect(w, SIGNAL(successConnection()), w->widget, SLOT(showNormal()));
-
-    /*QEventLoop *loop = new QEventLoop;
-    loop->connect(w, SIGNAL(successConnection()), loop, SLOT(quit()));
-    loop->connect(w, SIGNAL(fail()), loop, SLOT(quit()));
-    loop->exec();*/
 }
 
 void startDialog::scanSkins() {
