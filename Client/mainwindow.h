@@ -82,7 +82,6 @@ private:
     QTimer *repaintTimer;
     NetworkClass *input;
     gpoint integerCoord;
-    QTimer *checkOrDie;
     int backupPerspective;
     void sleep(int ms);
     gpoint getRealCoord();
@@ -102,7 +101,6 @@ private slots:
     void connectedSuccess();
     void connectionFailed();
     void gameStart();
-    void checkForDie();
 
 public slots:
     void legalStop();

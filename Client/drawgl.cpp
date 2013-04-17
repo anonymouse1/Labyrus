@@ -56,6 +56,15 @@ DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     setMouseTracking(true);
 }
 
+DrawGl::~DrawGl() {
+    delete timeFPS;
+    delete cursorSetTimer;
+    QSettings s(settingsFile, QSettings::IniFormat);
+    s.setValue("mouseSensitivity", QVariant(mouseSensitivity));
+    if (!isFullScreen())
+        s.setValue("widgetGeometry", QVariant(saveGeometry()));
+}
+
 void DrawGl::initializeGL() {
     qglClearColor(Qt::gray);
     glEnable(GL_DEPTH_TEST);
@@ -205,16 +214,63 @@ void DrawGl::enableLight() {
 }
 
 void DrawGl::drawSkyBox() {
-    loadTexture(textures[5]);
+    loadTexture(textures[sky]);
+    int n = 20;
     glBegin(GL_QUADS);
-        glVertex3f(50, -50, 10);
+        glVertex3f(n, -n, n);
         glTexCoord2d(1, 1);
-        glVertex3f(-50, -50, 10);
+        glVertex3f(-n, -n, n);
         glTexCoord2d(0, 1);
-        glVertex3f(-50, 50, 10);
+        glVertex3f(-n, n, n);
         glTexCoord2d(0, 0);
-        glVertex3f(50, 50, 10);
+        glVertex3f(n, n, n);
         glTexCoord2d(1, 0);
+
+        glVertex3f(n, n, -n);
+        glTexCoord2d(1, 1);
+        glVertex3f(n, n, n);
+        glTexCoord2d(0, 1);
+        glVertex3f(-n, n, n);
+        glTexCoord2d(0, 0);
+        glVertex3f(-n, n, -n);
+        glTexCoord2d(1, 0);
+
+        glVertex3f(n, -n, n);
+        glTexCoord2d(1, 1);
+        glVertex3f(n, -n, -n);
+        glTexCoord2d(0, 1);
+        glVertex3f(-n, -n, -n);
+        glTexCoord2d(0, 0);
+        glVertex3f(-n, -n, n);
+        glTexCoord2d(1, 0);
+
+        glVertex3f(n, -n, -n);
+        glTexCoord2d(1, 1);
+        glVertex3f(n, -n, n);
+        glTexCoord2d(0, 1);
+        glVertex3f(n, n, n);
+        glTexCoord2d(0, 0);
+        glVertex3f(n, n, -n);
+        glTexCoord2d(1, 0);
+
+        glVertex3f(-n, -n, n);
+        glTexCoord2d(1, 1);
+        glVertex3f(-n, -n, -n);
+        glTexCoord2d(0, 1);
+        glVertex3f(-n, n, -n);
+        glTexCoord2d(0, 0);
+        glVertex3f(-n, n, n);
+        glTexCoord2d(1, 0);
+
+        glVertex3f(-n, -n, -n);
+        glTexCoord2d(1, 1);
+        glVertex3f(n, -n, -n);
+        glTexCoord2d(0, 1);
+        glVertex3f(n, n, -n);
+        glTexCoord2d(0, 0);
+        glVertex3f(-n, n, -n);
+        glTexCoord2d(1, 0);
+
     glEnd();
 }
 
@@ -775,13 +831,6 @@ void DrawGl::drawBotLast() {
     glEnd();
     end2d();
     renderText(this->width() - 60, this->height() / 2 + 5, tr("Bot: ") + QString::number(botLast, 'f', 0) + "%");
-}
-
-DrawGl::~DrawGl() {
-    QSettings s(settingsFile, QSettings::IniFormat);
-    s.setValue("mouseSensitivity", QVariant(mouseSensitivity));
-    if (!isFullScreen())
-        s.setValue("widgetGeometry", QVariant(saveGeometry()));
 }
 
 void DrawGl::drawWinners() {

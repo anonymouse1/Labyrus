@@ -9,14 +9,11 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     app = a;
     repaintTimer = new QTimer;
     repaintTimer->setInterval(16);
-    checkOrDie = new QTimer;
-    checkOrDie->setInterval(10000);
     stopBot = false;
     widget = new DrawGl(app, skin, mouseSensitivity);
     widget->legacy = this;
     widget->setMinimumHeight(480);
     widget->setMinimumWidth(640);
-    checkOrDie->start();
     login = l;
 
     qDebug() << "connecting to " + ip.toString() + ":" + QString::number(port);
@@ -26,8 +23,8 @@ MainWindow::MainWindow(QApplication *a, QHostAddress ip, quint16 port, QByteArra
     QObject::connect(input, SIGNAL(gameStart()), this, SLOT(gameStart()));
     QObject::connect(input, SIGNAL(connectionFailed()), this, SLOT(connectionFailed()));
     QObject::connect(input, SIGNAL(successConnection()), this, SLOT(connectedSuccess()));
-    QObject::connect(checkOrDie, SIGNAL(timeout()), this, SLOT(checkForDie()));
     QObject::connect(widget, SIGNAL(runCommand(QString)), input, SLOT(runCommand(QString)));
+    QObject::connect(widget, SIGNAL(destroyed()), this, SLOT(legalStop()));
 
     ctrlPressed = false;
     finished = false;
@@ -452,11 +449,6 @@ void MainWindow::legalStop() {
     if (input->isRunning())
         input->quit();
     app->quit();
-}
-
-void MainWindow::checkForDie() {
-    if (!widget->isValid() || !widget->isVisible())
-        legalStop();
 }
 
 fpoint MainWindow::genFPoint(double x, double y, double h) {
