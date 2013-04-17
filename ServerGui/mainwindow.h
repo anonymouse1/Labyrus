@@ -4,7 +4,7 @@
 #include <QProcess>
 #include <QTimer>
 #include <QMainWindow>
-#include <qmess
+#include <QMessageBox>
 #include <QDebug>
 #include <QSettings>
 #include <QDir>
