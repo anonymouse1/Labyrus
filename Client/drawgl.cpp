@@ -102,7 +102,7 @@ void DrawGl::resizeGL(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, (GLint)w, (GLint)h);
-    gluPerspective(perspective, w / (double)h, 0.001, 100.0);
+    gluPerspective(perspective, w / (double)h, 0.001, 1000.0);
     if (isFullScreen())
         QCursor::setPos(w / 2, h / 2);
 
