@@ -19,7 +19,7 @@ Server::Server(bool debug, qint16 port, bool rad, int size, int height, int lat,
     latency = lat;
     numPlayers = players;
     strongNumPlayers = strong;
-    allowWin = debug;
+    allowWin = !debug;
     if (radiation) {
         radiationTimer = new QTimer;
         radiationTimer->setInterval(4000);
