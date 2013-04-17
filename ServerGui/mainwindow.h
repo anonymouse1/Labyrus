@@ -3,6 +3,7 @@
 
 #include <QProcess>
 #include <QTimer>
+#include <QMainWindow>
 #include <QMessageBox>
 #include <QDebug>
 #include <QSettings>

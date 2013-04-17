@@ -7,7 +7,6 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QThread>
-#include <QMessageBox>
 #include <QTimer>
 #include <QPoint>
 #include <QPointF>
