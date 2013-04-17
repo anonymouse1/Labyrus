@@ -56,11 +56,17 @@ void Player::disconnect() {
     server->alreadyPlayers = server->r.size();
     qDebug() << this->name << "disconnected";
     server->names.remove(name);
+    for (int i = 0; i < server->winners.size(); i++)
+        if (server->winners[i] == name) {
+            server->winners.removeAt(i);
+            i++;
+        }
     QObject::disconnect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()));
     QObject::disconnect(this, SIGNAL(say(QString)), server, SLOT(forAllClients(QString)));
     QObject::disconnect(server, SIGNAL(forAllClientsPrint(QString)), this, SLOT(printString(QString)));
     socket->deleteLater();
     emit say("S\n" + name + " disconnected\n");
+    server->checkForWin();
     exit(0);
 }
 

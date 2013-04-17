@@ -270,7 +270,6 @@ void DrawGl::drawSkyBox() {
         glTexCoord2d(0, 0);
         glVertex3f(-n, n, -n);
         glTexCoord2d(1, 0);
-
     glEnd();
 }
 

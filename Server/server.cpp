@@ -145,15 +145,7 @@ void Server::runCommand(QString command, Player *player) {
         qDebug() << winners;
         sendWinners();
         forAllClients("S\n" + player->name + " finished (" + QString::number(winners.size()) + " place)");
-
-        if (winners.size() == alreadyPlayers) {
-            forAllClients("restart");
-            forAllClients("S\nGame finished\nS\nPlease wait...");
-            if (n * n * h < 400)
-                QTimer::singleShot(4000, this, SLOT(restart()));
-            else
-                restart();
-        }
+        checkForWin();
     }
 
     if (player->socket->canReadLine())
@@ -437,4 +429,15 @@ void Server::restart() {
     forAllClients("S\nMap generated");
     forAllClients("gameStart");
     winners.clear();
+}
+
+void Server::checkForWin() {
+    if (winners.size() >= alreadyPlayers) {
+        forAllClients("restart");
+        forAllClients("S\nGame finished\nS\nPlease wait...");
+        if (n * n * h < 400)
+            QTimer::singleShot(4000, this, SLOT(restart()));
+        else
+            restart();
+    }
 }

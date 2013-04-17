@@ -39,9 +39,11 @@ public:
     void sendHeroesToPlayer(Player *player, QByteArray *data = NULL);
     int alreadyPlayers;
     void runCommand(QString command, Player *player);
+    void checkForWin();
     QMap<int, Player *> r;
     QSet<QString> names;
     QTimer *radiationTimer;
+    QStringList winners;
     bool radiation;
     bool gameStart;
 
@@ -60,7 +62,6 @@ private:
     QPoint getFreePoint();
     QByteArray *generateFieldMessage();
     QByteArray *generateHeroMessage();
-    QStringList winners;
 
     bool isConnected();
     void generateMap();
