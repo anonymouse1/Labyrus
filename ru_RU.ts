@@ -22,112 +22,112 @@
 <context>
     <name>DrawGl</name>
     <message>
-        <location filename="Client/drawgl.cpp" line="906"/>
+        <location filename="Client/drawgl.cpp" line="956"/>
         <source>Starting after </source>
         <translation>Старт через </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="531"/>
+        <location filename="Client/drawgl.cpp" line="586"/>
         <source>Bot is inactive</source>
         <translation>Бот неактивен</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="534"/>
+        <location filename="Client/drawgl.cpp" line="589"/>
         <source>You are in autonomous mode</source>
         <translation>Вы в автономном режиме</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="541"/>
+        <location filename="Client/drawgl.cpp" line="596"/>
         <source>Possible commands: help bot stop ping exit...</source>
         <translation>Возможные команды: help bot stop ping exit...</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="671"/>
+        <location filename="Client/drawgl.cpp" line="728"/>
         <source>Elapsed: </source>
         <translation>Прошло: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="371"/>
+        <location filename="Client/drawgl.cpp" line="426"/>
         <source>Welcome!!!</source>
         <translation>Добро пожаловать!!!</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="844"/>
+        <location filename="Client/drawgl.cpp" line="894"/>
         <source>Generation of map...</source>
         <translation>Генерация карты...</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="906"/>
+        <location filename="Client/drawgl.cpp" line="956"/>
         <source> seconds</source>
         <translation>с</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="394"/>
+        <location filename="Client/drawgl.cpp" line="449"/>
         <source>Z</source>
         <translation>Я</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="526"/>
+        <location filename="Client/drawgl.cpp" line="581"/>
         <source>Game not started</source>
         <translation>Игра еще не началась</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="674"/>
+        <location filename="Client/drawgl.cpp" line="731"/>
         <source>Progress: </source>
         <translation>Прогресс:</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="675"/>
+        <location filename="Client/drawgl.cpp" line="732"/>
         <source>Floor â</source>
         <translation>Этаж №</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="709"/>
+        <location filename="Client/drawgl.cpp" line="766"/>
         <source>Resume</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="712"/>
+        <location filename="Client/drawgl.cpp" line="769"/>
         <source>on</source>
         <translation>активен</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="714"/>
+        <location filename="Client/drawgl.cpp" line="771"/>
         <source>off</source>
         <translation>включить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="716"/>
+        <location filename="Client/drawgl.cpp" line="773"/>
         <source>FullScreen: </source>
         <translation>Полноэкранный режим: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="719"/>
+        <location filename="Client/drawgl.cpp" line="776"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="721"/>
+        <location filename="Client/drawgl.cpp" line="778"/>
         <source>BOT</source>
         <translation>Бот</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="723"/>
+        <location filename="Client/drawgl.cpp" line="780"/>
         <source>Mouse Sensitivity: </source>
         <translation>Чувствительность мыши: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="724"/>
+        <location filename="Client/drawgl.cpp" line="781"/>
         <source>Exit?</source>
         <translation>Выйти?</translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="777"/>
+        <location filename="Client/drawgl.cpp" line="834"/>
         <source>Bot: </source>
         <translation>Бот: </translation>
     </message>
     <message>
-        <location filename="Client/drawgl.cpp" line="842"/>
+        <location filename="Client/drawgl.cpp" line="892"/>
         <source>Waiting for others players...</source>
         <translation>Ожидание других игроков...</translation>
     </message>
@@ -179,56 +179,56 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="Client/mainwindow.cpp" line="56"/>
+        <location filename="Client/mainwindow.cpp" line="53"/>
         <source>Q</source>
         <translation>Й</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="58"/>
+        <location filename="Client/mainwindow.cpp" line="55"/>
         <source>E</source>
         <translation>У</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="62"/>
-        <location filename="Client/mainwindow.cpp" line="100"/>
+        <location filename="Client/mainwindow.cpp" line="59"/>
+        <location filename="Client/mainwindow.cpp" line="97"/>
         <source>W</source>
         <translation>Ц</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="64"/>
-        <location filename="Client/mainwindow.cpp" line="106"/>
+        <location filename="Client/mainwindow.cpp" line="61"/>
+        <location filename="Client/mainwindow.cpp" line="103"/>
         <source>S</source>
         <translation>Ы</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="70"/>
-        <location filename="Client/mainwindow.cpp" line="108"/>
+        <location filename="Client/mainwindow.cpp" line="67"/>
+        <location filename="Client/mainwindow.cpp" line="105"/>
         <source>A</source>
         <translation>Ф</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="72"/>
-        <location filename="Client/mainwindow.cpp" line="110"/>
+        <location filename="Client/mainwindow.cpp" line="69"/>
+        <location filename="Client/mainwindow.cpp" line="107"/>
         <source>D</source>
         <translation>В</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="132"/>
+        <location filename="Client/mainwindow.cpp" line="129"/>
         <source>Game already finished</source>
         <translation>Игра уже завершена</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="134"/>
+        <location filename="Client/mainwindow.cpp" line="131"/>
         <source>Bot already started</source>
         <translation>Бот уже запущен</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="137"/>
+        <location filename="Client/mainwindow.cpp" line="134"/>
         <source>Bot started</source>
         <translation>Бот запущен</translation>
     </message>
     <message>
-        <location filename="Client/mainwindow.cpp" line="148"/>
+        <location filename="Client/mainwindow.cpp" line="145"/>
         <source>Bot finished</source>
         <translation>Бот завершен</translation>
     </message>
@@ -316,7 +316,7 @@
         <location filename="ServerGui/mainwindow.cpp" line="96"/>
         <source>Labyrus is crossplatform game written with opengl and QT Written by Vladislav Tyulbashev</source>
         <translation>Labyrus - кроссплатформенная игра, написанная с использованием OpenGl и Qt русским разработчиком.
-Тюльбашев Владислав vladislav.tyulbashev@yandex.ru</translation>
+Тюльбашев Владислав - vladislav.tyulbashev@yandex.ru</translation>
     </message>
 </context>
 <context>

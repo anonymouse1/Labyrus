@@ -418,7 +418,7 @@ void Server::sendWinners() {
     win += "w\n";
     win += QString::number(winners.size());
     for (int i = 0; i < winners.size(); i++)
-        win += "\n" + winners[i];
+        win += "\n" + winners[i].toLocal8Bit();
 
     forAllClients(win);
 }

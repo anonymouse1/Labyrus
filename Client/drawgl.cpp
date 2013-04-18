@@ -226,41 +226,10 @@ void DrawGl::drawSkyBox() {
         glVertex3f(n, n, n);
         glTexCoord2d(1, 0);
 
-        glVertex3f(n, n, -n);
-        glTexCoord2d(1, 1);
-        glVertex3f(n, n, n);
-        glTexCoord2d(0, 1);
-        glVertex3f(-n, n, n);
-        glTexCoord2d(0, 0);
-        glVertex3f(-n, n, -n);
-        glTexCoord2d(1, 0);
-
-        glVertex3f(n, -n, n);
-        glTexCoord2d(1, 1);
-        glVertex3f(n, -n, -n);
-        glTexCoord2d(0, 1);
-        glVertex3f(-n, -n, -n);
-        glTexCoord2d(0, 0);
-        glVertex3f(-n, -n, n);
-        glTexCoord2d(1, 0);
-
-        glVertex3f(n, -n, -n);
-        glTexCoord2d(1, 1);
-        glVertex3f(n, -n, n);
-        glTexCoord2d(0, 1);
-        glVertex3f(n, n, n);
-        glTexCoord2d(0, 0);
-        glVertex3f(n, n, -n);
-        glTexCoord2d(1, 0);
-
-        glVertex3f(-n, -n, n);
-        glTexCoord2d(1, 1);
-        glVertex3f(-n, -n, -n);
-        glTexCoord2d(0, 1);
-        glVertex3f(-n, n, -n);
-        glTexCoord2d(0, 0);
-        glVertex3f(-n, n, n);
-        glTexCoord2d(1, 0);
+        drawQuad(n, -n, -n, -n, -n, 2 * n);
+        drawQuad(-n, -n, -n, n, -n, 2 * n);
+        drawQuad(n, n, n, -n, -n, 2 * n);
+        drawQuad(-n, n, n, n, -n, 2 * n);
 
         glVertex3f(-n, -n, -n);
         glTexCoord2d(1, 1);

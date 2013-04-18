@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->allowConnections, SIGNAL(toggled(bool)), ui->widget, SLOT(setVisible(bool)));
     QObject::connect(ui->actionAbout_Qt, SIGNAL(triggered()), this, SLOT(aboutQt()));
     QObject::connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+    QObject::connect(ui->actionStart, SIGNAL(triggered()), this, SLOT(start()));
 
 
     server = new QProcess(this);

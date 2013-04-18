@@ -4,6 +4,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
     ui = new Ui::Form;
     ui->setupUi(this);
     app = a;
+    loadSettings();
     bool st = false;
     for (int i = 0; i < argc; i++) {
         QString cur = argv[i];
@@ -27,14 +28,12 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
     }
     scanSkins();
 
-    ui->comboBox->setCurrentIndex(max(ui->comboBox->findText("default"), 0));
 
     if (st) {
         QTimer::singleShot(100, this, SLOT(start()));
     } else {
         QObject::connect(ui->commandLinkButton, SIGNAL(clicked()), this, SLOT(start()));
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(setPix(QString)));
-        loadSettings();
     }
     ui->commandLinkButton->setFocus();
 }
@@ -94,14 +93,14 @@ void startDialog::saveSettings() {
 void startDialog::loadSettings() {
     QSettings s(settingsFile, QSettings::IniFormat);
     restoreGeometry(s.value("dialogGeometry").toByteArray());
-    ui->lineEdit->setText(s.value("name", QVariant("vlad")).toString());
+    ui->lineEdit->setText(s.value("name", QVariant("name")).toString());
     ui->lineEdit_2->setText(s.value("ip", QVariant("127.0.0.1")).toString());
     ui->spinBox->setValue(s.value("port", QVariant(7777)).toInt());
     ui->fullScreen->setChecked(s.value("fullscreen", QVariant(true)).toBool());
     ui->comboBox->setCurrentIndex(ui->comboBox->findText(s.value("skin", QVariant("default")).toString()));
     mouseSensitivity = s.value("mouseSensitivity", QVariant(0.3)).toDouble();
-    if (mouseSensitivity > 5)
-        mouseSensitivity = 5;
+    if (mouseSensitivity > 3)
+        mouseSensitivity = 3;
     else if (mouseSensitivity < 0)
         mouseSensitivity = 0;
     setPix(ui->comboBox->currentText());
