@@ -432,7 +432,7 @@ void Server::restart() {
 }
 
 void Server::checkForWin() {
-    if (winners.size() >= alreadyPlayers) {
+    if ((winners.size() >= alreadyPlayers) && (alreadyPlayers)) {
         forAllClients("restart");
         forAllClients("S\nGame finished\nS\nPlease wait...");
         if (n * n * h < 400)
