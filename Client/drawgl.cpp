@@ -166,7 +166,7 @@ void DrawGl::paintGL() {
     if (botActive)
         drawBotLast();
 
-    if (!legacy->ctrlPressed && started)
+    if (!legacy->ctrlPressed && started && !a->isAutonomous())
         drawWinners();
 }
 
@@ -693,7 +693,7 @@ void DrawGl::drawHUD() {
     int time = legacy->thread->fromStartOfGame.elapsed() / 1000;
     if (!started)
         time = 0;
-    renderText(5, 15, tr("Elapsed: ") + QString::number(time) + QString("s"), hudFont);
+    renderText(5, 15, tr("Elapsed: ") + QString::number(time) + tr("s"), hudFont);
     progress += legacy->updateProgress();
     a->progress = double(progress) / a->n / a->n / a->h * 100;
     renderText(5, this->height() - 20, tr("Progress: ") + QString::number(int(double(progress) / a->n / a->n / a->h * 100)) + "%", hudFont);

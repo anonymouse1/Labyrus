@@ -4,6 +4,7 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
     ui = new Ui::Form;
     ui->setupUi(this);
     app = a;
+    scanSkins();
     loadSettings();
     bool st = false;
     for (int i = 0; i < argc; i++) {
@@ -26,8 +27,6 @@ startDialog::startDialog(QApplication *a, int argc, char *argv[], QWidget *paren
             exit(0);
         }
     }
-    scanSkins();
-
 
     if (st) {
         QTimer::singleShot(100, this, SLOT(start()));
