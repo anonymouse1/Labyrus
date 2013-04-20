@@ -49,7 +49,7 @@ MainClass::MainClass(int argc, char *argv[]) : QCoreApplication(argc, argv)
         } else if ((QString(argv[i]) == "-s") || (QString(argv[i]) == "--strong")) {
             strong = true;
         } else if ((QString(argv[i]) == "-v") || (QString(argv[i]) == "--version")) {
-            die("program has no version [alpha]");
+            die("program has no version [beta]");
         } else if ((QString(argv[i]) == "-r") || (QString(argv[i]) == "--radiation"))
             radiation = true;
           else if ((QString(argv[i]) == "-d") || (QString(argv[i]) == "--debug"))

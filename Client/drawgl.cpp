@@ -152,6 +152,8 @@ void DrawGl::paintGL() {
         drawCompass();
         drawHUD();
         drawChat();
+        if (botActive)
+            drawBotLast();
     }
 
     if (a->escapeMode)
@@ -162,9 +164,6 @@ void DrawGl::paintGL() {
 
     if (legacy->ctrlPressed)
         drawOkular();
-
-    if (botActive)
-        drawBotLast();
 
     if (!legacy->ctrlPressed && started && !a->isAutonomous())
         drawWinners();
@@ -460,10 +459,7 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
             a->escapeMode = false;
 
         return;
-    } else if (key == Qt::Key_Escape)
-        a->escapeMode = true;
-
-    if (event->key() == Qt::Key_Return) {
+    } else if (event->key() == Qt::Key_Return) {
         enteringText = !enteringText;
         if (!enteringText)
             processText();
@@ -479,8 +475,10 @@ void DrawGl::keyPressEvent(QKeyEvent *event) {
         } else if (currentText.length() < 30) {
             currentText += event->text();
         }
-    } else if (started)
-        legacy->keyPressEvent(event);
+    } else if (key == Qt::Key_Escape)
+           a->escapeMode = true;
+    else if (started)
+           legacy->keyPressEvent(event);
 
     event->accept();
 }
