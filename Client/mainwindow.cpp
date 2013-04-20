@@ -496,8 +496,8 @@ void MainWindow::restart() {
     input->winners.clear();
     widget->perspective = 45;
     widget->progress = 0;
-    widget->yAngle = -80;
-    widget->angle = 45;
+    input->yAngle = -80;
+    input->angle = 45;
     input->radiation = true;
     for (int i = 0; i < 100; i++)
         for (int j = 0; j < 100; j++)
