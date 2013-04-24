@@ -133,6 +133,7 @@ void MainWindow::startBot() {
     widget->botLast = 0;
     input->messages->addMessage(tr("Bot started"));
     widget->botActive = true;
+    stopBot = false;
     for (int i = 0; i < input->n; i++)
         for (int j = 0; j < input->n; j++)
             for (int k = 0; k < input->h; k++)

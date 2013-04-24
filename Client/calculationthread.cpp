@@ -104,7 +104,7 @@ void CalculationThread::check(double &dx, double &dy, double &dh) {
         dh = 0;
     for (int i = 0; i < main->m; i++)
         if (main->walls[i][3] == 0) {
-            if (heightEqualToMe(main->walls[i][2])) {
+            if (heightEqualToMe(main->walls[i][2]) || (main->h == 1)) {
                 checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0] + 1, main->walls[i][1]);
                 checkForWall(dx, dy, main->walls[i][0], main->walls[i][1] - k, main->walls[i][0], main->walls[i][1] + k);
                 checkForWall(dx, dy, main->walls[i][0] + 1, main->walls[i][1] - k, main->walls[i][0] + 1, main->walls[i][1] + k);
@@ -113,7 +113,7 @@ void CalculationThread::check(double &dx, double &dy, double &dh) {
             checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k * 1.5, main->walls[i][2], main->walls[i][0] + 1, main->walls[i][1] + k * 1.5);
             checkForDhWall(dh, main->walls[i][0], main->walls[i][1] - k * 1.5, main->walls[i][2] + 1, main->walls[i][0] + 1, main->walls[i][1] + k * 1.5);
         } else if (main->walls[i][3] == 1) {
-            if (heightEqualToMe(main->walls[i][2])) {
+            if ((heightEqualToMe(main->walls[i][2]) || (main->h == 1))) {
                 checkForWall(dx, dy, main->walls[i][0], main->walls[i][1], main->walls[i][0], main->walls[i][1] + 1);
                 checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1], main->walls[i][0] + k, main->walls[i][1]);
                 checkForWall(dx, dy, main->walls[i][0] - k, main->walls[i][1] + 1, main->walls[i][0] + k, main->walls[i][1] + 1);
