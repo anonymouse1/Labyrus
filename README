@@ -6,10 +6,21 @@ Portable:
 ./bin/labyrus-client
 ./bin/labyrus-server
 ./bin/labyrus-server-gui
-./bin/labyrus-switch-language
+./bin/labyrus-switchlanguage
 ./skins/skin1/
 ./skins/skin2/
 ./translations/labyrus-ru_RU.qm
+
+Standart:
+/usr/bin/labyrus-client
+/usr/bin/labyrus-server
+/usr/bin/labyrus-switchlanguage
+/usr/bin/labyrus-server-gui
+/usr/share/labyrus/skins/skin1/
+/usr/share/labyrus/skins/skin2/
+/usr/share/labyrus/translations/labyrus-ru_RU.qm
+
+Portable/Standart versions controlled by defines in *.pro files.
 
 I reming that I would glad to see your questions/suggestions/requests 
 on vladislav.tyulbashev@yandex.ru
