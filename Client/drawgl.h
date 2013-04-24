@@ -3,7 +3,11 @@
 
 #include <QGLWidget>
 #include <mainwindow.h>
-#include <GL/glu.h>
+#ifdef Q_OS_MAC
+    #include <OpenGL/glu.h>
+#else
+    #include <GL/glu.h>
+#endif
 #include <QImage>
 #include <QPixmap>
 #include <messagesstack.h>

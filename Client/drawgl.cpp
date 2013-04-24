@@ -1,6 +1,5 @@
 #include "drawgl.h"
 #include <QtOpenGL/QGLWidget>
-#include <GL/glu.h>
 
 DrawGl::DrawGl(QApplication *app, QString skin, double mouse, QWidget *parent) :
     QGLWidget(parent)

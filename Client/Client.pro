@@ -12,7 +12,8 @@ QT       += opengl
 
 LIBS += -L/usr/lib/qt
 
-unix: LIBS += -lGLU
+unix: !macx: LIBS += -lGLU
+macx: LIBS += -framework OpenGL
 
 TARGET = Client
 TEMPLATE = app

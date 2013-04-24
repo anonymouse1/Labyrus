@@ -2,7 +2,11 @@
 #define MODEL_H
 
 #include <QString>
-#include <GL/gl.h>
+#ifdef Q_OS_MAC
+    #include <OpenGL/gl.h>
+#else
+    #include <GL/gl.h>
+#endif
 #include <stdio.h>
 #include <QDebug>
 #include <assert.h>
