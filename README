@@ -1,0 +1,15 @@
+Hello everybody, who reading this!
+
+File structure for project:
+
+Portable:
+./bin/labyrus-client
+./bin/labyrus-server
+./bin/labyrus-server-gui
+./bin/labyrus-switch-language
+./skins/skin1/
+./skins/skin2/
+./translations/labyrus-ru_RU.qm
+
+I reming that I would glad to see your questions/suggestions/requests 
+on vladislav.tyulbashev@yandex.ru
