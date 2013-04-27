@@ -596,7 +596,7 @@ QPixmap DrawGl::generateCompass(double angle) {
     transform.rotate(angle - 45);
     p.setTransform(transform);
 
-    p.drawPixmap(-200, -200, QPixmap(skinPath + "/compass.png"));
+    p.drawPixmap(-200, -200, *compass);
     p.end();
     return res;
 }
