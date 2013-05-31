@@ -19,4 +19,4 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-DEFINES += PORTABLE
+#DEFINES += PORTABLE
